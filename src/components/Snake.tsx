@@ -11,7 +11,6 @@ import SnakeBodyUnit from '../assets/snakeModel/snakeBody/snakeBodyUnit'
 import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
 import checkTimerStep from '../engine/time/checkTimerStep'
 import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
-import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
