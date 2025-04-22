@@ -185,6 +185,7 @@
   },
   "active": "9e2c3f7f2bdbfb3b",
   "lastOpenFiles": [
+    "src/assets/snakeModel/snakeTail/snakeTail.tsx",
     "comments/обновления игрового движка.md",
     "comments/условия завершения игры.md",
     "comments/interruptGameEvent.md",
@@ -212,7 +213,6 @@
     "comments/`Scene`.md",
     "comments/сцена.md",
     "comments/компонент меню.md",
-    "comments/`Main`.md",
     "src/components/Snake.tsx",
     "src/components/Snake1.tsx",
     "vite.config.ts.timestamp-1743613956228-5c153496d573c.mjs",
