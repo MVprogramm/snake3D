@@ -1,4 +1,4 @@
-import SnakeTail from '../assets/snakeModel/snakeTail/SnakeTail'
+import SnakeTail from '../assets/snakeModel/SnakeTail/SnakeTail'
 import SnakeHead from '../assets/snakeModel/snakeHead/SnakeHead'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
