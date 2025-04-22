@@ -1,5 +1,5 @@
-import SnakeTail from '../assets/snakeModel/SnakeTail/SnakeTail'
-import SnakeHead from '../assets/snakeModel/snakeHead/SnakeHead'
+import SnakeTail from '../assets/snakeModel/snakeTail/snakeTail'
+import SnakeHead from '../assets/snakeModel/snakeHead/snakeHead'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
