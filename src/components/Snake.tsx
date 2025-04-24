@@ -87,6 +87,7 @@ const Snake = () => {
           getSnakeUnitPosition()[index][1],
           getSnakeUnitPosition()[index][2]
         )
+        tailRef.current!.rotation.z = getSnakeUnitRotation()[snake.length - 2][2]
         // tailRef.current!.rotation.z = isSnakeMoving ? zRotation : 0
       }
     })
