@@ -10,7 +10,10 @@ import { getSnakeBodyCoord, getSnakeHeadParams } from '../engine/snake/snake'
 import SnakeBodyUnit from '../assets/snakeModel/snakeBody/snakeBodyUnit'
 import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
 import checkTimerStep from '../engine/time/checkTimerStep'
-import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import {
+  getSnakeUnitPosition,
+  getSnakeUnitRotation,
+} from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
@@ -35,26 +38,26 @@ const Snake = () => {
     //   getSnakeHeadParams().snakeHeadStepX !== 0 ||
     //   getSnakeHeadParams().snakeHeadStepY !== 0
     // const zRotation = Math.sin(state.clock.elapsedTime * -2) * 0.2
-    // if (counterHeadX === 0 && counterHeadY === 0) {
-    //   if (
-    //     getSnakeHeadParams().snakeHeadStepX !== 0 ||
-    //     getSnakeHeadParams().snakeHeadStepY !== 0
-    //   ) {
-    //     console.log(
-    //       'координаты движка: ',
-    //       getSnakeBodyCoord()[0],
-    //       getSnakeBodyCoord()[1],
-    //       getSnakeBodyCoord()[2]
-    //     )
-    //     console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
-    //     console.log(
-    //       'координаты 3D змейки: ',
-    //       getSnakeUnitPosition()[0],
-    //       getSnakeUnitPosition()[1],
-    //       getSnakeUnitPosition()[2]
-    //     )
-    //   }
-    // }
+    if (counterHeadX === 0 && counterHeadY === 0) {
+      if (
+        getSnakeHeadParams().snakeHeadStepX !== 0 ||
+        getSnakeHeadParams().snakeHeadStepY !== 0
+      ) {
+        //     console.log(
+        //       'координаты движка: ',
+        //       getSnakeBodyCoord()[0],
+        //       getSnakeBodyCoord()[1],
+        //       getSnakeBodyCoord()[2]
+        //     )
+        //     console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
+        // console.log(
+        //   'поворот 3D змейки: ',
+        //   getSnakeUnitRotation()[0],
+        //   getSnakeUnitRotation()[1],
+        //   getSnakeUnitRotation()[2]
+        // )
+      }
+    }
 
     //*********************************
     // if (
@@ -64,10 +67,11 @@ const Snake = () => {
     snake.forEach((_, index) => {
       if (index === 0) {
         headRef.current!.position.set(
-          getSnakeUnitPosition()[index][0],
-          getSnakeUnitPosition()[index][1],
-          getSnakeUnitPosition()[index][2]
+          getSnakeUnitPosition()[0][0],
+          getSnakeUnitPosition()[0][1],
+          getSnakeUnitPosition()[0][2]
         )
+        headRef.current!.rotation.z = getSnakeUnitRotation()[0][2]
         // headRef.current!.rotation.z = isSnakeMoving ? -zRotation : 0
       }
       if (index > 0 && index < snake.length - 2) {

@@ -23,7 +23,7 @@ export const setSnakeUnitPosition = (props: number[][]) => {
 export const setSnakeUnitRotation = (props: number[][]) => {
   snakeBodyRotation.length = 0
 
-  props.forEach((unit) => snakeBodyRotation.push(unit))
+  props.forEach((unit, index) => snakeBodyRotation.push(unit))
 }
 
 export const setSnakeUnitScale = (props: number[][]) => {

@@ -185,6 +185,7 @@
   },
   "active": "9e2c3f7f2bdbfb3b",
   "lastOpenFiles": [
+    "vite.config.ts.timestamp-1745346562242-e1a029f8dcaec.mjs",
     "src/assets/snakeModel/snakeTail/snakeTail.tsx",
     "src/assets/snakeModel/snakeTail/SnakeTailGeometry.tsx",
     "src/assets/snakeModel/snakeTail/snakeTailVertices.ts",
@@ -208,7 +209,6 @@
     "comments/ГЛАВНЫЙ ФАЙЛ.md",
     "comments/стартовый файл.md",
     "vite.config.ts.timestamp-1744277405243-aa2303c3f3a9c.mjs",
-    "vite.config.ts.timestamp-1744275978794-f8315339a1f8e.mjs",
     "comments/ГРУППУ ПЕРСОНАЖЕЙ.md",
     "comments/ЗМЕЙКА.md",
     "comments/АНИМИРОВАТЬ.md",

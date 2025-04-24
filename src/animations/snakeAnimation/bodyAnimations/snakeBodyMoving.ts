@@ -11,7 +11,7 @@ import snakeBodyDiff from './snakeBodyDiff'
 
 export const snakeBodyMoving = (delta: number) => {
   const moveSpeed = getSnakeSpeed()
-  const [counterHeadX, counterHeadY] = getCounterHead()
+  // const [counterHeadX, counterHeadY] = getCounterHead()
   // if (counterHeadX === 0 && counterHeadY === 0) {
   //   if (
   //     getSnakeHeadParams().snakeHeadStepX !== 0 ||
@@ -36,18 +36,18 @@ export const snakeBodyMoving = (delta: number) => {
     return positions
   })
 
-  if (counterHeadX === 0 && counterHeadY === 0) {
-    if (
-      getSnakeHeadParams().snakeHeadStepX !== 0 ||
-      getSnakeHeadParams().snakeHeadStepY !== 0
-    ) {
-      // console.log(
-      //   'координаты 3D змейки: ',
-      //   getSnakeUnitPosition()[0],
-      //   getSnakeUnitPosition()[1],
-      //   getSnakeUnitPosition()[2]
-      // )
-    }
-  }
+  // if (counterHeadX === 0 && counterHeadY === 0) {
+  //   if (
+  //     getSnakeHeadParams().snakeHeadStepX !== 0 ||
+  //     getSnakeHeadParams().snakeHeadStepY !== 0
+  //   ) {
+  //     // console.log(
+  //     //   'координаты 3D змейки: ',
+  //     //   getSnakeUnitPosition()[0],
+  //     //   getSnakeUnitPosition()[1],
+  //     //   getSnakeUnitPosition()[2]
+  //     // )
+  //   }
+  // }
   setSnakeUnitPosition(pos)
 }
