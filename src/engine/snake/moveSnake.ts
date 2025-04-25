@@ -32,6 +32,7 @@ function moveSnake(): void {
       snakeHeadStepX: SNAKE.getSnakeHeadParams().snakeHeadStepX,
       snakeHeadStepY: SNAKE.getSnakeHeadParams().snakeHeadStepY,
     }
+
     const newBodyCoord = [...SNAKE.getSnakeBodyCoord()]
     let { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } = snakeHead
     if (snakeHeadStepX !== 0 || snakeHeadStepY !== 0) {

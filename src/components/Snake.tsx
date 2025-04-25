@@ -14,6 +14,8 @@ import {
   getSnakeUnitPosition,
   getSnakeUnitRotation,
 } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
+import { getProtocol } from '../engine/protocol/protocol'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
@@ -43,15 +45,21 @@ const Snake = () => {
         getSnakeHeadParams().snakeHeadStepX !== 0 ||
         getSnakeHeadParams().snakeHeadStepY !== 0
       ) {
-        //     console.log(
-        //       'координаты движка: ',
-        //       getSnakeBodyCoord()[0],
-        //       getSnakeBodyCoord()[1],
-        //       getSnakeBodyCoord()[2]
-        //     )
-        //     console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
         // console.log(
-        //   'поворот 3D змейки: ',
+        //   getProtocol()[getProtocol().length - 1],
+        //   getProtocol()[getProtocol().length - 2]
+        // )
+        // console.log(
+        //   'координаты движка: ',
+        //   getSnakeHeadParams().snakeHeadStepX,
+        //   getSnakeHeadParams().snakeHeadStepY,
+        //   getSnakeBodyCoord()[0],
+        //   getSnakeBodyCoord()[1],
+        //   getSnakeBodyCoord()[2]
+        // )
+        // console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
+        // console.log(
+        //   ': ',
         //   getSnakeUnitRotation()[0],
         //   getSnakeUnitRotation()[1],
         //   getSnakeUnitRotation()[2]
