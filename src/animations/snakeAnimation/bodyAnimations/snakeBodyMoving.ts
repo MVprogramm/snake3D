@@ -11,6 +11,8 @@ import snakeBodyDiff from './snakeBodyDiff'
 
 export const snakeBodyMoving = (delta: number) => {
   const moveSpeed = getSnakeSpeed()
+  // if (getSnakeBodyCoord().length > getSnakeUnitPosition().length)
+  //   setSnakeUnitPosition([...getSnakeUnitPosition(), [0, 0, 0]])
   // const [counterHeadX, counterHeadY] = getCounterHead()
   // if (counterHeadX === 0 && counterHeadY === 0) {
   //   if (

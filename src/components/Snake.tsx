@@ -58,12 +58,7 @@ const Snake = () => {
         //   getSnakeBodyCoord()[2]
         // )
         // console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
-        // console.log(
-        //   ': ',
-        //   getSnakeUnitRotation()[0],
-        //   getSnakeUnitRotation()[1],
-        //   getSnakeUnitRotation()[2]
-        // )
+        getSnakeUnitPosition().forEach((unit, index) => console.log(index, unit))
       }
     }
 
@@ -113,7 +108,7 @@ const Snake = () => {
           )
         } else if (index < snake.length - 2) {
           return (
-            <group key={index} /* ref={(el) => (bodyRefs.current[index] = el)} */>
+            <group key={index} ref={bodyRefs.current[index]}>
               <SnakeBodyUnit />
             </group>
           )

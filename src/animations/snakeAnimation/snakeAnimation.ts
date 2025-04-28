@@ -1,12 +1,17 @@
 import moveSnake from '../../engine/snake/moveSnake'
 import { setSnakePosition } from '../../engine/snake/setSnakePosition'
+import { getSnakeBodyCoord } from '../../engine/snake/snake'
 import checkTimerStep from '../../engine/time/checkTimerStep'
 import { snakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 // import { snakeBodyLocation } from './bodyAnimations/snakeBodyLocation'
 import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
+import {
+  getSnakeUnitPosition,
+  setSnakeUnitPosition,
+} from './bodyAnimations/snakeBodyProps'
 import { snakeBodyTurnaround } from './bodyAnimations/snakeBodyTurnaround'
-import { getDiff } from './bodyAnimations/snakeDiff'
+import { getDiff, setDiff } from './bodyAnimations/snakeDiff'
 import { getCounterHead, snakeHeadLocation } from './headAnimations/snakeHeadLocation'
 import { snakeHeadMoving } from './headAnimations/snakeHeadMoving'
 import { snakeHeadTurnaround } from './headAnimations/snakeHeadTurnaround'
@@ -47,8 +52,15 @@ export const snakeAnimation = (delta: number): void => {
   }))
   // если скорость змейки не равна 0
   if (!checkTimerStep()) {
+    if (getSnakeBodyCoord().length > snakePreviousStepsArray.length) {
+      snakePreviousStepsArray.push({ previousStepX: 0, previousStepY: 0 })
+      const tempUnitPosition = getSnakeUnitPosition()
+      tempUnitPosition.push([0, 0, 0])
+      setSnakeUnitPosition(tempUnitPosition)
+      setDiff({ diffX: 0, diffY: 0 }, getDiff().length)
+    }
     // вычисляем направление движения всех элементов змейки
-    snakeSteps.forEach((_, index) => snakeBodyDiff(index))
+    getSnakeBodyCoord().forEach((_, index) => snakeBodyDiff(index))
 
     snakeSteps = snakeStepSetting(snakeSteps)
     snakeBodyMoving(delta)
@@ -72,7 +84,8 @@ export const snakeAnimation = (delta: number): void => {
       step.previousStepY = step.currentStepY
       return step
     })
-
+    if (getSnakeBodyCoord().length > snakePreviousStepsArray.length)
+      snakePreviousStepsArray.push({ previousStepX: 0, previousStepY: 0 })
     // previousStepX = snakeSteps.currentStepX
     // previousStepY = snakeSteps.currentStepY
 
