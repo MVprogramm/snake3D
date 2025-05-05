@@ -54,10 +54,12 @@ export const snakeAnimation = (delta: number): void => {
   if (!checkTimerStep()) {
     if (getSnakeBodyCoord().length > snakePreviousStepsArray.length) {
       snakePreviousStepsArray.push({ previousStepX: 0, previousStepY: 0 })
-      const tempUnitPosition = getSnakeUnitPosition()
-      tempUnitPosition.push([0, 0, 0])
-      setSnakeUnitPosition(tempUnitPosition)
-      setDiff({ diffX: 0, diffY: 0 }, getDiff().length)
+      // const tempUnitPosition = [...getSnakeUnitPosition()]
+      // tempUnitPosition.push([0, 0, 0])
+      // // console.log(tempUnitPosition[tempUnitPosition.length - 1])
+
+      // setSnakeUnitPosition(tempUnitPosition)
+      // setDiff({ diffX: 0, diffY: 0 }, getDiff().length)
     }
     // вычисляем направление движения всех элементов змейки
     getSnakeBodyCoord().forEach((_, index) => snakeBodyDiff(index))

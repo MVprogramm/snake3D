@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import SnakeHead from '../assets/snakeModel/snakeHead/SnakeHead'
@@ -13,28 +13,45 @@ import checkTimerStep from '../engine/time/checkTimerStep'
 import {
   getSnakeUnitPosition,
   getSnakeUnitRotation,
+  setSnakeUnitPosition,
+  setSnakeUnitRotation,
 } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
-import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
+import { getDiff, setDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
 import { getProtocol } from '../engine/protocol/protocol'
+import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
  */
 const Snake = () => {
-  let snake = Array(getSnakeBodyCoord().length).fill([])
-  const headRef = useRef<THREE.Group>(null)
-  const bodyRefs = useRef<Array<React.RefObject<THREE.Group>>>(
-    Array(getAmountOfFood())
-      .fill(null)
-      .map(() => useRef<THREE.Group>(null))
-  )
-  const tailRef = useRef<THREE.Group>(null)
+  let snakeLength = getAmountOfFood() + 2
+  let snake = Array(getAmountOfFood() + 2).fill(1)
+  const [snakeSeparate, setSnakeSeparate] = useState(Array(getAmountOfFood() + 2).fill(1))
+  const snakeRefs: { [key: string]: RefObject<THREE.Group> } = {}
+  let tempKey: string
+  for (let i = 0; i <= snakeLength - 1; i++) {
+    tempKey = `bodyUnitRef_${i}`
+    if (i === 0) tempKey = 'headRef'
+    if (i === snakeLength - 1) tempKey = 'tailRef'
+    snakeRefs[tempKey] = useRef<THREE.Group>(null)
+  }
+
+  if (getSnakeUnitPosition().length < getSnakeBodyCoord().length) {
+    const tempUnitPosition = [...getSnakeUnitPosition()]
+    for (let i = 0; i < getAmountOfFood(); i++) {
+      tempUnitPosition.push([0, -3 - i, 0])
+      setDiff({ diffX: 0, diffY: 0 }, 3 + i)
+    }
+    setSnakeUnitPosition(tempUnitPosition)
+    const tempUnitRotation = [...getSnakeUnitRotation()]
+    for (let i = 0; i < getAmountOfFood(); i++) tempUnitRotation.push([0, 0, 0])
+    setSnakeUnitRotation(tempUnitRotation)
+  }
 
   useFrame((state, delta) => {
     snakeAnimation(delta)
 
     //**********КОНТРОЛЬ************************
-
     const [counterHeadX, counterHeadY] = getCounterHead()
     // const isSnakeMoving =
     //   getSnakeHeadParams().snakeHeadStepX !== 0 ||
@@ -45,6 +62,7 @@ const Snake = () => {
         getSnakeHeadParams().snakeHeadStepX !== 0 ||
         getSnakeHeadParams().snakeHeadStepY !== 0
       ) {
+        console.log(snakeRefs)
         // console.log(
         //   getProtocol()[getProtocol().length - 1],
         //   getProtocol()[getProtocol().length - 2]
@@ -58,63 +76,94 @@ const Snake = () => {
         //   getSnakeBodyCoord()[2]
         // )
         // console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
-        getSnakeUnitPosition().forEach((unit, index) => console.log(index, unit))
+        // getSnakeUnitPosition().forEach((unit, index) => console.log(index, unit))
       }
     }
+    const updatedSnake = snake.map((item, index) => {
+      if (index > getSnakeBodyCoord().length - 4) return 0
+      return 1
+    })
 
-    //*********************************
+    setSnakeSeparate(updatedSnake)
+
     // if (
     //   getSnakeHeadParams().snakeHeadStepX !== 0 ||
     //   getSnakeHeadParams().snakeHeadStepY !== 0
     // ) {
-    snake.forEach((_, index) => {
-      if (index === 0) {
-        headRef.current!.position.set(
-          getSnakeUnitPosition()[0][0],
-          getSnakeUnitPosition()[0][1],
-          getSnakeUnitPosition()[0][2]
-        )
-        headRef.current!.rotation.z = getSnakeUnitRotation()[0][2]
-        // headRef.current!.rotation.z = isSnakeMoving ? -zRotation : 0
+    //snake.forEach((_, index) => {
+    for (const key in snakeRefs) {
+      if (snakeRefs.hasOwnProperty(key)) {
+        if (key === 'headRef') {
+          snakeRefs['headRef'].current?.position.set(
+            getSnakeUnitPosition()[0][0],
+            getSnakeUnitPosition()[0][1],
+            getSnakeUnitPosition()[0][2]
+          )
+          snakeRefs['headRef'].current?.rotation.set(0, 0, getSnakeUnitRotation()[0][2])
+        }
+        if (key === 'tailRef') {
+          snakeRefs['tailRef'].current?.position.set(
+            getSnakeUnitPosition()[getSnakeUnitPosition().length - 2][0],
+            getSnakeUnitPosition()[getSnakeUnitPosition().length - 2][1],
+            getSnakeUnitPosition()[getSnakeUnitPosition().length - 2][2]
+          )
+          snakeRefs['tailRef'].current?.rotation.set(0, 0, getSnakeUnitRotation()[0][2])
+        }
       }
-      if (index > 0 && index < snake.length - 2) {
-        bodyRefs.current[index]!.current!.position.set(
-          getSnakeUnitPosition()[index][0],
-          getSnakeUnitPosition()[index][1],
-          getSnakeUnitPosition()[index][2]
-        )
-      }
-      if (index === snake.length - 2) {
-        tailRef.current!.position.set(
-          getSnakeUnitPosition()[index][0],
-          getSnakeUnitPosition()[index][1],
-          getSnakeUnitPosition()[index][2]
-        )
-        tailRef.current!.rotation.z = getSnakeUnitRotation()[snake.length - 2][2]
-        // tailRef.current!.rotation.z = isSnakeMoving ? zRotation : 0
-      }
-    })
+    }
+    // for (let i = 0; i < snakeLength; i++) {
+    //   if (i === 0) {
+    //     headRef.current!.position.set(
+    //       getSnakeUnitPosition()[0][0],
+    //       getSnakeUnitPosition()[0][1],
+    //       getSnakeUnitPosition()[0][2]
+    //     )
+    //     headRef.current!.rotation.z = getSnakeUnitRotation()[0][2]
+    //     headRef.current!.name = 'head'
+    //     // headRef.current!.rotation.z = isSnakeMoving ? -zRotation : 0
+    //   }
+    //   if (i > 0 && i < snakeLength - 1) {
+    //     bodyRefs.current[i]!.position.set(
+    //       getSnakeUnitPosition()[i][0],
+    //       getSnakeUnitPosition()[i][1],
+    //       getSnakeUnitPosition()[i][2]
+    //     )
+    //     bodyRefs.current[i]!.name = `unit_${i}`
+    //   }
+    //   if (i === snakeLength - 2) {
+    //     tailRef.current!.position.set(
+    //       getSnakeUnitPosition()[i][0],
+    //       getSnakeUnitPosition()[i][1],
+    //       getSnakeUnitPosition()[i][2]
+    //     )
+    //     tailRef.current!.rotation.z = getSnakeUnitRotation()[snakeLength - 2][2]
+    //     tailRef.current!.name = 'tail'
+    //     // tailRef.current!.rotation.z = isSnakeMoving ? zRotation : 0
+    //   }
+    // }
     // }
   })
 
   return (
     <group>
-      {snake.map((_, index) => {
+      {snakeSeparate.map((ref, index) => {
         if (index === 0) {
           return (
-            <group key={index} ref={headRef}>
+            <group key={index} ref={snakeRefs['headRef']}>
               <SnakeHead />
             </group>
           )
-        } else if (index < snake.length - 2) {
+        } else if (index < snakeLength - 1) {
           return (
-            <group key={index} ref={bodyRefs.current[index]}>
-              <SnakeBodyUnit />
-            </group>
+            ref === 1 && (
+              <group key={index} ref={snakeRefs[`bodyUnitRef_${index}`]}>
+                <SnakeBodyUnit />
+              </group>
+            )
           )
-        } else if (index === snake.length - 2) {
+        } else if (index === snakeLength - 1) {
           return (
-            <group key={index} ref={tailRef}>
+            <group key={index} ref={snakeRefs['tailRef']}>
               <SnakeTail />
             </group>
           )
