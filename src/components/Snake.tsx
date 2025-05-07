@@ -24,27 +24,30 @@ import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
  */
 const Snake = () => {
-  let snakeLength = getAmountOfFood() + 2
+  const snakeMaxLength = getAmountOfFood() + 2
+
+  const [snakeCurrentLength, setSnakeCurrentLength] = useState(3)
+  // const snakeSeparate = Array(getAmountOfFood() + 2).fill(1)
   let snake = Array(getAmountOfFood() + 2).fill(1)
   const [snakeSeparate, setSnakeSeparate] = useState(Array(getAmountOfFood() + 2).fill(1))
   const snakeRefs: { [key: string]: RefObject<THREE.Group> } = {}
   let tempKey: string
-  for (let i = 0; i <= snakeLength - 1; i++) {
+  for (let i = 0; i <= snakeMaxLength - 1; i++) {
     tempKey = `bodyUnitRef_${i}`
     if (i === 0) tempKey = 'headRef'
-    if (i === snakeLength - 1) tempKey = 'tailRef'
+    if (i === snakeMaxLength - 1) tempKey = 'tailRef'
     snakeRefs[tempKey] = useRef<THREE.Group>(null)
   }
+  // console.log(getSnakeUnitPosition().length, getSnakeBodyCoord().length)
 
   if (getSnakeUnitPosition().length < getSnakeBodyCoord().length) {
     const tempUnitPosition = [...getSnakeUnitPosition()]
-    for (let i = 0; i < getAmountOfFood(); i++) {
-      tempUnitPosition.push([0, -3 - i, 0])
-      setDiff({ diffX: 0, diffY: 0 }, 3 + i)
-    }
+    console.log(tempUnitPosition)
+    for (let i = 0; i < snakeCurrentLength; i++) setDiff({ diffX: 0, diffY: 0 }, 3 + i)
+    tempUnitPosition.push([0, -3 - snakeCurrentLength - 1, 0])
     setSnakeUnitPosition(tempUnitPosition)
     const tempUnitRotation = [...getSnakeUnitRotation()]
-    for (let i = 0; i < getAmountOfFood(); i++) tempUnitRotation.push([0, 0, 0])
+    for (let i = 0; i < snakeCurrentLength; i++) tempUnitRotation.push([0, 0, 0])
     setSnakeUnitRotation(tempUnitRotation)
   }
 
@@ -79,12 +82,15 @@ const Snake = () => {
         // getSnakeUnitPosition().forEach((unit, index) => console.log(index, unit))
       }
     }
-    const updatedSnake = snake.map((item, index) => {
-      if (index > getSnakeBodyCoord().length - 4) return 0
+    const updatedSnake = snake.map((_, index) => {
+      if (index > getSnakeBodyCoord().length - 3) return 0
       return 1
     })
 
     setSnakeSeparate(updatedSnake)
+    if (snakeCurrentLength < getSnakeBodyCoord().length) {
+      setSnakeCurrentLength(getSnakeBodyCoord().length)
+    }
 
     // if (
     //   getSnakeHeadParams().snakeHeadStepX !== 0 ||
@@ -153,7 +159,7 @@ const Snake = () => {
               <SnakeHead />
             </group>
           )
-        } else if (index < snakeLength - 1) {
+        } else if (index < snakeMaxLength - 1) {
           return (
             ref === 1 && (
               <group key={index} ref={snakeRefs[`bodyUnitRef_${index}`]}>
@@ -161,7 +167,7 @@ const Snake = () => {
               </group>
             )
           )
-        } else if (index === snakeLength - 1) {
+        } else if (index === snakeMaxLength - 1) {
           return (
             <group key={index} ref={snakeRefs['tailRef']}>
               <SnakeTail />
