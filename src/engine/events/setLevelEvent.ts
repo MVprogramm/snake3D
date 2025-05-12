@@ -2,6 +2,19 @@
  *  @module setLevelEvent.ts Устанавливает уровень в игре
  *     @function setLevelEvent Создание нового уровня
  */
+import {
+  getSnakeBodyLocation,
+  setSnakeBodyLocation,
+} from '../../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
+import {
+  setSnakeUnitPosition,
+  setSnakeUnitRotation,
+  setSnakeUnitScale,
+} from '../../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import { setDiff } from '../../animations/snakeAnimation/bodyAnimations/snakeDiff'
+import { setSnakePreviousStepsArray } from '../../animations/snakeAnimation/snakeAnimation'
+import { PreviousStep } from '../../types/animationTypes'
+import { getAmountOfFood } from '../food/amountOfFoodPerLevel'
 import { setCurrentLevel } from '../levels/currentLevel'
 import loadLevelProps from '../levels/loadLevelProps'
 import { setMaxLevel } from '../levels/maxLevel'
@@ -26,6 +39,22 @@ function setLevelEvent(level: number): boolean {
       name: 'start level',
       value: level,
     })
+    const tempVector3 = []
+    const positionVector3 = []
+    const tempLocationBody = []
+    const previousStep: PreviousStep[] = []
+    for (let i = 0; i < getAmountOfFood() + 1; i++) {
+      setDiff({ diffX: 0, diffY: 0 }, i)
+      tempVector3.push([0, 0, 0])
+      positionVector3.push([0, i * -1, 0])
+      previousStep.push({ previousStepX: 0, previousStepY: 0 })
+      tempLocationBody.push([0, i * -1])
+    }
+    setSnakeUnitPosition(positionVector3)
+    setSnakeUnitRotation(tempVector3)
+    setSnakeUnitScale(tempVector3)
+    setSnakeBodyLocation(tempLocationBody)
+    setSnakePreviousStepsArray(previousStep)
   } catch (error) {
     console.error(`Error setting level ${level}:`, error)
     throw error

@@ -19,17 +19,17 @@ import {
 import { getDiff, setDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
 import { getProtocol } from '../engine/protocol/protocol'
 import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
+import { getSnakeBodyLocation } from '../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
  */
 const Snake = () => {
-  const snakeMaxLength = getAmountOfFood() + 2
-
+  const snakeMaxLength = getAmountOfFood() + 1
   const [snakeCurrentLength, setSnakeCurrentLength] = useState(3)
   // const snakeSeparate = Array(getAmountOfFood() + 2).fill(1)
-  let snake = Array(getAmountOfFood() + 2).fill(1)
-  const [snakeSeparate, setSnakeSeparate] = useState(Array(getAmountOfFood() + 2).fill(1))
+  let snake = Array(getAmountOfFood() + 1).fill(1)
+  const [snakeSeparate, setSnakeSeparate] = useState(Array(getAmountOfFood() + 1).fill(1))
   const snakeRefs: { [key: string]: RefObject<THREE.Group> } = {}
   let tempKey: string
   for (let i = 0; i <= snakeMaxLength - 1; i++) {
@@ -38,18 +38,17 @@ const Snake = () => {
     if (i === snakeMaxLength - 1) tempKey = 'tailRef'
     snakeRefs[tempKey] = useRef<THREE.Group>(null)
   }
-  // console.log(getSnakeUnitPosition().length, getSnakeBodyCoord().length)
 
-  if (getSnakeUnitPosition().length < getSnakeBodyCoord().length) {
-    const tempUnitPosition = [...getSnakeUnitPosition()]
-    console.log(tempUnitPosition)
-    for (let i = 0; i < snakeCurrentLength; i++) setDiff({ diffX: 0, diffY: 0 }, 3 + i)
-    tempUnitPosition.push([0, -3 - snakeCurrentLength - 1, 0])
-    setSnakeUnitPosition(tempUnitPosition)
-    const tempUnitRotation = [...getSnakeUnitRotation()]
-    for (let i = 0; i < snakeCurrentLength; i++) tempUnitRotation.push([0, 0, 0])
-    setSnakeUnitRotation(tempUnitRotation)
-  }
+  // if (getSnakeUnitPosition().length < getSnakeBodyCoord().length) {
+  //   const tempUnitPosition = [...getSnakeUnitPosition()]
+  //   for (let i = 0; i < snakeCurrentLength; i++) setDiff({ diffX: 0, diffY: 0 }, 3 + i)
+
+  //   tempUnitPosition.push([0, -3 - snakeCurrentLength - 1, 0])
+  //   setSnakeUnitPosition(tempUnitPosition)
+  //   const tempUnitRotation = [...getSnakeUnitRotation()]
+  //   for (let i = 0; i < snakeCurrentLength; i++) tempUnitRotation.push([0, 0, 0])
+  //   setSnakeUnitRotation(tempUnitRotation)
+  // }
 
   useFrame((state, delta) => {
     snakeAnimation(delta)
@@ -66,6 +65,14 @@ const Snake = () => {
         getSnakeHeadParams().snakeHeadStepY !== 0
       ) {
         console.log(snakeRefs)
+
+        console.log('head: ', snakeRefs['headRef'].current?.position)
+        console.log('body: ', snakeRefs['bodyUnitRef_1'].current?.position)
+        console.log('tail: ', snakeRefs['tailRef'].current?.position)
+        // console.log('engine: ', getSnakeBodyCoord())
+        // console.log('diff: ', getDiff())
+        // console.log('3D: ', getSnakeUnitPosition())
+        console.log('Location: ', getSnakeBodyLocation())
         // console.log(
         //   getProtocol()[getProtocol().length - 1],
         //   getProtocol()[getProtocol().length - 2]
@@ -74,7 +81,7 @@ const Snake = () => {
         //   'координаты движка: ',
         //   getSnakeHeadParams().snakeHeadStepX,
         //   getSnakeHeadParams().snakeHeadStepY,
-        //   getSnakeBodyCoord()[0],
+        // getSnakeBodyCoord()
         //   getSnakeBodyCoord()[1],
         //   getSnakeBodyCoord()[2]
         // )
@@ -109,11 +116,27 @@ const Snake = () => {
         }
         if (key === 'tailRef') {
           snakeRefs['tailRef'].current?.position.set(
-            getSnakeUnitPosition()[getSnakeUnitPosition().length - 2][0],
-            getSnakeUnitPosition()[getSnakeUnitPosition().length - 2][1],
-            getSnakeUnitPosition()[getSnakeUnitPosition().length - 2][2]
+            getSnakeUnitPosition()[snakeCurrentLength - 2][0],
+            getSnakeUnitPosition()[snakeCurrentLength - 2][1],
+            getSnakeUnitPosition()[snakeCurrentLength - 2][2]
           )
           snakeRefs['tailRef'].current?.rotation.set(0, 0, getSnakeUnitRotation()[0][2])
+        }
+
+        if (key.includes('bodyUnitRef_')) {
+          const index = +key[key.length - 1]
+          if (index < snakeCurrentLength - 2) {
+            snakeRefs[`bodyUnitRef_${index}`].current?.position.set(
+              getSnakeUnitPosition()[index][0],
+              getSnakeUnitPosition()[index][1],
+              getSnakeUnitPosition()[index][2]
+            )
+            snakeRefs[`bodyUnitRef_${index}`].current?.rotation.set(
+              0,
+              0,
+              getSnakeUnitRotation()[0][2]
+            )
+          }
         }
       }
     }

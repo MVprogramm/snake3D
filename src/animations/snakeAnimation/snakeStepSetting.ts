@@ -55,11 +55,13 @@ export const snakeStepSetting = (step: snakeSteps[]): snakeSteps[] => {
   if (step[0].currentStepX !== 0 && step[0].currentStepX === -step[0].previousStepX) {
     step[0].currentStepX = 0
     step[0].currentStepY = +getProtocol()[getProtocol().length - 2].value
+
     setDiff({ diffX: step[0].currentStepX, diffY: step[0].currentStepY }, 0)
   }
   if (step[0].currentStepY !== 0 && step[0].currentStepY === -step[0].previousStepY) {
     step[0].currentStepY = 0
     step[0].currentStepX = +getProtocol()[getProtocol().length - 2].value
+
     setDiff({ diffX: step[0].currentStepX, diffY: step[0].currentStepY }, 0)
   }
 

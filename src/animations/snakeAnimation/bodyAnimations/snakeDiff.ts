@@ -4,11 +4,13 @@ import { snakeDiff } from '../../../types/animationTypes'
  * Массив объектов, хранящих текущие направления движения каждого
  * элемента змейки по вертикали и горизонтали
  */
-let snakeDiffArray: snakeDiff[] = [
-  { diffX: 0, diffY: 0 },
-  { diffX: 0, diffY: 0 },
-  { diffX: 0, diffY: 0 },
-]
+// let snakeDiffArray: snakeDiff[] = [
+//   { diffX: 0, diffY: 0 },
+//   { diffX: 0, diffY: 0 },
+//   { diffX: 0, diffY: 0 },
+// ]
+
+let snakeDiffArray: snakeDiff[] = []
 
 /**
  * Функция вносит текущие направления движения каждого элемента змейки
@@ -19,12 +21,13 @@ let snakeDiffArray: snakeDiff[] = [
  * @param index - расположение элемента змейки в массиве snakeDiffArray.
  */
 export function setDiff(newDiff: snakeDiff, index: number): void {
-  if (index === snakeDiffArray.length) {
-    snakeDiffArray.push({ diffX: 0, diffY: 0 })
-    snakeDiffArray[index - 1] = newDiff
-  } else {
-    snakeDiffArray[index] = newDiff
-  }
+  // if (isNaN(newDiff.diffX) || isNaN(newDiff.diffY)) return
+  // if (index === snakeDiffArray.length) {
+  //   snakeDiffArray.push({ diffX: 0, diffY: 0 })
+  //   snakeDiffArray[index - 1] = newDiff
+  // } else {
+  snakeDiffArray[index] = newDiff
+  // }
 }
 
 export function getDiff(): snakeDiff[] {

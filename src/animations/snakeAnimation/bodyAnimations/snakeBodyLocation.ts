@@ -1,26 +1,30 @@
-// import { setSnakePosition } from '../../../engine/snake/setSnakePosition'
-// import checkTimerStep from '../../../engine/time/checkTimerStep'
-// import { snakeSteps } from '../../../types/animationTypes'
-// import { getSnakeSpeed } from '../snakeSpeedSetting'
+import { getField } from '../../../engine/field/fieldPerLevel'
+import { getSnakeHeadParams } from '../../../engine/snake/snake'
+import { checkTimerWorking } from '../../../engine/time/isTimer'
+import { getCounterHead } from '../headAnimations/snakeHeadLocation'
 
-// let counterX = 0
-// let counterY = 0
+const snakeBodyLocation: number[][] = []
 
-// export const snakeBodyLocation = (steps: snakeSteps, delta: number) => {
-//   const { previousStepX, previousStepY, currentStepX, currentStepY } = steps
-//   if (!checkTimerStep()) {
-//     const moveSpeed = getSnakeSpeed()
-//     counterX = counterX + currentStepX * delta * moveSpeed
-//     counterY = counterY + currentStepY * delta * moveSpeed
-//     {counterX, counterY} = setSnakePosition({
-//       counterX,
-//       counterY,
-//     })
-//     if (previousStepX !== 0 && currentStepX === 0 && currentStepY !== 0) counterX = 0
-//     if (previousStepY !== 0 && currentStepX !== 0 && currentStepY === 0) counterY = 0
-//   }
-// }
+export const setSnakeBodyLocation = (props: number[][]) => {
+  snakeBodyLocation.length = 0
 
-// export const getCounter = () => {
-//   return [counterX, counterY]
-// }
+  props.forEach((unit) => snakeBodyLocation.push(unit))
+}
+
+export const updateSnakeBodyLocation = () => {
+  const [counterHeadX, counterHeadY] = getCounterHead()
+  if (counterHeadX === 0 && counterHeadY === 0 && checkTimerWorking()) {
+    let { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } =
+      getSnakeHeadParams()
+    const xCoord = snakeHeadCoordX - (getField() + 1) / 2
+    const yCoord = snakeHeadCoordY - (getField() + 1) / 2
+
+    for (let i = snakeBodyLocation.length - 1; i > 0; i--)
+      snakeBodyLocation[i] = snakeBodyLocation[i - 1]
+    snakeBodyLocation[0] = [xCoord + snakeHeadStepX, yCoord + snakeHeadStepY]
+  }
+}
+
+export const getSnakeBodyLocation = (): number[][] => {
+  return snakeBodyLocation
+}

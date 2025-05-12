@@ -24,3 +24,8 @@ export type snakeDiff = {
   diffX: number
   diffY: number
 }
+
+export type PreviousStep = {
+  previousStepX: number
+  previousStepY: number
+}

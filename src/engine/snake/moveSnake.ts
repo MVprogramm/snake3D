@@ -2,6 +2,7 @@
  * @module moveSnake.ts Управляет движением змейки
  *    @function moveSnake Двигает змейку по игровому полю
  */
+import { getSnakeUnitPosition } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import { getPositionHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadProps'
 import allContactEvents from '../events/allContactEvents'
@@ -42,6 +43,7 @@ function moveSnake(): void {
         snakeHeadStepX: snakeHeadStepX,
         snakeHeadStepY: snakeHeadStepY,
       }
+
       const nextSnakeHeadCoord = allContactEvents(potentialSnakeHeadCoord)
       if (
         nextSnakeHeadCoord.snakeHeadCoordX !== potentialSnakeHeadCoord.snakeHeadCoordX ||

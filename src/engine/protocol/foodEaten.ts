@@ -15,7 +15,19 @@ import * as SNAKE from '../snake/snake'
 function foodEaten() {
   setFood(1)
   setScores(getDoubleScoresFood() ? getFoodScores() * 2 : getFoodScores())
-  if (!getStopsGrowing()) SNAKE.addSnakeBodyCoord([])
+  if (!getStopsGrowing()) {
+    const snakeLength = SNAKE.getSnakeBodyCoord().length
+    const xDef =
+      SNAKE.getSnakeBodyCoord()[snakeLength - 2][0] -
+      SNAKE.getSnakeBodyCoord()[snakeLength - 1][0]
+    const yDef =
+      SNAKE.getSnakeBodyCoord()[snakeLength - 2][1] -
+      SNAKE.getSnakeBodyCoord()[snakeLength - 1][1]
+    const xNewCoord = SNAKE.getSnakeBodyCoord()[snakeLength - 1][0] - xDef
+    const yNewCoord = SNAKE.getSnakeBodyCoord()[snakeLength - 1][1] - yDef
+
+    SNAKE.addSnakeBodyCoord([xNewCoord, yNewCoord])
+  }
   // moveSnake();
 }
 
