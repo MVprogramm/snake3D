@@ -66,13 +66,13 @@ const Snake = () => {
       ) {
         console.log(snakeRefs)
 
-        console.log('head: ', snakeRefs['headRef'].current?.position)
-        console.log('body: ', snakeRefs['bodyUnitRef_1'].current?.position)
-        console.log('tail: ', snakeRefs['tailRef'].current?.position)
+        // console.log('head: ', snakeRefs['headRef'].current?.position)
+        // console.log('body: ', snakeRefs['bodyUnitRef_1'].current?.position)
+        // console.log('tail: ', snakeRefs['tailRef'].current?.position)
         // console.log('engine: ', getSnakeBodyCoord())
         // console.log('diff: ', getDiff())
-        // console.log('3D: ', getSnakeUnitPosition())
-        console.log('Location: ', getSnakeBodyLocation())
+        console.log('3D: ', getSnakeUnitPosition())
+        // console.log('Location: ', getSnakeBodyLocation())
         // console.log(
         //   getProtocol()[getProtocol().length - 1],
         //   getProtocol()[getProtocol().length - 2]

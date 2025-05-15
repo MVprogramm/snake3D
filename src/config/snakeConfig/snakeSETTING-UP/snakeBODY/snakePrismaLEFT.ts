@@ -10,7 +10,7 @@ const snakePrismaLeftTransition: TYPES.GeometryTransitionProps = {
 export const snakePrismaLEFT: TYPES.GeometryProps = {
   position: new Vector3(
     snakePrismaLeftTransition.position[0],
-    -0.94 + snakePrismaLeftTransition.position[1],
+    snakePrismaLeftTransition.position[1],
     0.5 + snakePrismaLeftTransition.position[2]
   ),
   'rotation-x': 0 + snakePrismaLeftTransition.rotation[0],
