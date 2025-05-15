@@ -1,18 +1,6 @@
-const snakeBodyPosition: number[][] = [
-  // [0, 0, 0],
-  // [0, -1, 0],
-  // [0, -2, 0],
-]
-const snakeBodyRotation: number[][] = [
-  // [0, 0, 0],
-  // [0, 0, 0],
-  // [0, 0, 0],
-]
-const snakeBodyScale: number[][] = [
-  // [0, 0, 0],
-  // [0, 0, 0],
-  // [0, 0, 0],
-]
+const snakeBodyPosition: number[][] = []
+const snakeBodyRotation: number[][] = []
+const snakeBodyScale: number[][] = []
 
 export const setSnakeUnitPosition = (props: number[][]) => {
   snakeBodyPosition.length = 0

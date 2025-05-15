@@ -64,7 +64,7 @@ const Snake = () => {
         getSnakeHeadParams().snakeHeadStepX !== 0 ||
         getSnakeHeadParams().snakeHeadStepY !== 0
       ) {
-        console.log(snakeRefs)
+        // console.log(snakeRefs)
 
         // console.log('head: ', snakeRefs['headRef'].current?.position)
         // console.log('body: ', snakeRefs['bodyUnitRef_1'].current?.position)
@@ -72,7 +72,7 @@ const Snake = () => {
         // console.log('engine: ', getSnakeBodyCoord())
         // console.log('diff: ', getDiff())
         console.log('3D: ', getSnakeUnitPosition())
-        // console.log('Location: ', getSnakeBodyLocation())
+        console.log('Location: ', getSnakeBodyLocation())
         // console.log(
         //   getProtocol()[getProtocol().length - 1],
         //   getProtocol()[getProtocol().length - 2]

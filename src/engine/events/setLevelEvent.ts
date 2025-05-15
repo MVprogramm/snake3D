@@ -11,6 +11,7 @@ import {
   setSnakeUnitRotation,
   setSnakeUnitScale,
 } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import { setSnakeBodyRotation } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyTurnaround'
 import { setDiff } from '../../animations/snakeAnimation/bodyAnimations/snakeDiff'
 import { setSnakePreviousStepsArray } from '../../animations/snakeAnimation/snakeAnimation'
 import { PreviousStep } from '../../types/animationTypes'
@@ -42,6 +43,7 @@ function setLevelEvent(level: number): boolean {
     const tempVector3 = []
     const positionVector3 = []
     const tempLocationBody = []
+    const tempRotationBody = []
     const previousStep: PreviousStep[] = []
     for (let i = 0; i < getAmountOfFood() + 1; i++) {
       setDiff({ diffX: 0, diffY: 0 }, i)
@@ -49,11 +51,13 @@ function setLevelEvent(level: number): boolean {
       positionVector3.push([0, i * -1, 0])
       previousStep.push({ previousStepX: 0, previousStepY: 0 })
       tempLocationBody.push([0, i * -1])
+      tempRotationBody.push([0, 0, 11 * i])
     }
     setSnakeUnitPosition(positionVector3)
     setSnakeUnitRotation(tempVector3)
     setSnakeUnitScale(tempVector3)
     setSnakeBodyLocation(tempLocationBody)
+    setSnakeBodyRotation(tempRotationBody)
     setSnakePreviousStepsArray(previousStep)
   } catch (error) {
     console.error(`Error setting level ${level}:`, error)

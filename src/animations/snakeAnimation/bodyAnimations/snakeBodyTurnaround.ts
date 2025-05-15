@@ -1,5 +1,12 @@
-let snakeBodyTurn = 1
+const snakeBodyRotation: number[][] = []
+export const setSnakeBodyRotation = (props: number[][]) => {
+  snakeBodyRotation.length = 0
 
+  props.forEach((unit) => snakeBodyRotation.push(unit))
+}
+export const getSnakeBodyRotation = (): number[][] => snakeBodyRotation
+
+let snakeBodyTurn = 1
 export const setBodyTurnaround = (body: number) => {
   snakeBodyTurn = body
 }
