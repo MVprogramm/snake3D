@@ -12,9 +12,15 @@ import {
 import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
 import {
   getSnakeUnitPosition,
+  getSnakeUnitRotation,
   setSnakeUnitPosition,
+  setSnakeUnitRotation,
 } from './bodyAnimations/snakeBodyProps'
-import { snakeBodyTurnaround } from './bodyAnimations/snakeBodyTurnaround'
+import {
+  getSnakeBodyRotation,
+  snakeBodyTurnaround,
+  updateSnakeBodyRotation,
+} from './bodyAnimations/snakeBodyTurnaround'
 import { getDiff, setDiff } from './bodyAnimations/snakeDiff'
 import { getCounterHead, snakeHeadLocation } from './headAnimations/snakeHeadLocation'
 import { snakeHeadMoving } from './headAnimations/snakeHeadMoving'
@@ -75,14 +81,18 @@ export const snakeAnimation = (delta: number): void => {
     //     setDiff({ diffX, diffY }, index)
     //   }
     // })
+    console.log(getSnakeUnitRotation()[getSnakeUnitRotation().length - 1])
+
     getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
     // getSnakeUnitPosition().forEach((_, index) => snakeBodyDiff(index))
     updateSnakeBodyLocation()
+    // updateSnakeBodyRotation()
     snakeSteps = snakeStepSetting(snakeSteps)
     snakeBodyMoving(delta)
     snakeHeadLocation(snakeSteps[0], delta)
     snakeHeadMoving(snakeSteps[0], delta)
     snakeBodyTurnaround(snakeSteps[0])
+    // setSnakeUnitRotation(getSnakeBodyRotation())
     // const [counterHeadX, counterHeadY] = getCounterHead()
     // console.log({ counterHeadX, counterHeadY })
 

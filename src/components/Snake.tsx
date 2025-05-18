@@ -65,14 +65,14 @@ const Snake = () => {
         getSnakeHeadParams().snakeHeadStepY !== 0
       ) {
         // console.log(snakeRefs)
-
         // console.log('head: ', snakeRefs['headRef'].current?.position)
         // console.log('body: ', snakeRefs['bodyUnitRef_1'].current?.position)
         // console.log('tail: ', snakeRefs['tailRef'].current?.position)
         // console.log('engine: ', getSnakeBodyCoord())
         // console.log('diff: ', getDiff())
-        console.log('3D: ', getSnakeUnitPosition())
-        console.log('Location: ', getSnakeBodyLocation())
+        // console.log('3D: ', getSnakeUnitPosition())
+        // console.log('Location: ', getSnakeBodyLocation())
+        console.log('Rotation: ', getSnakeUnitRotation())
         // console.log(
         //   getProtocol()[getProtocol().length - 1],
         //   getProtocol()[getProtocol().length - 2]
@@ -114,17 +114,21 @@ const Snake = () => {
           )
           snakeRefs['headRef'].current?.rotation.set(0, 0, getSnakeUnitRotation()[0][2])
         }
+        const index = +key[key.length - 1]
         if (key === 'tailRef') {
           snakeRefs['tailRef'].current?.position.set(
             getSnakeUnitPosition()[snakeCurrentLength - 2][0],
             getSnakeUnitPosition()[snakeCurrentLength - 2][1],
             getSnakeUnitPosition()[snakeCurrentLength - 2][2]
           )
-          snakeRefs['tailRef'].current?.rotation.set(0, 0, getSnakeUnitRotation()[0][2])
+          snakeRefs['tailRef'].current?.rotation.set(
+            0,
+            0,
+            getSnakeUnitRotation()[snakeCurrentLength - 2][2]
+          )
         }
 
         if (key.includes('bodyUnitRef_')) {
-          const index = +key[key.length - 1]
           if (index < snakeCurrentLength - 2) {
             snakeRefs[`bodyUnitRef_${index}`].current?.position.set(
               getSnakeUnitPosition()[index][0],
@@ -134,7 +138,7 @@ const Snake = () => {
             snakeRefs[`bodyUnitRef_${index}`].current?.rotation.set(
               0,
               0,
-              getSnakeUnitRotation()[0][2]
+              getSnakeUnitRotation()[index][2]
             )
           }
         }

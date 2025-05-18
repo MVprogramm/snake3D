@@ -6,6 +6,12 @@ export const setSnakeBodyRotation = (props: number[][]) => {
 }
 export const getSnakeBodyRotation = (): number[][] => snakeBodyRotation
 
+export const updateSnakeBodyRotation = () => {
+  const [counterHeadX, counterHeadY] = getCounterHead()
+  if (counterHeadX === 0 && counterHeadY === 0 && checkTimerWorking()) {
+  }
+}
+
 let snakeBodyTurn = 1
 export const setBodyTurnaround = (body: number) => {
   snakeBodyTurn = body
@@ -13,7 +19,10 @@ export const setBodyTurnaround = (body: number) => {
 
 export const getBodyTurnaround = () => snakeBodyTurn
 
+import { getSnakeBodyCoord } from '../../../engine/snake/snake'
+import { checkTimerWorking } from '../../../engine/time/isTimer'
 import { snakeSteps } from '../../../types/animationTypes'
+import { getCounterHead } from '../headAnimations/snakeHeadLocation'
 import * as PROPS from './snakeBodyProps'
 import { getDiff } from './snakeDiff'
 
@@ -30,11 +39,16 @@ export const snakeBodyTurnaround = (steps: snakeSteps) => {
       if (previousStepY === 0 && currentStepY === 1) unit[2] = 0
     }
 
-    if (index === PROPS.getSnakeUnitRotation().length - 2) {
+    if (index === getSnakeBodyCoord().length - 2) {
       if (getDiff()[index].diffX === 1) unit[2] = 11
       if (getDiff()[index].diffX === -1) unit[2] = 33
       if (getDiff()[index].diffY === 1) unit[2] = 0
       if (getDiff()[index].diffY === -1) unit[2] = 22
+    } else {
+      if (getDiff()[index].diffX === 1) unit[2] = 11 + (index % 2) * 11
+      if (getDiff()[index].diffX === -1) unit[2] = 33 + (index % 2) * 11
+      if (getDiff()[index].diffY === 1) unit[2] = 0 + (index % 2) * 11
+      if (getDiff()[index].diffY === -1) unit[2] = 22 + (index % 2) * 11
     }
     return unit
   })
