@@ -10,7 +10,6 @@ export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
   const moveSpeed = getSnakeSpeed()
   const positionHead = getPositionHead()
   // if (checkTimerWorking() && !checkContact()) {
-
   positionHead[0] += currentStepX * delta * moveSpeed
   positionHead[1] += currentStepY * delta * moveSpeed
   if (currentStepX === 0) positionHead[0] = Math.round(positionHead[0])

@@ -1,6 +1,6 @@
 import moveSnake from '../../engine/snake/moveSnake'
 import { setSnakePosition } from '../../engine/snake/setSnakePosition'
-import { getSnakeBodyCoord } from '../../engine/snake/snake'
+import { getSnakeBodyCoord, getSnakeHeadParams } from '../../engine/snake/snake'
 import checkTimerStep from '../../engine/time/checkTimerStep'
 import { PreviousStep, snakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
@@ -81,16 +81,37 @@ export const snakeAnimation = (delta: number): void => {
     //     setDiff({ diffX, diffY }, index)
     //   }
     // })
-    console.log(getSnakeUnitRotation()[getSnakeUnitRotation().length - 1])
+    // console.log(getSnakeUnitRotation()[getSnakeUnitRotation().length - 1])
 
     getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
     // getSnakeUnitPosition().forEach((_, index) => snakeBodyDiff(index))
-    updateSnakeBodyLocation()
+    // console.log(getDiff()[0], getDiff()[1])
+    // console.log(
+    //   'pos: ',
+    //   [
+    //     Math.round(getSnakeUnitPosition()[0][0]),
+    //     Math.round(getSnakeUnitPosition()[0][1]),
+    //   ],
+    //   [Math.round(getSnakeUnitPosition()[1][0]), Math.round(getSnakeUnitPosition()[1][1])]
+    // )
+
     // updateSnakeBodyRotation()
+
     snakeSteps = snakeStepSetting(snakeSteps)
-    snakeBodyMoving(delta)
+    updateSnakeBodyLocation()
+    // const [counterHeadX, counterHeadY] = getCounterHead()
+    // if (counterHeadX === 0 && counterHeadY === 0) {
+    //   if (
+    //     getSnakeHeadParams().snakeHeadStepX !== 0 ||
+    //     getSnakeHeadParams().snakeHeadStepY !== 0
+    //   ) {
+    //     console.log(snakeSteps)
+    //   }
+    // }
+
     snakeHeadLocation(snakeSteps[0], delta)
     snakeHeadMoving(snakeSteps[0], delta)
+    snakeBodyMoving(snakeSteps, delta)
     snakeBodyTurnaround(snakeSteps[0])
     // setSnakeUnitRotation(getSnakeBodyRotation())
     // const [counterHeadX, counterHeadY] = getCounterHead()

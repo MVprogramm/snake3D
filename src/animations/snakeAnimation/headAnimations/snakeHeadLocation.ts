@@ -1,4 +1,5 @@
 import { setSnakePosition } from '../../../engine/snake/setSnakePosition'
+import { getSnakeHeadParams } from '../../../engine/snake/snake'
 import checkTimerStep from '../../../engine/time/checkTimerStep'
 import { snakeSteps } from '../../../types/animationTypes'
 import { getSnakeSpeed } from '../snakeSpeedSetting'
@@ -124,15 +125,29 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
         console.error('Error: setSnakePosition returned invalid counter values')
         return
       }
-
+      /*
       // Вычисление условий обратного хода
       const isChangingDirectionFromXtoY =
         previousStepX !== 0 && currentStepX === 0 && currentStepY !== 0
       const isChangingDirectionFromYtoX =
         previousStepY !== 0 && currentStepY === 0 && currentStepX !== 0
+      // if (counterHeadX === 0 && counterHeadY === 0) {
+      //   if (
+      //     getSnakeHeadParams().snakeHeadStepX !== 0 ||
+      //     getSnakeHeadParams().snakeHeadStepY !== 0
+      //   ) {
+      //     if (isChangingDirectionFromXtoY || isChangingDirectionFromYtoX) {
+      //       console.log({ isChangingDirectionFromXtoY, isChangingDirectionFromYtoX })
+      //     }
+      //   }
+      // }
 
       counterHeadX = isChangingDirectionFromXtoY ? 0 : counterX
       counterHeadY = isChangingDirectionFromYtoX ? 0 : counterY
+    */
+
+      counterHeadX = counterX
+      counterHeadY = counterY
     } catch (error) {
       console.error('Error occurred during position calculation:', error)
       // Не меняем счетчики в случае ошибки

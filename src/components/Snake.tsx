@@ -20,6 +20,8 @@ import { getDiff, setDiff } from '../animations/snakeAnimation/bodyAnimations/sn
 import { getProtocol } from '../engine/protocol/protocol'
 import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
 import { getSnakeBodyLocation } from '../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
+import { getCounterUnits } from '../animations/snakeAnimation/bodyAnimations/snakeBodyMoving'
+import { getSnakeTurnAround } from '../animations/snakeAnimation/snakeStepSetting'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
@@ -64,6 +66,8 @@ const Snake = () => {
         getSnakeHeadParams().snakeHeadStepX !== 0 ||
         getSnakeHeadParams().snakeHeadStepY !== 0
       ) {
+        // console.log(getSnakeTurnAround())
+        // console.log(getCounterUnits())
         // console.log(snakeRefs)
         // console.log('head: ', snakeRefs['headRef'].current?.position)
         // console.log('body: ', snakeRefs['bodyUnitRef_1'].current?.position)
@@ -71,8 +75,13 @@ const Snake = () => {
         // console.log('engine: ', getSnakeBodyCoord())
         // console.log('diff: ', getDiff())
         // console.log('3D: ', getSnakeUnitPosition())
-        // console.log('Location: ', getSnakeBodyLocation())
-        console.log('Rotation: ', getSnakeUnitRotation())
+        // console.log(
+        //   'Location: ',
+        //   getSnakeBodyLocation()[0],
+        //   getSnakeBodyLocation()[1],
+        //   getSnakeBodyLocation()[2]
+        // )
+        // console.log('Rotation: ', getSnakeUnitRotation())
         // console.log(
         //   getProtocol()[getProtocol().length - 1],
         //   getProtocol()[getProtocol().length - 2]
@@ -86,7 +95,9 @@ const Snake = () => {
         //   getSnakeBodyCoord()[2]
         // )
         // console.log('смещения 3D координат: ', getDiff()[0], getDiff()[1], getDiff()[2])
-        // getSnakeUnitPosition().forEach((unit, index) => console.log(index, unit))
+        // getSnakeUnitPosition().forEach((unit, index) => {
+        //   if (index < 3) console.log(index, unit)
+        // })
       }
     }
     const updatedSnake = snake.map((_, index) => {

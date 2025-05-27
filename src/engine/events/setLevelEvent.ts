@@ -6,6 +6,7 @@ import {
   getSnakeBodyLocation,
   setSnakeBodyLocation,
 } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
+import { setCounterUnits } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyMoving'
 import {
   getSnakeUnitRotation,
   setSnakeUnitPosition,
@@ -58,6 +59,7 @@ function setLevelEvent(level: number): boolean {
         tempRotationBody.push([0, 0, 22])
       }
     }
+    setCounterUnits()
     setSnakeUnitPosition(positionVector3)
     setSnakeUnitRotation(tempRotationBody)
     setSnakeUnitScale(tempVector3)
