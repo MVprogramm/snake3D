@@ -42,7 +42,7 @@ function Main() {
           }}
           camera={cameraSettings}
         >
-          <OrbitControls />
+          {/* <OrbitControls /> */}
           <Game />
         </Canvas>
 

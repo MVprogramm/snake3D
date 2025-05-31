@@ -72,12 +72,8 @@ export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
       getSnakeHeadParams().snakeHeadStepY !== 0
     ) {
       // console.log(getSnakeBodyLocation()[0], getSnakeBodyLocation()[1])
-
       // console.log('pos: ', posHeadBefore, posBodyBefore)
       // console.log('diff: ', getDiff()[0], getDiff()[1])
-
-      console.log('----------------------------')
-
       //     console.log(
       //       'координаты движка: ',
       //       getSnakeBodyCoord()[0],
