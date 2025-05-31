@@ -16,7 +16,6 @@ export const setSnakeBodyLocation = (props: number[][]) => {
 export const updateSnakeBodyLocation = () => {
   const [counterHeadX, counterHeadY] = getCounterHead()
   if (counterHeadX === 0 && counterHeadY === 0 && checkTimerWorking()) {
-    console.log('head life: ', snakeBodyLocation[0])
     let { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } =
       getSnakeHeadParams()
     const xCoord = snakeHeadCoordX - (getField() + 1) / 2
@@ -29,13 +28,10 @@ export const updateSnakeBodyLocation = () => {
       snakeBodyLocation[i] = snakeBodyLocation[i - 1]
 
     if (getSnakeTurnAround()[0] === 1) {
-      console.log('head shock X')
-
       currentSnakeHeadStepX = 0
       currentSnakeHeadStepY = +getProtocol()[getProtocol().length - 2].value
     }
     if (getSnakeTurnAround()[1] === 1) {
-      console.log('head shock Y')
       currentSnakeHeadStepX = +getProtocol()[getProtocol().length - 2].value
       currentSnakeHeadStepY = 0
     }
@@ -44,7 +40,6 @@ export const updateSnakeBodyLocation = () => {
       xCoord + currentSnakeHeadStepX,
       yCoord + currentSnakeHeadStepY,
     ]
-    console.log('after: ', getSnakeBodyLocation()[0])
 
     setSnakeTurnAround([0, 0])
   }
