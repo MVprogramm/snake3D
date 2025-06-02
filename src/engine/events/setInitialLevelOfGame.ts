@@ -1,18 +1,10 @@
 /**
- *  @module setLevelEvent.ts Устанавливает уровень в игре
- *     @function setLevelEvent Создание нового уровня
+ *  @module setInitialLevelOfGame.ts Устанавливает уровень в игре
+ *  @function setInitialLevelOfGame Создание нового уровня
  */
-import {
-  getSnakeBodyLocation,
-  setSnakeBodyLocation,
-} from '../../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
+import { setSnakeBodyLocation } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
 import { setCounterUnits } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyMoving'
-import {
-  getSnakeUnitRotation,
-  setSnakeUnitPosition,
-  setSnakeUnitRotation,
-  setSnakeUnitScale,
-} from '../../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import * as UNIT from '../../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import { setSnakeBodyRotation } from '../../animations/snakeAnimation/bodyAnimations/snakeBodyTurnaround'
 import { setDiff } from '../../animations/snakeAnimation/bodyAnimations/snakeDiff'
 import { setSnakePreviousStepsArray } from '../../animations/snakeAnimation/snakeAnimation'
@@ -30,7 +22,7 @@ import protocolExecutor from '../protocol/protocolExecutor'
  * 2. Устанавливает стартовый уровень и его настройки
  * 3. Фиксирует событие запуска уровня в игре
  */
-function setLevelEvent(level: number): boolean {
+function setInitialLevelOfGame(level: number): boolean {
   if (!Number.isInteger(level) || level < 1) {
     throw new Error('Level must be a positive integer')
   }
@@ -60,9 +52,9 @@ function setLevelEvent(level: number): boolean {
       }
     }
     setCounterUnits()
-    setSnakeUnitPosition(positionVector3)
-    setSnakeUnitRotation(tempRotationBody)
-    setSnakeUnitScale(tempVector3)
+    UNIT.setSnakeUnitPosition(positionVector3)
+    UNIT.setSnakeUnitRotation(tempRotationBody)
+    UNIT.setSnakeUnitScale(tempVector3)
     setSnakeBodyLocation(tempLocationBody)
     setSnakeBodyRotation(tempRotationBody)
     setSnakePreviousStepsArray(previousStep)
@@ -72,13 +64,6 @@ function setLevelEvent(level: number): boolean {
   }
 
   return true
-  // setMaxLevel()
-  // setCurrentLevel(level)
-  // loadLevelProps(level)
-  // protocolExecutor({
-  //   name: 'start level',
-  //   value: level,
-  // })
 }
 
-export default setLevelEvent
+export default setInitialLevelOfGame

@@ -1,7 +1,6 @@
 
-**tsconfig.node.json**
+## Файл настроек Typescript для компилятора Vite **"tsconfig.node.json"**
 #comments 
-
 
 Файл `tsconfig.node.json` используется для компиляции **Vite-конфига** (`vite.config.ts`).
 

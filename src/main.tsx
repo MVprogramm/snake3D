@@ -1,16 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Main from './components/Main'
-import setLevelEvent from './engine/events/setLevelEvent'
-import { disableScrolling } from './commands/disableScrolling'
+import setInitialLevelOfGame from './engine/events/setInitialLevelOfGame'
+// import { disableScrolling } from './commands/disableScrolling'
+import { disableScrolling, enableScrolling } from './commands/scrollController'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   throw new Error('Root element not found')
 }
-
+const levelAtWhichGameStarts = 1
 try {
-  const levelSet = setLevelEvent(1)
+  const levelSet = setInitialLevelOfGame(levelAtWhichGameStarts)
   if (levelSet) {
     disableScrolling()
     ReactDOM.createRoot(rootElement).render(
@@ -23,13 +24,9 @@ try {
   }
 } catch (error) {
   console.error('Error initializing app:', error)
+  enableScrolling()
 }
 
-// if (setLevelEvent(1)) {
-//   disableScrolling()
-//   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-//     <React.StrictMode>
-//       <Main />
-//     </React.StrictMode>
-//   )
-// }
+window.addEventListener('beforeunload', () => {
+  enableScrolling()
+})

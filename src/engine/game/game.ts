@@ -2,7 +2,7 @@
  * @module game.ts Начинает игру
  *    @function game Настройка уровня и запуск игры
  */
-import setLevelEvent from '../events/setLevelEvent'
+import setLevelEvent from '../events/setInitialLevelOfGame'
 import setLoop from '../time/setLoop'
 /**
  * Запуск игры

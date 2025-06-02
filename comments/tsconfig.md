@@ -1,4 +1,5 @@
-**tsconfig.json**
+
+## Файл настроек компилятора Typescript **"tsconfig.json"**
 #comments 
 
 Файл `tsconfig.json` содержит конфигурацию компилятора TypeScript для проекта. Разберём его содержимое:
