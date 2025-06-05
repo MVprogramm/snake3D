@@ -1,3 +1,4 @@
+
 ## Файл разметки **"index.html"**
 #comments 
 
@@ -36,12 +37,12 @@ HTML-файл является основой для React-приложения,
 ```html
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="/src/index.ts"></script>
 </body>
 </html>
 ```
 3. **Тело документа**:
    - `<div id="root"></div>` является контейнером, в который будет рендериться React-приложение. React будет "встраиваться" в этот элемент.
    
-   - `<script type="module" src="/src/main.tsx"></script>` подключает основной файл  приложения [[main]].tsx, который инициализирует и запускает приложение React. Атрибут `type="module"` позволяет использовать ES-модули.
+   - `<script type="module" src="/src/index.tsx"></script>` подключает основной файл  приложения [[main]].tsx, который инициализирует и запускает приложение React. Атрибут `type="module"` позволяет использовать ES-модули.
 
