@@ -1,5 +1,5 @@
 import main from './main'
-import { enableScrolling } from './commands/scrollController'
+import { enableScrolling } from './commands/enableScrolling'
 
 // Восстанавливаем прокрутку при закрытии страницы
 const handleBeforeUnload = () => {

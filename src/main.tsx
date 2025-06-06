@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom/client'
 import Main from './components/Main'
 import setInitialLevelOfGame from './engine/events/setInitialLevelOfGame'
 import ErrorScreen from './components/ErrorScreen'
-import { disableScrolling, enableScrolling } from './commands/scrollController'
+import { disableScrolling } from './commands/disableScrolling'
+import { enableScrolling } from './commands/enableScrolling'
 
 // Проверяем наличие корневого элемента
 const rootElement = document.getElementById('root')
