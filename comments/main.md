@@ -18,7 +18,7 @@ import { disableScrolling, enableScrolling } from './commands/scrollController'
    - `React` и `ReactDOM` импортируются для работы с библиотекой React и её функциональностью по рендерингу компонентов.
    - [['Main']] — это основной компонент приложения, который будет отображаться на странице.
    - [[setInitialLevelOfGame]] — функция, которая, настраивает уровень игры.
-   - [[disableScrolling]] и [[enableScrolling]] — функции, которые отключают и включают прокрутку страницы соответственно.  
+   - [[`disableScrolling.ts`]] и [[enableScrolling]] — функции, которые отключают и включают прокрутку страницы соответственно.  
 2. **Поиск корневого DOM-элемента**:
 ```ts
 const rootElement = document.getElementById('root')
