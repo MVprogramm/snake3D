@@ -4,7 +4,7 @@ type ErrorMassage = {
   message: string
 }
 
-const ErrorScreen = (message: ErrorMassage) => {
+const ErrorScreen = ({ message }: ErrorMassage) => {
   return (
     <>
       <style>
@@ -55,7 +55,7 @@ const ErrorScreen = (message: ErrorMassage) => {
         <div className='error-container'>
           <h1 className='error-title'>Something went wrong</h1>
           <p className='error-message'>
-            message || 'An unexpected error occurred. Please try again later.'
+            {message || 'An unexpected error occurred. Please try again later.'}
           </p>
           <button className='retry-button' onClick={() => window.location.reload()}>
             Retry

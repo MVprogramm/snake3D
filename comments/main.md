@@ -36,7 +36,7 @@ if (!rootElement) {
 	const levelAtWhichGameStarts = 
 		new URLSearchParams(window.location.search).get('level') || '1'
 ```
-5. **Инициализация приложения в функции `initializeApp`:** 
+5. **Инициализация приложения в функции `main`:** 
 	```ts
 	export default function main() {
 	  try {
@@ -68,16 +68,13 @@ if (!rootElement) {
         - Показывает `ErrorScreen` с сообщением.            
     	    ```ts
 		    console.warn('Level not set, rendering fallback UI')
-		```    
-        - Включает прокрутку обратно при ошибке.     
-    	    ```ts
 		    root.render(
 		        <React.StrictMode>
 		          <ErrorScreen message='Failed to initialize game level' />
 		        </React.StrictMode>
 	         )
 		```    
-6. **События страницы:**   
+6. **Если инициализация не выполнена:**   
 	```ts
 		 }
 	  } catch (error) {
@@ -88,7 +85,7 @@ if (!rootElement) {
 		      </React.StrictMode>
           )
 	```
-    - Восстанавливает прокрутку при `beforeunload` (выход со страницы).        
+    - Восстанавливает прокрутку.        
         ```ts
 		    enableScrolling() // Восстанавливаем прокрутку при ошибке
 	  }

@@ -17,9 +17,11 @@ function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
     if (
       index !== 0 &&
       index !== SNAKE.getSnakeBodyCoord().length - 1 &&
-      snakeHead.snakeHeadCoordX === pos[0] &&
-      snakeHead.snakeHeadCoordY === pos[1]
+      snakeHead.snakeHeadCoordX - snakeHead.snakeHeadStepX === pos[0] &&
+      snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY === pos[1]
     ) {
+      console.log(snakeHead, pos)
+
       // const coordX = snakeHead.snakeHeadCoordX;
       // const coordY = snakeHead.snakeHeadCoordY;
       snakeHead.snakeHeadCoordY = snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY

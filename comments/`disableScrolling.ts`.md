@@ -1,3 +1,4 @@
+
 ## Отключение прокрутки экрана **"disableScrolling.ts"**
 #comments 
 
@@ -12,12 +13,12 @@ import { getScrollbarWidth } from './getScrollbarWidth'
 import { preventScroll } from './scrollController'
 ```
 Функция импортирует
-- модуль состояния блокировки скролла [[`scrollLockState`]] и его методы, 
+- модуль состояния блокировки скролла [[`scrollLockState.ts`]] и его методы, 
 - утилиту определения ширины скроллбара [[`getScrollbarWidth`]]
 - обработчик [[`preventScroll`]] для iOS.
 
 2. **Что делает функция**
-	`2.1. Проверяет, не активна ли уже блокировка, чтобы не выполнять её повторно.
+	`2.1. Проверяет, не активна ли блокировка уже, чтобы не выполнять её повторно.
 ```ts
 export const disableScrolling = (): void => {
   // Предотвращаем повторную блокировку
