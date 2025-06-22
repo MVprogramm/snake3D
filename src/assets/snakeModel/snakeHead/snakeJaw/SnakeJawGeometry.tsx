@@ -1,42 +1,36 @@
-import * as VERT from "./snakeJawVertices";
+import * as VERT from './snakeJawVertices'
+
+// Вспомогательная функция для создания треугольной грани
+const face = (a: number[], b: number[], c: number[]) => [...a, ...b, ...c]
 
 function SnakeJawGeometry() {
-  const jawFaceABH = VERT.verticesA.concat(VERT.verticesH, VERT.verticesB);
-  const jawFaceAHE = VERT.verticesA.concat(VERT.verticesE, VERT.verticesH);
-  const jawFaceACF = VERT.verticesA.concat(VERT.verticesC, VERT.verticesF);
-  const jawFaceAFE = VERT.verticesA.concat(VERT.verticesF, VERT.verticesE);
-  const jawFaceABD = VERT.verticesA.concat(VERT.verticesB, VERT.verticesD);
-  const jawFaceADC = VERT.verticesA.concat(VERT.verticesD, VERT.verticesC);
-  const jawFaceBDG = VERT.verticesB.concat(VERT.verticesG, VERT.verticesD);
-  const jawFaceBGH = VERT.verticesB.concat(VERT.verticesH, VERT.verticesG);
-  const jawFaceCDG = VERT.verticesC.concat(VERT.verticesD, VERT.verticesG);
-  const jawFaceCGF = VERT.verticesC.concat(VERT.verticesG, VERT.verticesF);
-  const jawFaceGEH = VERT.verticesG.concat(VERT.verticesH, VERT.verticesE);
-  const jawFaceGEF = VERT.verticesG.concat(VERT.verticesE, VERT.verticesF);
-  const allJawFaces = jawFaceGEF.concat(
-    jawFaceABH,
-    jawFaceAHE,
-    jawFaceACF,
-    jawFaceAFE,
-    jawFaceABD,
-    jawFaceADC,
-    jawFaceBDG,
-    jawFaceBGH,
-    jawFaceCDG,
-    jawFaceCGF,
-    jawFaceGEH
-  );
-  const jawVertices = new Float32Array(allJawFaces);
+  const faces = [
+    face(VERT.vertexA, VERT.vertexH, VERT.vertexB), // верхняя правая грань
+    face(VERT.vertexA, VERT.vertexE, VERT.vertexH), // задняя правая грань
+    face(VERT.vertexA, VERT.vertexC, VERT.vertexF), // нижняя левая передняя грань
+    face(VERT.vertexA, VERT.vertexF, VERT.vertexE), // нижняя левая задняя грань
+    face(VERT.vertexA, VERT.vertexB, VERT.vertexD), // нижняя передняя правая грань
+    face(VERT.vertexA, VERT.vertexD, VERT.vertexC), // нижняя левая передняя грань
+    face(VERT.vertexB, VERT.vertexG, VERT.vertexD), // верхняя передняя грань
+    face(VERT.vertexB, VERT.vertexH, VERT.vertexG), // верхняя правая грань
+    face(VERT.vertexC, VERT.vertexD, VERT.vertexG), // левая передняя грань
+    face(VERT.vertexC, VERT.vertexG, VERT.vertexF), // левая задняя грань
+    face(VERT.vertexG, VERT.vertexH, VERT.vertexE), // задняя верхняя грань
+    face(VERT.vertexG, VERT.vertexE, VERT.vertexF), // задняя нижняя грань
+  ]
+
+  const jawVertices = new Float32Array(faces.flat())
+
   return (
     <bufferGeometry onUpdate={(self) => self.computeVertexNormals()}>
       <bufferAttribute
-        attach="attributes-position"
+        attach='attributes-position'
         count={jawVertices.length / 3}
         array={jawVertices}
         itemSize={3}
       />
     </bufferGeometry>
-  );
+  )
 }
 
-export default SnakeJawGeometry;
+export default SnakeJawGeometry

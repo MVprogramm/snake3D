@@ -1,8 +1,14 @@
-export const verticesA = [1.27, -1.27, 0]
-export const verticesB = [1.27, 1.27, 0]
-export const verticesC = [-1.25, -0.47, 0.37]
-export const verticesD = [-1.25, 0.47, 0.37]
-export const verticesE = [1.27, -1.27, -0.21]
-export const verticesF = [-1.25, -0.47, 0.21]
-export const verticesG = [-1.25, 0.47, 0.21]
-export const verticesH = [1.27, 1.27, -0.21]
+// Вершины нижней челюсти змеи (Snake Jaw Vertices)
+// Координаты заданы в формате [x, y, z]
+
+// Правая сторона (положительная по X)
+export const vertexA = [1.27, -1.27, 0] // Нижний передний угол (внешний)
+export const vertexB = [1.27, 1.27, 0] // Верхний передний угол (внешний)
+export const vertexE = [1.27, -1.27, -0.21] // Нижний задний угол
+export const vertexH = [1.27, 1.27, -0.21] // Верхний задний угол
+
+// Левая сторона (отрицательная по X)
+export const vertexC = [-1.25, -0.47, 0.37] // Нижний передний угол (внутренний)
+export const vertexD = [-1.25, 0.47, 0.37] // Верхний передний угол (внутренний)
+export const vertexF = [-1.25, -0.47, 0.21] // Нижний задний угол
+export const vertexG = [-1.25, 0.47, 0.21] // Верхний задний угол
