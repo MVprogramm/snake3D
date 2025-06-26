@@ -19,24 +19,33 @@ export const setBodyTurnaround = (body: number) => {
 
 export const getBodyTurnaround = () => snakeBodyTurn
 
+const lastMoveDirection = {
+  name: '',
+  value: 0,
+  turn: 0,
+}
+
+import findLastMoveDirection from '../../../engine/protocol/findLastMoveDirection'
 import { getSnakeBodyCoord } from '../../../engine/snake/snake'
 import { checkTimerWorking } from '../../../engine/time/isTimer'
-import { snakeSteps } from '../../../types/animationTypes'
 import { getCounterHead } from '../headAnimations/snakeHeadLocation'
 import * as PROPS from './snakeBodyProps'
 import { getDiff } from './snakeDiff'
 
-export const snakeBodyTurnaround = (steps: snakeSteps) => {
-  // const rotations: number[][] = Array(PROPS.getSnakeUnitRotation().length).fill([0, 0, 0])
-  // const rotations: number[][] = PROPS.getSnakeUnitRotation()
-  // console.log(rotations[0], rotations[1], rotations[2])
-  const { previousStepX, previousStepY, currentStepX, currentStepY } = steps
+export const snakeBodyTurnaround = () => {
   const rotations = PROPS.getSnakeUnitRotation().map((unit, index) => {
+    const { name, value } = findLastMoveDirection()
     if (index === 0) {
-      if (previousStepX === 0 && currentStepX === 1) unit[2] = 11
-      if (previousStepX === 0 && currentStepX === -1) unit[2] = 33
-      if (previousStepY === 0 && currentStepY === -1) unit[2] = 22
-      if (previousStepY === 0 && currentStepY === 1) unit[2] = 0
+      unit[2] = lastMoveDirection.turn
+      if (lastMoveDirection.name !== name) {
+        if (name === 'X' && value === 1) unit[2] = 11
+        if (name === 'X' && value === -1) unit[2] = 33
+        if (name === 'Y' && value === -1) unit[2] = 22
+        if (name === 'Y' && value === 1) unit[2] = 0
+      }
+      lastMoveDirection.turn = unit[2]
+      lastMoveDirection.name = name
+      lastMoveDirection.value = +value
     }
 
     if (index === getSnakeBodyCoord().length - 2) {
@@ -53,5 +62,7 @@ export const snakeBodyTurnaround = (steps: snakeSteps) => {
     return unit
   })
 
+  const [counterHeadX, counterHeadY] = getCounterHead()
+  if (counterHeadX === 0 && counterHeadY === 0) rotations[0][2] = lastMoveDirection.turn
   PROPS.setSnakeUnitRotation(rotations)
 }
