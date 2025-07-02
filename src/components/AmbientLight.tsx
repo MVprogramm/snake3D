@@ -1,3 +1,6 @@
+import { lightCONFIG } from '../config/lightConfig'
+
 export function AmbientLight() {
-  return <ambientLight intensity={0.2} />
+  const intensity = lightCONFIG.ambientLight.intensity
+  return <ambientLight intensity={intensity} />
 }
