@@ -1,10 +1,10 @@
 import React from 'react'
 
-type ErrorMassage = {
+type ErrorMessage = {
   message: string
 }
 
-const ErrorScreen = ({ message }: ErrorMassage) => {
+const ErrorScreen = ({ message }: ErrorMessage) => {
   return (
     <>
       <style>

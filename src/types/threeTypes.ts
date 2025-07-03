@@ -1,4 +1,5 @@
 import { Vector3 } from '@react-three/fiber'
+import { Object3D } from 'three'
 
 export interface GeometryProps {
   position: Vector3
@@ -22,4 +23,13 @@ export interface CameraProps {
   position: number[]
   rotation: number[]
   zoom: number
+}
+
+export type Position2D = [number, number]
+export type Position3D = [number, number, number]
+
+export interface GLTFResult {
+  scene: Object3D
+  nodes: { [name: string]: Object3D }
+  materials: { [name: string]: any }
 }

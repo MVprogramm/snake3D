@@ -11,36 +11,36 @@
 /**
  * @var Количество баллов, которые получает игрок за съеденый объект еды
  */
-let foodScores: number;
+let foodScores: number
 /**
  * @var Массив координат X и Y текущей еды
  */
-let foodCoord: number[];
+let foodCoord: [number, number]
 /**
  * Задает количество баллов, которые игрок получает за каждую съеденную еду
  * @param score
  */
 export function setFoodScores(score: number) {
-  foodScores = score;
+  foodScores = score
 }
 /**
  * Задает координаты X и Y текущей еды
  * @param coord
  */
-export function setFoodCoord(coord: number[]) {
-  foodCoord = [...coord];
+export function setFoodCoord(coord: [number, number]) {
+  foodCoord = [...coord]
 }
 /**
  * Возвращает количество баллов, которые игрок получает за каждую съеденную еду
  * @returns foodScores
  */
 export function getFoodScores(): number {
-  return foodScores;
+  return foodScores
 }
 /**
  * Возвращает координаты X и Y текущей еды
  * @returns foodCoord
  */
-export function getFoodCoord(): number[] {
-  return foodCoord;
+export function getFoodCoord(): [number, number] {
+  return foodCoord
 }
