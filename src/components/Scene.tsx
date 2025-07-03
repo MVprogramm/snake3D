@@ -3,7 +3,7 @@ import { Perf } from 'r3f-perf'
 import { Field } from './Field'
 import { Environment } from './Environment'
 import Snake from './Snake'
-import Apple from './Apple1'
+import Apple from './Apple'
 import { useFrame, useThree } from '@react-three/fiber'
 import { cameraCONFIG } from '../config/cameraConfig'
 
