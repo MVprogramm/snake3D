@@ -199,6 +199,8 @@
   },
   "active": "45bf4be8d4d3b8bb",
   "lastOpenFiles": [
+    "public/apple.glb",
+    "src/apple.glb",
     "src/hooks/useDebounce.ts",
     "src/hooks/useDebounce.tsx",
     "src/hooks/useShadowSetup.ts",
@@ -208,8 +210,6 @@
     "src/components/Apple.tsx",
     "src/components/Apple12.tsx",
     "src/commands/useDebounce.tsx",
-    "src/types/appleTypes.ts",
-    "src/config/appleConfig.ts",
     "comments/Успешное завершение уровня levelCompleteEvent.ts.md",
     "comments/`levelCompleteEvent.ts`.md",
     "comments/`index.ts`.md",
