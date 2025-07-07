@@ -3,9 +3,7 @@
  *     @function snakeHeadBodyContactEvent Создает событие контакт змейки с собой
  */
 import { SnakeHeadCoord } from '../../types/snakeTypes'
-// import { mistakeWasMade } from "../lives/isMistake";
 import { isContact } from './isContact'
-// import protocolExecutor from "../protocol/protocolExecutor";
 import * as SNAKE from '../snake/snake'
 /**
  * При контакте змейки с самой собой останавливает движение и создает событие
@@ -13,10 +11,12 @@ import * as SNAKE from '../snake/snake'
  * @returns Измененные в результате контакта параметры головы змейки
  */
 function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
+  const currentSnakeLength = SNAKE.getSnakeBodyCoord().length
+  const maxSnakeBodyLength = currentSnakeLength + (currentSnakeLength % 2) - 2
   SNAKE.getSnakeBodyCoord().forEach((pos: number[], index: number) => {
     if (
       index !== 0 &&
-      index !== SNAKE.getSnakeBodyCoord().length - 2 &&
+      index !== maxSnakeBodyLength &&
       snakeHead.snakeHeadCoordX === pos[0] &&
       snakeHead.snakeHeadCoordY === pos[1]
     ) {
