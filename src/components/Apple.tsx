@@ -8,6 +8,7 @@ import { useDebounce } from '../hooks/useDebounce'
 import { useApplePosition } from '../hooks/useApplePosition'
 import { useShadowSetup } from '../hooks/useShadowSetup'
 import ErrorScreen from './ErrorScreen'
+import Spinner from './Spinner'
 const COUNTER_RESET_VALUE = 1000000 // Предотвращает переполнение счетчика
 const DEBOUNCE_DELAY = 16 // ~60fps для debouncing позиции
 /**
@@ -45,7 +46,7 @@ const Apple: React.FC = () => {
     return <ErrorScreen message={loadError.message} />
   }
   if (!gltf?.scene) {
-    return <ErrorScreen message='Модель яблока не загружена' />
+    return <Spinner />
   }
   return <primitive object={gltf.scene} position={debouncedPosition} scale={scaleArray} />
 }
