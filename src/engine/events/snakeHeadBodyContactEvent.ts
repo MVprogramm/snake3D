@@ -26,8 +26,6 @@ function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
         snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY
       snakeHead.snakeHeadCoordX =
         snakeHead.snakeHeadCoordX - snakeHead.snakeHeadStepX
-      snakeHead.snakeHeadStepX = 0
-      snakeHead.snakeHeadStepY = 0
       isContact(snakeHead, 'oneself')
       break
     }
