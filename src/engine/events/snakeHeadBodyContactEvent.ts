@@ -11,9 +11,10 @@ import * as SNAKE from '../snake/snake'
  * @returns Измененные в результате контакта параметры головы змейки
  */
 function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
-  const currentSnakeLength = SNAKE.getSnakeBodyCoord().length
+  const snakeBody = SNAKE.getSnakeBodyCoord()
+  const currentSnakeLength = snakeBody.length
   const maxSnakeBodyLength = currentSnakeLength + (currentSnakeLength % 2) - 2
-  SNAKE.getSnakeBodyCoord().forEach((pos: number[], index: number) => {
+  snakeBody.forEach((pos: number[], index: number) => {
     if (
       index !== 0 &&
       index !== maxSnakeBodyLength &&
