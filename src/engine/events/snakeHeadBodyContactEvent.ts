@@ -14,20 +14,24 @@ function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
   const snakeBody = SNAKE.getSnakeBodyCoord()
   const currentSnakeLength = snakeBody.length
   const maxSnakeBodyLength = currentSnakeLength + (currentSnakeLength % 2) - 2
-  snakeBody.forEach((pos: number[], index: number) => {
+  for (let index = 0; index < snakeBody.length; index++) {
+    const pos = snakeBody[index]
     if (
       index !== 0 &&
       index !== maxSnakeBodyLength &&
       snakeHead.snakeHeadCoordX === pos[0] &&
       snakeHead.snakeHeadCoordY === pos[1]
     ) {
-      snakeHead.snakeHeadCoordY = snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY
-      snakeHead.snakeHeadCoordX = snakeHead.snakeHeadCoordX - snakeHead.snakeHeadStepX
+      snakeHead.snakeHeadCoordY =
+        snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY
+      snakeHead.snakeHeadCoordX =
+        snakeHead.snakeHeadCoordX - snakeHead.snakeHeadStepX
       snakeHead.snakeHeadStepX = 0
       snakeHead.snakeHeadStepY = 0
       isContact(snakeHead, 'oneself')
+      break
     }
-  })
+  }
 
   return snakeHead
 }
