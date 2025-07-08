@@ -2,7 +2,7 @@ import { lightConfig } from '../types/lightTypes'
 
 export const lightCONFIG: lightConfig = {
   sun: {
-    position: [-2, 2, 3], // положение источника света в 3-х мерном пространстве
+    position: [-2, 2, 4], // положение источника света в 3-х мерном пространстве
     intensity: 1.5, // сила солнечного света
   },
   ambientLight: {
