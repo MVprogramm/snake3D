@@ -1,6 +1,8 @@
 import { checkTimerWorking } from '../time/isTimer'
 import { advanceSnake } from './moveSnake'
 
+export const POSITION_EPSILON = 1e-3
+
 /**
  * тип, описывающий счётчик шагов головы 3D змейки по X и Y
  * при её движении от центра одной клетки к центру другой
@@ -29,6 +31,9 @@ export const setSnakePosition = (props: positionCounter): positionCounter => {
       advanceSnake()
     }
   }
+
+  if (Math.abs(counterX) < POSITION_EPSILON) counterX = 0
+  if (Math.abs(counterY) < POSITION_EPSILON) counterY = 0
 
   return { counterX, counterY }
 }
