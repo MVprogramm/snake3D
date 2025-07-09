@@ -40,7 +40,7 @@ export const snakeAnimation = (delta: number): void => {
     LOCATION.updateSnakeBodyLocation()
     snakeHeadLocation(snakeSteps[0], delta)
     snakeHeadMoving(snakeSteps[0], delta)
-    snakeBodyMoving(snakeSteps, delta)
+    snakeBodyMoving(delta)
     snakeBodyTurnaround()
     snakePreviousStepsArray = snakeSteps.map((step) => {
       step.previousStepX = step.currentStepX

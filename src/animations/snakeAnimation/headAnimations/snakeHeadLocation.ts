@@ -99,7 +99,7 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
     return
   }
 
-  const { previousStepX, previousStepY, currentStepX, currentStepY } = steps
+  const { currentStepX, currentStepY } = steps
   if (!checkTimerStep()) {
     const moveSpeed = getSnakeSpeed()
 

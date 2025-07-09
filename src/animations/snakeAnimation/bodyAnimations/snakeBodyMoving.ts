@@ -12,7 +12,7 @@ export const setCounterUnits = () => {
 
 export const getCounterUnits = () => counterUnits
 
-export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
+export const snakeBodyMoving = (delta: number) => {
   const moveSpeed = getSnakeSpeed()
   const pos = getSnakeUnitPosition().map((positions, index) => {
     positions[0] += getDiff()[index].diffX * delta * moveSpeed

@@ -30,7 +30,7 @@ export const Game = () => {
       document.removeEventListener('keydown', keyboardPauseEvent)
     }
   }, [isVisible, titleMenu])
-  useFrame((_, delta) => setLoop(delta))
+  useFrame(() => setLoop())
 
   return <Scene />
 }

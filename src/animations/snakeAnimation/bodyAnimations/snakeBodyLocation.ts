@@ -3,6 +3,7 @@ import { getProtocol } from '../../../engine/protocol/protocol'
 import { getSnakeHeadParams } from '../../../engine/snake/snake'
 import { checkTimerWorking } from '../../../engine/time/isTimer'
 import { getCounterHead } from '../headAnimations/snakeHeadLocation'
+import { getSnakeSpeed } from '../snakeSpeedSetting'
 import { getSnakeTurnAround, setSnakeTurnAround } from '../snakeStepSetting'
 
 const snakeBodyLocation: number[][] = []
@@ -15,6 +16,7 @@ export const setSnakeBodyLocation = (props: number[][]) => {
 
 export const updateSnakeBodyLocation = () => {
   const [counterHeadX, counterHeadY] = getCounterHead()
+  const moveSpeed = getSnakeSpeed()
   if (counterHeadX === 0 && counterHeadY === 0 && checkTimerWorking()) {
     let { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } =
       getSnakeHeadParams()

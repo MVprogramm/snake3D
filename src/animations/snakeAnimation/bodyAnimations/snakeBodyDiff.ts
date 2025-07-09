@@ -1,4 +1,4 @@
-import { getSnakeBodyCoord, getSnakeHeadParams } from '../../../engine/snake/snake'
+import { getSnakeHeadParams } from '../../../engine/snake/snake'
 import { getCounterHead } from '../headAnimations/snakeHeadLocation'
 import { getSnakeBodyLocation } from './snakeBodyLocation'
 import { getDiff, setDiff } from './snakeDiff'

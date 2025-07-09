@@ -4,12 +4,9 @@ import { Grid } from './Grid'
 import { Line } from './Line'
 
 export const Field = () => {
-  const {
-    fieldCOLOR: fieldColor,
-    fieldRATIO: fieldRatio,
-    // fieldSIZE: fieldSize,
-  } = fieldCONFIG
+  const { fieldCOLOR: fieldColor, fieldRATIO: fieldRatio } = fieldCONFIG
   const fieldSize = getField()
+
   return (
     <group>
       <Grid />

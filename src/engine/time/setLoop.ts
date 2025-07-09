@@ -15,7 +15,7 @@ import playLevel from '../levels/playLevel'
  *  - производится рендер актуального состояния игрового поля
  *  - устанавливается актуальное значение интервала перерисовки игрового поля
  */
-function setLoop(delta: number) {
+function setLoop() {
   INTERRUPT.interruptGameEvent()
   if (!INTERRUPT.getInterruptGame()) {
     playLevel()
