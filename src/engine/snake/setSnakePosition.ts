@@ -1,4 +1,5 @@
 import { checkTimerWorking } from '../time/isTimer'
+import { advanceSnake } from './moveSnake'
 
 /**
  * тип, описывающий счётчик шагов головы 3D змейки по X и Y
@@ -19,8 +20,14 @@ type positionCounter = {
 export const setSnakePosition = (props: positionCounter): positionCounter => {
   let { counterX, counterY } = props
   if (checkTimerWorking()) {
-    counterX = Math.abs(counterX) > 1 ? 0 : counterX
-    counterY = Math.abs(counterY) > 1 ? 0 : counterY
+    while (Math.abs(counterX) > 1) {
+      counterX -= Math.sign(counterX)
+      advanceSnake()
+    }
+    while (Math.abs(counterY) > 1) {
+      counterY -= Math.sign(counterY)
+      advanceSnake()
+    }
   }
 
   return { counterX, counterY }
