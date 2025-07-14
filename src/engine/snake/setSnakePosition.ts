@@ -1,4 +1,5 @@
 import { checkTimerWorking } from '../time/isTimer'
+import { getSnakeSpeed } from '../../animations/snakeAnimation/snakeSpeedSetting'
 /**
  * тип, описывающий счётчик шагов головы 3D змейки по X и Y
  * при её движении от центра одной клетки к центру другой
@@ -8,6 +9,7 @@ type positionCounter = {
   counterY: number
 }
 let counter = 0
+const FPS = 60
 /**
  * Контролирует количество шагов головы 3D змейки по X и Y,
  * ограничивая их пределами межклеточного расстояния.
@@ -18,16 +20,17 @@ let counter = 0
  */
 export const setSnakePosition = (props: positionCounter): positionCounter => {
   let { counterX, counterY } = props
+
+  const maxCount = FPS / getSnakeSpeed()
   if (checkTimerWorking()) {
-    counterX = Math.abs(counterX) > 1 ? 0 : counterX
-    counterY = Math.abs(counterY) > 1 ? 0 : counterY
+    counterX = counter >= maxCount ? 0 : counterX
+    counterY = counter >= maxCount ? 0 : counterY
   }
   if (counterX === 0 && counterY === 0) {
     counter = 0
   } else {
     counter++
   }
-  console.log(counter)
 
   return { counterX, counterY }
 }

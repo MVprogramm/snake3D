@@ -2,7 +2,7 @@ import { setSnakePosition } from '../../../engine/snake/setSnakePosition'
 import checkTimerStep from '../../../engine/time/checkTimerStep'
 import { snakeSteps } from '../../../types/animationTypes'
 import { getSnakeSpeed } from '../snakeSpeedSetting'
-
+import { SystemConfig } from '../../../config/systemConfig'
 /**
  * @var счетчик шагов головы 3D змейки по оси X
  */
@@ -99,7 +99,7 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
     return
   }
 
-  const { previousStepX, previousStepY, currentStepX, currentStepY } = steps
+  const { currentStepX, currentStepY } = steps
   if (!checkTimerStep()) {
     const moveSpeed = getSnakeSpeed()
 
@@ -109,8 +109,8 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
       return
     }
 
-    const nextCounterX = counterHeadX + currentStepX * delta * moveSpeed
-    const nextCounterY = counterHeadY + currentStepY * delta * moveSpeed
+    const nextCounterX = counterHeadX + (currentStepX * moveSpeed) / SystemConfig.FPS
+    const nextCounterY = counterHeadY + (currentStepY * moveSpeed) / SystemConfig.FPS
 
     // Обрабатываем возможную ошибку от setSnakePosition
     try {

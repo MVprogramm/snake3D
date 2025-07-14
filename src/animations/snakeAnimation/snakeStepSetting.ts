@@ -20,7 +20,6 @@ import {
 import { getSnakeUnitPosition } from './bodyAnimations/snakeBodyProps'
 import { getDiff, setDiff } from './bodyAnimations/snakeDiff'
 import { getCounterHead } from './headAnimations/snakeHeadLocation'
-import { POSITION_EPSILON } from '../../engine/snake/setSnakePosition'
 
 const snakeTurnAround = [0, 0]
 
@@ -48,12 +47,7 @@ export const snakeStepSetting = (step: snakeSteps[]): snakeSteps[] => {
   let newStep: snakeSteps[] = [...step]
 
   // Функция работает только в момент нахождения рендера в узлах игрового поля
-  const [cx, cy] = getCounterHead()
-  if (
-    Math.abs(cx) < POSITION_EPSILON &&
-    Math.abs(cy) < POSITION_EPSILON &&
-    checkTimerWorking()
-  ) {
+  if (getCounterHead()[0] === 0 && getCounterHead()[1] === 0 && checkTimerWorking()) {
     // newStep = [...step]
     // console.log('new step: ')
     // console.log(

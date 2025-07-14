@@ -9,8 +9,9 @@ import { useApplePosition } from '../hooks/useApplePosition'
 import { useShadowSetup } from '../hooks/useShadowSetup'
 import ErrorScreen from './ErrorScreen'
 import Spinner from './Spinner'
+import { SystemConfig } from '../config/systemConfig'
 const COUNTER_RESET_VALUE = 1000000 // Предотвращает переполнение счетчика
-const DEBOUNCE_DELAY = 16 // ~60fps для debouncing позиции
+
 /**
  * Компонент Apple отображает 3D-модель яблока,
  * получая его позицию на поле из игрового движка.
@@ -23,7 +24,7 @@ const Apple: React.FC = () => {
   }) as GLTFResult
   const { zLocation, scale, FRAME_SKIP } = appleCONFIG as AppleConfig
   const { position, updatePosition } = useApplePosition(zLocation)
-  const debouncedPosition = useDebounce(position, DEBOUNCE_DELAY)
+  const debouncedPosition = useDebounce(position, SystemConfig.DEBOUNCE_DELAY)
   useShadowSetup(gltf?.scene)
   const counterRef = React.useRef<number>(0)
   const scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
