@@ -1,4 +1,4 @@
-let snakeSpeed = 10
+let snakeSpeed = 1
 
 export function changeSnakeSpeed(newSpeed: number) {
   snakeSpeed = newSpeed

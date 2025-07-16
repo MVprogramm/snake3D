@@ -11,6 +11,7 @@ let counterHeadX = 0
  * @var счетчик шагов головы 3D змейки по оси Y
  */
 let counterHeadY = 0
+let moveSpeed = 1
 
 /**
  * Проверяет корректность объекта шагов змейки
@@ -101,14 +102,11 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
 
   const { currentStepX, currentStepY } = steps
   if (!checkTimerStep()) {
-    const moveSpeed = getSnakeSpeed()
-
     // Дополнительная проверка, что moveSpeed - положительное число
     if (typeof moveSpeed !== 'number' || moveSpeed <= 0) {
       console.error('Error: Invalid snake speed value')
       return
     }
-
     const nextCounterX = counterHeadX + (currentStepX * moveSpeed) / SystemConfig.FPS
     const nextCounterY = counterHeadY + (currentStepY * moveSpeed) / SystemConfig.FPS
 
@@ -118,7 +116,6 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
         counterX: nextCounterX,
         counterY: nextCounterY,
       })
-
       // Проверяем результаты после вызова setSnakePosition
       if (typeof counterX !== 'number' || typeof counterY !== 'number') {
         console.error('Error: setSnakePosition returned invalid counter values')
@@ -126,6 +123,7 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
       }
       counterHeadX = counterX
       counterHeadY = counterY
+      if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getSnakeSpeed()
     } catch (error) {
       console.error('Error occurred during position calculation:', error)
       // Не меняем счетчики в случае ошибки

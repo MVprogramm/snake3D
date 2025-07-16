@@ -9,6 +9,7 @@ type positionCounter = {
   counterY: number
 }
 let counter = 0
+let moveSpeed = 1
 const FPS = 60
 /**
  * Контролирует количество шагов головы 3D змейки по X и Y,
@@ -20,13 +21,13 @@ const FPS = 60
  */
 export const setSnakePosition = (props: positionCounter): positionCounter => {
   let { counterX, counterY } = props
-
-  const maxCount = FPS / getSnakeSpeed()
+  const maxCount = FPS / moveSpeed
   if (checkTimerWorking()) {
     counterX = counter >= maxCount ? 0 : counterX
     counterY = counter >= maxCount ? 0 : counterY
   }
   if (counterX === 0 && counterY === 0) {
+    moveSpeed = getSnakeSpeed()
     counter = 0
   } else {
     counter++

@@ -13,10 +13,10 @@ export const setCounterUnits = () => {
 }
 
 export const getCounterUnits = () => counterUnits
-
+let moveSpeed = 1
 export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
   const [counterHeadX, counterHeadY] = getCounterHead()
-  const moveSpeed = getSnakeSpeed()
+  if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getSnakeSpeed()
   const pos = getSnakeUnitPosition().map((positions, index) => {
     positions[0] += (getDiff()[index].diffX * moveSpeed) / SystemConfig.FPS
     positions[1] += (getDiff()[index].diffY * moveSpeed) / SystemConfig.FPS
