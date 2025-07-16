@@ -5,6 +5,7 @@ import { getDiff } from './snakeDiff'
 import { getAmountOfFood } from '../../../engine/food/amountOfFoodPerLevel'
 import { getCounterHead } from '../headAnimations/snakeHeadLocation'
 import { SystemConfig } from '../../../config/systemConfig'
+import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 
 let counterUnits: number[][] = []
 
@@ -16,7 +17,7 @@ export const getCounterUnits = () => counterUnits
 let moveSpeed = 1
 export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
   const [counterHeadX, counterHeadY] = getCounterHead()
-  if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getSnakeSpeed()
+  if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
   const pos = getSnakeUnitPosition().map((positions, index) => {
     positions[0] += (getDiff()[index].diffX * moveSpeed) / SystemConfig.FPS
     positions[1] += (getDiff()[index].diffY * moveSpeed) / SystemConfig.FPS

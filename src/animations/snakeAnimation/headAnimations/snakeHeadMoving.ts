@@ -3,13 +3,14 @@ import { getPositionHead, setPositionHead } from './snakeHeadProps'
 import { getSnakeSpeed } from '../snakeSpeedSetting'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getCounterHead } from './snakeHeadLocation'
+import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 
 let moveSpeed = 1
 
 export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
   const { currentStepX, currentStepY } = steps
   const [counterHeadX, counterHeadY] = getCounterHead()
-  if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getSnakeSpeed()
+  if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
   const positionHead = getPositionHead()
 
   positionHead[0] += (currentStepX * moveSpeed) / SystemConfig.FPS

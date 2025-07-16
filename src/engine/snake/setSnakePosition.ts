@@ -1,5 +1,6 @@
 import { checkTimerWorking } from '../time/isTimer'
 import { getSnakeSpeed } from '../../animations/snakeAnimation/snakeSpeedSetting'
+import { getTimerStep } from '../time/timerStepPerLevel'
 /**
  * тип, описывающий счётчик шагов головы 3D змейки по X и Y
  * при её движении от центра одной клетки к центру другой
@@ -27,7 +28,7 @@ export const setSnakePosition = (props: positionCounter): positionCounter => {
     counterY = counter >= maxCount ? 0 : counterY
   }
   if (counterX === 0 && counterY === 0) {
-    moveSpeed = getSnakeSpeed()
+    moveSpeed = getTimerStep()
     counter = 0
   } else {
     counter++

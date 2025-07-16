@@ -3,6 +3,7 @@ import checkTimerStep from '../../../engine/time/checkTimerStep'
 import { snakeSteps } from '../../../types/animationTypes'
 import { getSnakeSpeed } from '../snakeSpeedSetting'
 import { SystemConfig } from '../../../config/systemConfig'
+import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 /**
  * @var счетчик шагов головы 3D змейки по оси X
  */
@@ -123,7 +124,10 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
       }
       counterHeadX = counterX
       counterHeadY = counterY
-      if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getSnakeSpeed()
+      if (counterHeadX === 0 && counterHeadY === 0) {
+        moveSpeed = getTimerStep()
+        console.log(moveSpeed)
+      }
     } catch (error) {
       console.error('Error occurred during position calculation:', error)
       // Не меняем счетчики в случае ошибки
