@@ -32,7 +32,6 @@ export function advanceSnake(): void {
     snakeHeadStepX: SNAKE.getSnakeHeadParams().snakeHeadStepX,
     snakeHeadStepY: SNAKE.getSnakeHeadParams().snakeHeadStepY,
   }
-
   const newBodyCoord = [...SNAKE.getSnakeBodyCoord()]
   let { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } = snakeHead
   if (snakeHeadStepX !== 0 || snakeHeadStepY !== 0) {
@@ -53,7 +52,8 @@ export function advanceSnake(): void {
         snakeHeadStepX: 0,
         snakeHeadStepY: 0,
       }
-      for (let i = newBodyCoord.length - 1; i > 0; i--) newBodyCoord[i] = newBodyCoord[i - 1]
+      for (let i = newBodyCoord.length - 1; i > 0; i--)
+        newBodyCoord[i] = newBodyCoord[i - 1]
       newBodyCoord[0] = [snakeHeadCoordX, snakeHeadCoordY]
 
       SNAKE.setSnakeBodyCoord(newBodyCoord)
@@ -63,7 +63,8 @@ export function advanceSnake(): void {
     breakContact()
 
     if (checkTimerWorking() && !checkMistake()) {
-      for (let i = newBodyCoord.length - 1; i > 0; i--) newBodyCoord[i] = newBodyCoord[i - 1]
+      for (let i = newBodyCoord.length - 1; i > 0; i--)
+        newBodyCoord[i] = newBodyCoord[i - 1]
       newBodyCoord[0] = [snakeHeadCoordX, snakeHeadCoordY]
 
       SNAKE.setSnakeBodyCoord(newBodyCoord)

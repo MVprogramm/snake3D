@@ -19,6 +19,7 @@ function lifeLost(): void {
   const { lifeElement } = getSelectors()
   let attention = false
   stopTimer()
+
   if (checkMistake()) {
     setLives(-1)
     const intervalID = setInterval(

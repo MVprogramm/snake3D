@@ -12,6 +12,9 @@ let counterHeadX = 0
  * @var счетчик шагов головы 3D змейки по оси Y
  */
 let counterHeadY = 0
+/**
+ * @var начальная скорость змейки
+ */
 let moveSpeed = 1
 
 /**
@@ -124,10 +127,7 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
       }
       counterHeadX = counterX
       counterHeadY = counterY
-      if (counterHeadX === 0 && counterHeadY === 0) {
-        moveSpeed = getTimerStep()
-        console.log(moveSpeed)
-      }
+      if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
     } catch (error) {
       console.error('Error occurred during position calculation:', error)
       // Не меняем счетчики в случае ошибки

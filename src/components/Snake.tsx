@@ -13,6 +13,8 @@ import {
   getSnakeUnitPosition,
   getSnakeUnitRotation,
 } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
+import { getSnakeBodyLocation } from '../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
