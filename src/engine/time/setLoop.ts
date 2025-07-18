@@ -5,9 +5,9 @@
 import * as INTERRUPT from '../events/interruptGameEvent'
 import playLevel from '../levels/playLevel'
 // import render from "../render/render";
-// import { checkTimerWorking } from "./isTimer";
-// import { setTimer } from "./timer";
-// import { getTimerStep } from "./timerStepPerLevel";
+import { checkTimerWorking } from './isTimer'
+import { setTimer } from './timer'
+import { getTimerStep } from './timerStepPerLevel'
 /**
  * Запускает setLoop() каждые timerStepPerLevel миллисекунд в котором:
  *  - проверяет условия прерывания игры
@@ -21,7 +21,7 @@ function setLoop(delta: number) {
     playLevel()
     //   render();
   }
-  // if (checkTimerWorking()) setTimer(getTimerStep());
+  if (checkTimerWorking()) setTimer(delta * 1000)
   // setTimeout(setLoop, getTimerStep());
 }
 

@@ -12,10 +12,6 @@ export const Game = () => {
   const titleMenu = useMenuStore((state) => state.titleMenu)
 
   useEffect(() => {
-    renderInfo()
-  }, [])
-
-  useEffect(() => {
     document.removeEventListener('keydown', keyboardEvents)
     document.removeEventListener('keydown', keyboardPauseEvent)
 
@@ -30,7 +26,10 @@ export const Game = () => {
       document.removeEventListener('keydown', keyboardPauseEvent)
     }
   }, [isVisible, titleMenu])
-  useFrame((_, delta) => setLoop(delta))
+  useFrame((_, delta) => {
+    setLoop(delta)
+    renderInfo()
+  })
 
   return <Scene />
 }

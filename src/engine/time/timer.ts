@@ -7,18 +7,18 @@
 /**
  * @var текущее время, затраченное игроком на прохождение уровня
  */
-let timer = 0;
+let timer = 0
 /**
  * Устанавливает текущее время при каждой перерисовке игрового поля
  * @param interval продолжительность пребывания игрока на текущем уровне
  */
 export function setTimer(interval: number): void {
-  timer += interval;
+  timer += interval
 }
 /**
  * Возвращает текущее время, затраченное игроком на прохождение уровня
  * @returns timer
  */
 export function getTimer(): number {
-  return timer;
+  return timer
 }

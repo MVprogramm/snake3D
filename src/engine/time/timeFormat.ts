@@ -9,11 +9,11 @@
  * @returns время в формате "минуты : секунды"
  */
 function timeFormat(milliseconds: number): string {
-  const minutes = Math.floor(milliseconds / 60000);
-  const seconds = ((milliseconds % 60000) / 1000).toFixed(0);
-  const timeFormat = minutes + ":" + (+seconds < 10 ? "0" : "") + seconds;
+  const minutes = Math.floor(milliseconds / 60000)
+  const seconds = ((milliseconds % 60000) / 1000).toFixed(0)
+  const timeFormat = minutes + ':' + (+seconds < 10 ? '0' : '') + seconds
 
-  return timeFormat;
+  return timeFormat
 }
 
-export default timeFormat;
+export default timeFormat
