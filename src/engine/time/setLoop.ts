@@ -19,10 +19,8 @@ function setLoop(delta: number) {
   INTERRUPT.interruptGameEvent()
   if (!INTERRUPT.getInterruptGame()) {
     playLevel()
-    //   render();
   }
   if (checkTimerWorking()) setTimer(delta * 1000)
-  // setTimeout(setLoop, getTimerStep());
 }
 
 export default setLoop

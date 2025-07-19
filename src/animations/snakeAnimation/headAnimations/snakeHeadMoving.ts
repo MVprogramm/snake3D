@@ -1,6 +1,5 @@
 import { snakeSteps } from '../../../types/animationTypes'
 import { getPositionHead, setPositionHead } from './snakeHeadProps'
-import { getSnakeSpeed } from '../snakeSpeedSetting'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getCounterHead } from './snakeHeadLocation'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
