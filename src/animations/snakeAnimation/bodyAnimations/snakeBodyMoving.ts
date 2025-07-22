@@ -24,7 +24,7 @@ let moveSpeed = 1
 export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
   const [counterHeadX, counterHeadY] = getCounterHead()
   if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
-  const WAVE_AMPLITUDE = moveSpeed / 100
+  const WAVE_AMPLITUDE = moveSpeed / 200
   waveTime += delta * moveSpeed
   const pos = getSnakeUnitPosition().map((positions, index) => {
     const diff = getDiff()[index]
