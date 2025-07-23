@@ -10,8 +10,13 @@ import { getTimerStep } from '../engine/time/timerStepPerLevel'
 import { getCounterHead } from '../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import { SystemConfig } from '../config/systemConfig'
 import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import { getSnakeBodyCoord } from '../engine/snake/snake'
+import { getProtocol } from '../engine/protocol/protocol'
+import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
 
-let moveSpeed = 1
+let counter = 0
+let currentFoodNumber = 0
+let snakeLength = getSnakeBodyCoord().length
 
 export function Scene() {
   // const { performance } = useControls('Monitoring', {
@@ -27,12 +32,23 @@ export function Scene() {
   // if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
 
   useFrame(() => {
+    if (currentFoodNumber != getCurrentFoodNumber()) {
+      counter = 1
+      currentFoodNumber = getCurrentFoodNumber()
+    }
     camera.position.set(
       x + getSnakeUnitPosition()[0][0],
-      y + getSnakeUnitPosition()[0][1],
-      z
+      y + getSnakeUnitPosition()[0][1] - snakeLength,
+      z + snakeLength
     )
     camera.updateProjectionMatrix()
+    if (counter >= 1 && counter < 60) {
+      counter++
+      snakeLength = snakeLength + 1 / 60
+    } else {
+      counter = 0
+      snakeLength = getSnakeBodyCoord().length
+    }
   })
 
   return (
