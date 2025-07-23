@@ -67,6 +67,11 @@ const Snake = () => {
             0,
             getSnakeUnitRotation()[snakeCurrentLength - 2][2]
           )
+          snakeRefs['tailRef'].current?.scale.set(
+            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
+            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
+            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length)
+          )
         }
 
         if (key.includes('bodyUnitRef_')) {
@@ -80,6 +85,16 @@ const Snake = () => {
               0,
               0,
               getSnakeUnitRotation()[index][2]
+            )
+            snakeRefs[`bodyUnitRef_${index}`].current?.scale.set(
+              0.65 +
+                (0.35 * (getSnakeBodyCoord().length - index)) /
+                  getSnakeBodyCoord().length,
+              0.65 +
+                (0.35 * (getSnakeBodyCoord().length - index)) /
+                  getSnakeBodyCoord().length,
+              0.65 +
+                (0.35 * (getSnakeBodyCoord().length - index)) / getSnakeBodyCoord().length
             )
           }
         }
