@@ -1,8 +1,11 @@
 import { Vector3 } from 'three'
 import * as TYPES from '../../../../types/threeTypes'
+import { snakeBodyConfig } from './snakeBodyConfig'
+
+const prismaGap = snakeBodyConfig.prismaGap
 
 const snakePrismaRightTransition: TYPES.GeometryTransitionProps = {
-  position: [0, 0, 0],
+  position: [prismaGap, -prismaGap, 0],
   rotation: [0, 0, 11],
   scale: 1,
 }
