@@ -11,12 +11,23 @@ import ErrorScreen from './ErrorScreen'
 import Spinner from './Spinner'
 import { SystemConfig } from '../config/systemConfig'
 const COUNTER_RESET_VALUE = 1000000 // Предотвращает переполнение счетчика
+const DEBUG_MODE = false
+const FORCE_SPINNER = false
+const FORCE_LOAD_ERROR = false
+const FORCE_ERROR = false
 
 /**
  * Компонент Apple отображает 3D-модель яблока,
  * получая его позицию на поле из игрового движка.
  */
 const Apple: React.FC = () => {
+  // 🟥 Если принудительная ошибка активна — сразу рендерим ErrorScreen
+  if (DEBUG_MODE && FORCE_ERROR && !FORCE_SPINNER) {
+    console.log('Принудительная отладочная ошибка (FORCE_ERROR)')
+
+    return <ErrorScreen message='Принудительная отладочная ошибка (FORCE_ERROR)' />
+  }
+
   const [loadError, setLoadError] = React.useState<Error | null>(null)
   const gltf = useGLTF('/apple.glb', undefined, undefined, (error) => {
     console.error('Ошибка загрузки модели яблока:', error)
@@ -43,9 +54,17 @@ const Apple: React.FC = () => {
   React.useEffect(() => {
     return () => useGLTF.clear('/apple.glb')
   }, [])
+
+  // 🟥 Если произошла реальная ошибка — показываем её
   if (loadError) {
     return <ErrorScreen message={loadError.message} />
   }
+
+  // ⏳ Показываем спиннер
+  if (!gltf?.scene || (DEBUG_MODE && FORCE_SPINNER)) {
+    return <Spinner />
+  }
+
   if (!gltf?.scene) {
     return <Spinner />
   }

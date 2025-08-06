@@ -6,12 +6,8 @@ import Snake from './Snake'
 import Apple from './Apple'
 import { useFrame, useThree } from '@react-three/fiber'
 import { cameraCONFIG } from '../config/cameraConfig'
-import { getTimerStep } from '../engine/time/timerStepPerLevel'
-import { getCounterHead } from '../animations/snakeAnimation/headAnimations/snakeHeadLocation'
-import { SystemConfig } from '../config/systemConfig'
 import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import { getSnakeBodyCoord } from '../engine/snake/snake'
-import { getProtocol } from '../engine/protocol/protocol'
 import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
 
 let counter = 0
@@ -26,10 +22,7 @@ export function Scene() {
   const { camera } = useThree()
   const [x, y, z] = cameraCONFIG.position
   const [xx, yy, zz] = cameraCONFIG.rotation
-
   camera.rotation.set(xx, yy, zz)
-  // const [counterHeadX, counterHeadY] = getCounterHead()
-  // if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
 
   useFrame(() => {
     if (currentFoodNumber != getCurrentFoodNumber()) {

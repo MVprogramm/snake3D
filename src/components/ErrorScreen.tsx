@@ -1,4 +1,5 @@
 import React from 'react'
+import { Html } from '@react-three/drei'
 
 type ErrorMessage = {
   message: string
@@ -6,63 +7,48 @@ type ErrorMessage = {
 
 const ErrorScreen = ({ message }: ErrorMessage) => {
   return (
-    <>
-      <style>
-        {`
-          .error-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-          }
-          .error-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-          }
-          .error-title {
-            color: #d32f2f;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-          }
-          .error-message {
-            color: #333;
-            margin-bottom: 1.5rem;
-          }
-          .retry-button {
-            background-color: #1976d2;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.2s;
-          }
-          .retry-button:hover {
-            background-color: #1565c0;
-          }
-        `}
-      </style>
-      <div className='error-screen'>
-        <div className='error-container'>
-          <h1 className='error-title'>Something went wrong</h1>
-          <p className='error-message'>
-            {message || 'An unexpected error occurred. Please try again later.'}
-          </p>
-          <button className='retry-button' onClick={() => window.location.reload()}>
-            Retry
-          </button>
-        </div>
+    <Html fullscreen>
+      <div
+        style={{
+          height: '100vh',
+          width: '100vw',
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'Orbitron, sans-serif',
+          color: '#00fff2',
+          textShadow: '0 0 8px #00fff2',
+        }}
+      >
+        <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>CRITICAL ERROR</h1>
+        <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>{message}</p>
+        <button
+          onClick={() => window.location.reload()}
+          style={{
+            background: 'transparent',
+            border: '2px solid #00fff2',
+            padding: '0.5rem 1.5rem',
+            color: '#00fff2',
+            fontSize: '1rem',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease-in-out',
+          }}
+          onMouseOver={(e) => {
+            ;(e.target as HTMLButtonElement).style.backgroundColor = '#00fff2'
+            ;(e.target as HTMLButtonElement).style.color = '#000'
+          }}
+          onMouseOut={(e) => {
+            ;(e.target as HTMLButtonElement).style.backgroundColor = 'transparent'
+            ;(e.target as HTMLButtonElement).style.color = '#00fff2'
+          }}
+        >
+          RELOAD
+        </button>
       </div>
-    </>
+    </Html>
   )
 }
 

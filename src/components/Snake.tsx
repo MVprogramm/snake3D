@@ -9,10 +9,7 @@ import { getCounterHead } from '../animations/snakeAnimation/headAnimations/snak
 import { getSnakeBodyCoord, getSnakeHeadParams } from '../engine/snake/snake'
 import SnakeBodyUnit from '../assets/snakeModel/snakeBody/snakeBodyUnit'
 import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
-import {
-  getSnakeUnitPosition,
-  getSnakeUnitRotation,
-} from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
+import * as U from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
 import { getSnakeBodyLocation } from '../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
 
@@ -48,24 +45,24 @@ const Snake = () => {
       if (snakeRefs.hasOwnProperty(key)) {
         if (key === 'headRef') {
           snakeRefs['headRef'].current?.position.set(
-            getSnakeUnitPosition()[0][0],
-            getSnakeUnitPosition()[0][1],
-            getSnakeUnitPosition()[0][2]
+            U.getSnakeUnitPosition()[0][0],
+            U.getSnakeUnitPosition()[0][1],
+            U.getSnakeUnitPosition()[0][2]
           )
 
-          snakeRefs['headRef'].current?.rotation.set(0, 0, getSnakeUnitRotation()[0][2])
+          snakeRefs['headRef'].current?.rotation.set(0, 0, U.getSnakeUnitRotation()[0][2])
         }
         const index = +key[key.length - 1]
         if (key === 'tailRef') {
           snakeRefs['tailRef'].current?.position.set(
-            getSnakeUnitPosition()[snakeCurrentLength - 2][0],
-            getSnakeUnitPosition()[snakeCurrentLength - 2][1],
-            getSnakeUnitPosition()[snakeCurrentLength - 2][2]
+            U.getSnakeUnitPosition()[snakeCurrentLength - 2][0],
+            U.getSnakeUnitPosition()[snakeCurrentLength - 2][1],
+            U.getSnakeUnitPosition()[snakeCurrentLength - 2][2]
           )
           snakeRefs['tailRef'].current?.rotation.set(
             0,
             0,
-            getSnakeUnitRotation()[snakeCurrentLength - 2][2]
+            U.getSnakeUnitRotation()[snakeCurrentLength - 2][2]
           )
           snakeRefs['tailRef'].current?.scale.set(
             0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
@@ -77,14 +74,14 @@ const Snake = () => {
         if (key.includes('bodyUnitRef_')) {
           if (index < snakeCurrentLength - 2) {
             snakeRefs[`bodyUnitRef_${index}`].current?.position.set(
-              getSnakeUnitPosition()[index][0],
-              getSnakeUnitPosition()[index][1],
-              getSnakeUnitPosition()[index][2]
+              U.getSnakeUnitPosition()[index][0],
+              U.getSnakeUnitPosition()[index][1],
+              U.getSnakeUnitPosition()[index][2]
             )
             snakeRefs[`bodyUnitRef_${index}`].current?.rotation.set(
               0,
               0,
-              getSnakeUnitRotation()[index][2]
+              U.getSnakeUnitRotation()[index][2]
             )
             snakeRefs[`bodyUnitRef_${index}`].current?.scale.set(
               0.65 +
