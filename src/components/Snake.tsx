@@ -112,7 +112,10 @@ const Snake = () => {
           return (
             ref === 1 && (
               <group key={index} ref={snakeRefs[`bodyUnitRef_${index}`]}>
-                <SnakeBodyUnit />
+                <SnakeBodyUnit
+                  right={-(index % 2) * 1.57}
+                  left={3.14 - (index % 2) * 1.57}
+                />
               </group>
             )
           )

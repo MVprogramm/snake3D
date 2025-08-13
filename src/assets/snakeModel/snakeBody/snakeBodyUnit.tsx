@@ -2,9 +2,19 @@ import { GeometryProps } from '../../../types/threeTypes'
 import SnakeBodyGeometry from './snakeBodyGeometry'
 import { snakeCONFIG } from '../../../config/snakeConfig/snakeCONFIG'
 
-function SnakeBodyRightPrisma(/*props: GeometryProps*/) {
+type SnakeBodyPrismaProps = {
+  zRotation: number
+}
+
+type SnakeBodyUnitProps = {
+  right: number
+  left: number
+}
+
+function SnakeBodyRightPrisma({ zRotation }: SnakeBodyPrismaProps) {
+  const props: GeometryProps = { ...snakeCONFIG.body.left, 'rotation-z': zRotation }
   return (
-    <mesh {...snakeCONFIG.body.right} receiveShadow castShadow>
+    <mesh {...props} receiveShadow castShadow>
       <SnakeBodyGeometry />
       <meshStandardMaterial
         color={snakeCONFIG.colors.snakeFirstCOLOR}
@@ -15,9 +25,10 @@ function SnakeBodyRightPrisma(/*props: GeometryProps*/) {
   )
 }
 
-function SnakeBodyLeftPrisma(/*props: GeometryProps*/) {
+function SnakeBodyLeftPrisma({ zRotation }: SnakeBodyPrismaProps) {
+  const props: GeometryProps = { ...snakeCONFIG.body.right, 'rotation-z': zRotation }
   return (
-    <mesh {...snakeCONFIG.body.left} receiveShadow castShadow>
+    <mesh {...props} receiveShadow castShadow>
       <SnakeBodyGeometry />
       <meshStandardMaterial
         color={snakeCONFIG.colors.snakeSecondCOLOR}
@@ -28,11 +39,11 @@ function SnakeBodyLeftPrisma(/*props: GeometryProps*/) {
   )
 }
 
-function SnakeBodyUnit(/*props: GeometryProps*/) {
+function SnakeBodyUnit({ right, left }: SnakeBodyUnitProps) {
   return (
     <group>
-      <SnakeBodyRightPrisma /*{...props}*/ />
-      <SnakeBodyLeftPrisma /*{...props}*/ />
+      <SnakeBodyRightPrisma zRotation={right} />
+      <SnakeBodyLeftPrisma zRotation={left} />
     </group>
   )
 }

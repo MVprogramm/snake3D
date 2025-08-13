@@ -20,7 +20,7 @@ export type snakeSteps = {
   currentStepY: number
 }
 
-export type snakeDiff = {
+export type snakeDiffLocation = {
   diffX: number
   diffY: number
 }
@@ -28,4 +28,9 @@ export type snakeDiff = {
 export type PreviousStep = {
   previousStepX: number
   previousStepY: number
+}
+
+export type MoveDirection = {
+  turn: number // положение после поворота: 0-вверх, 11-вправо, 22-вниз, 33-влево
+  turnItemNumber: number // порядковый номер элемента змейки(от головы), выполняющий поворот
 }
