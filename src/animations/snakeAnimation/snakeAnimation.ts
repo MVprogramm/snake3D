@@ -4,6 +4,7 @@ import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 import * as LOCATION from './bodyAnimations/snakeBodyLocation'
 import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
 import { snakeBodyTurnaround } from './bodyAnimations/snakeBodyTurnaround'
+import { getDiff } from './bodyAnimations/snakeDiff'
 import { snakeHeadLocation } from './headAnimations/snakeHeadLocation'
 import { snakeHeadMoving } from './headAnimations/snakeHeadMoving'
 import { snakeStepSetting } from './snakeStepSetting'
@@ -36,7 +37,9 @@ export const snakeAnimation = (delta: number): void => {
   if (!checkTimerStep()) {
     // вычисляем направление движения всех элементов змейки
     LOCATION.getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
+
     snakeSteps = snakeStepSetting(snakeSteps)
+
     LOCATION.updateSnakeBodyLocation()
     snakeHeadLocation(snakeSteps[0], delta)
     snakeHeadMoving(snakeSteps[0], delta)

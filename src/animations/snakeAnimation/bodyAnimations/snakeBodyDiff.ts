@@ -30,8 +30,14 @@ function snakeBodyDiff(index: number) {
         diffY = getSnakeBodyLocation()[index - 1][1] - getSnakeBodyLocation()[index][1]
       } else {
         // Для головы направление движения задается данными из движка
-        diffX = getSnakeHeadParams().snakeHeadStepX
-        diffY = getSnakeHeadParams().snakeHeadStepY
+        diffX =
+          getSnakeHeadParams().snakeHeadStepX === -diffX
+            ? diffX
+            : getSnakeHeadParams().snakeHeadStepX
+        diffY =
+          getSnakeHeadParams().snakeHeadStepY === -diffY
+            ? diffY
+            : getSnakeHeadParams().snakeHeadStepY
       }
 
     // Сохраняем расчётные значения

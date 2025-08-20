@@ -13,20 +13,10 @@ export const snakeBodyTurnaround = () => {
   const [counterHeadX, counterHeadY] = getCounterHead()
   const rotations = PROPS.getSnakeUnitRotation().map((unit, index) => {
     if (index === 0) {
-      const diffPreviousX = DIFF.getPreviousDiff()[index].diffX
-      const diffPreviousY = DIFF.getPreviousDiff()[index].diffY
-      const diffCurrentX = DIFF.getDiff()[index].diffX
-      const diffCurrentY = DIFF.getDiff()[index].diffY
-      let previousDirection =
-        diffPreviousX === 1 && diffPreviousY === 0
-          ? 'right'
-          : diffPreviousX === 0 && diffPreviousY === -1
-          ? 'down'
-          : diffPreviousX === -1 && diffPreviousY === 0
-          ? 'left'
-          : diffPreviousX === 0 && diffPreviousY === 1
-          ? 'up'
-          : ''
+      // const diffPreviousX = DIFF.getPreviousDiff()[index].diffX
+      // const diffPreviousY = DIFF.getPreviousDiff()[index].diffY
+      const diffCurrentX = DIFF.getDiff()[0].diffX
+      const diffCurrentY = DIFF.getDiff()[0].diffY
       let currentDirection =
         diffCurrentX === 1 && diffCurrentY === 0
           ? 'right'
@@ -47,6 +37,8 @@ export const snakeBodyTurnaround = () => {
           : currentDirection === 'left'
           ? 1.57
           : 0
+      if (counterHeadX === 0 && counterHeadY === 0)
+        console.log('currentDirection head: ', currentDirection)
     }
     if (index > 0 && index < getSnakeBodyCoord().length - 2) {
       const diffPreviousX = DIFF.getPreviousDiff()[index - 1].diffX
@@ -122,6 +114,18 @@ export const snakeBodyTurnaround = () => {
       const diffPreviousY = DIFF.getPreviousDiff()[index - 1].diffY
       const diffCurrentX = DIFF.getDiff()[index - 1].diffX
       const diffCurrentY = DIFF.getDiff()[index - 1].diffY
+      console.log(diffCurrentX, diffCurrentY)
+      // if (counterHeadX === 0 && counterHeadY === 0)
+      //   console.log(
+      //     'tail previous X: ',
+      //     diffPreviousX,
+      //     'tail previous Y: ',
+      //     diffPreviousY,
+      //     '| tail current X: ',
+      //     diffCurrentX,
+      //     'tail current Y: ',
+      //     diffCurrentY
+      //   )
       let previousDirection =
         diffPreviousX === 1 && diffPreviousY === 0
           ? 'right'
@@ -142,6 +146,7 @@ export const snakeBodyTurnaround = () => {
           : diffCurrentX === 0 && diffCurrentY === 1
           ? 'up'
           : ''
+      console.log(previousDirection, currentDirection)
       if (
         (previousDirection === 'right' && currentDirection === 'up') ||
         (previousDirection === 'left' && currentDirection === 'down') ||

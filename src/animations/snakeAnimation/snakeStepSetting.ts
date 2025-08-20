@@ -73,7 +73,6 @@ export const snakeStepSetting = (step: snakeSteps[]): snakeSteps[] => {
     newStep[0].currentStepX = getSnakeHeadParams().snakeHeadStepX
     newStep[0].currentStepY = getSnakeHeadParams().snakeHeadStepY
     // }
-    // console.log(newStep[1], getDiff()[1])
     // console.log('before: ', getDiff()[0], getDiff()[1])
 
     // На этом этапе запрещается движение змейки в обратном направлении
@@ -152,5 +151,6 @@ export const snakeStepSetting = (step: snakeSteps[]): snakeSteps[] => {
   //   snakeHeadStepX: step[0].currentStepX,
   //   snakeHeadStepY: step[0].currentStepY,
   // })
+
   return newStep
 }
