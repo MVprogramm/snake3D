@@ -12,6 +12,7 @@ import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
 import * as U from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
 import { getSnakeBodyLocation } from '../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
+import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
@@ -106,6 +107,7 @@ const Snake = () => {
           return (
             <group key={index} ref={snakeRefs['headRef']}>
               <SnakeHead />
+              <SnakeJaw />
             </group>
           )
         } else if (index < snakeMaxLength - 1) {

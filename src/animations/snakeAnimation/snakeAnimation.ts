@@ -1,3 +1,5 @@
+import { getNewMove } from '../../engine/events/changeDirectionEvent'
+import { snakeMovesTowardsFood } from '../../engine/events/snakeMovesTowardsFood'
 import checkTimerStep from '../../engine/time/checkTimerStep'
 import { PreviousStep, snakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
@@ -37,9 +39,7 @@ export const snakeAnimation = (delta: number): void => {
   if (!checkTimerStep()) {
     // вычисляем направление движения всех элементов змейки
     LOCATION.getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
-
     snakeSteps = snakeStepSetting(snakeSteps)
-
     LOCATION.updateSnakeBodyLocation()
     snakeHeadLocation(snakeSteps[0], delta)
     snakeHeadMoving(snakeSteps[0], delta)

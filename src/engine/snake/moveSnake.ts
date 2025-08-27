@@ -7,6 +7,7 @@ import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/s
 import { getPositionHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadProps'
 import allContactEvents from '../events/allContactEvents'
 import { breakContact } from '../events/isContact'
+import { snakeMovesTowardsFood } from '../events/snakeMovesTowardsFood'
 import { getField } from '../field/fieldPerLevel'
 import { checkMistake } from '../lives/isMistake'
 import { checkTimerWorking, startTimer } from '../time/isTimer'
@@ -24,7 +25,6 @@ import * as SNAKE from './snake'
  *        * на место первого элемента вводит текущие координаты головы змейки
  *    - вносит новые координаты тела змейки в модуль snake
  */
-
 export function advanceSnake(): void {
   let snakeHead = {
     snakeHeadCoordX: (getField() + 1) / 2 + Math.round(getPositionHead()[0]),
@@ -41,7 +41,6 @@ export function advanceSnake(): void {
       snakeHeadStepX: snakeHeadStepX,
       snakeHeadStepY: snakeHeadStepY,
     }
-
     const nextSnakeHeadCoord = allContactEvents(potentialSnakeHeadCoord)
     if (
       nextSnakeHeadCoord.snakeHeadCoordX !== potentialSnakeHeadCoord.snakeHeadCoordX ||
@@ -74,9 +73,7 @@ export function advanceSnake(): void {
 
 function moveSnake(): void {
   const [counterHeadX, counterHeadY] = getCounterHead()
-  if (counterHeadX === 0 && counterHeadY === 0 && checkTimerWorking()) {
-    advanceSnake()
-  }
+  if (counterHeadX === 0 && counterHeadY === 0 && checkTimerWorking()) advanceSnake()
 }
 
 export default moveSnake

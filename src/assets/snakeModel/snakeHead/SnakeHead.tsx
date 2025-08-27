@@ -2,13 +2,14 @@ import SnakeScull from './snakeScull/SnakeScull'
 import SnakeEyes from './snakeEyes/SnakeEyes'
 import SnakeJaw from './snakeJaw/SnakeJaw'
 import SnakeTongue from './snakeTongue/snakeTongue'
-import { snakeCONFIG } from '../../../config/snakeConfig/snakeCONFIG'
+import { getSnakeHeadProps } from '../../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
 function SnakeHead() {
+  const headProps = { ...getSnakeHeadProps() }
   return (
-    <group {...snakeCONFIG.head.head}>
+    <group {...headProps}>
       <SnakeScull />
       <SnakeEyes />
-      <SnakeJaw />
+      {/* <SnakeJaw /> */}
       <SnakeTongue />
     </group>
   )

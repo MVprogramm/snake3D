@@ -1,4 +1,4 @@
-import { Vector3 } from '@react-three/fiber'
+import { Vector3 } from 'three'
 import { Object3D } from 'three'
 
 export interface GeometryProps {

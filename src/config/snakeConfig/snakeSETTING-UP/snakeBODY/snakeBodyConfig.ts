@@ -1,3 +1,3 @@
 export const snakeBodyConfig = {
-  prismaGap: 0.01,
+  prismaGap: 0,
 }

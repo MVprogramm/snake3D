@@ -13,7 +13,7 @@ import { addEvent } from '../protocol/protocol'
 import protocolExecutor from '../protocol/protocolExecutor'
 import { getSnakeHeadParams } from '../snake/snake'
 /**
- * Равно true, если на текущем шаге игры еда съедена и false, если нет
+ * Контроль контакта головы змейки с едой, true, если есть, и false, если нет
  */
 let isFoodEaten: boolean
 /**

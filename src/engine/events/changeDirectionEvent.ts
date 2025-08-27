@@ -13,12 +13,9 @@ import { checkTimerWorking } from '../time/isTimer'
 import getSnakeMoveDirection from '../snake/getSnakeMoveDirection'
 import { checkContact } from './isContact'
 /**
- * @var Положение головы змейки перед совершением хода (для анимации)
+ * @var Новое направление головы змейки
  */
-const prohibitedMove = {
-  direction: '',
-  step: 0,
-}
+let newMove = ''
 /**
  * Изменяет направление движения змейки при нажатии клавиш со стрелками
  * @param e событие нажатия клавиши на клавиатуре
@@ -30,7 +27,7 @@ const prohibitedMove = {
  * 5. Нажатие клавиши запускает игру
  * @returns событие изменения направления движения змейки, или "пустое" событие
  */
-const changeDirectionEvent = (e: KeyboardEvent): Event => {
+export const changeDirectionEvent = (e: KeyboardEvent): Event => {
   const moveDirection = findLastMoveDirection()
   let newName = ''
   let newValue = 0
@@ -42,6 +39,7 @@ const changeDirectionEvent = (e: KeyboardEvent): Event => {
   if (e.code === 'ArrowUp' && moveDirection.name !== 'Y') {
     newName = 'Y'
     newValue = 1
+    newMove = 'up'
   } else if (
     e.code === 'ArrowDown' &&
     moveDirection.name !== 'Y' &&
@@ -49,12 +47,15 @@ const changeDirectionEvent = (e: KeyboardEvent): Event => {
   ) {
     newName = 'Y'
     newValue = -1
+    newMove = 'down'
   } else if (e.code === 'ArrowLeft' && moveDirection.name !== 'X') {
     newName = 'X'
     newValue = -1
+    newMove = 'left'
   } else if (e.code === 'ArrowRight' && moveDirection.name !== 'X') {
     newName = 'X'
     newValue = 1
+    newMove = 'right'
   }
 
   // if (newName === prohibitedMove.direction && newValue === prohibitedMove.step)
@@ -65,4 +66,4 @@ const changeDirectionEvent = (e: KeyboardEvent): Event => {
   return newEvent
 }
 
-export default changeDirectionEvent
+export const getNewMove = () => newMove

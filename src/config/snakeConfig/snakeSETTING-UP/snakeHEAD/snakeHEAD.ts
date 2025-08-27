@@ -5,13 +5,25 @@ import { snakeTONGUE } from './snakeTONGUE'
 import { GeometryProps } from '../../../../types/threeTypes'
 import { Vector3 } from 'three'
 
+const SNAKE_HEAD_POSITION_X = 0
+const SNAKE_HEAD_POSITION_Y = -0.06
+const SNAKE_HEAD_POSITION_Z = 0
+const SNAKE_HEAD_ROTATION_X = 0
+const SNAKE_HEAD_ROTATION_Y = 0
+const SNAKE_HEAD_ROTATION_Z = 0
+const SNAKE_HEAD_SCALE = 1
+
 export const snakeHEAD = {
   head: <GeometryProps>{
-    position: new Vector3(0, -0.06, 0),
-    'rotation-x': 0,
-    'rotation-y': 0,
-    'rotation-z': 0,
-    scale: 1,
+    position: new Vector3(
+      SNAKE_HEAD_POSITION_X,
+      SNAKE_HEAD_POSITION_Y,
+      SNAKE_HEAD_POSITION_Z
+    ),
+    'rotation-x': SNAKE_HEAD_ROTATION_X,
+    'rotation-y': SNAKE_HEAD_ROTATION_Y,
+    'rotation-z': SNAKE_HEAD_ROTATION_Z,
+    scale: SNAKE_HEAD_SCALE,
   },
   eyes: snakeEYES,
   scull: snakeSCULL,

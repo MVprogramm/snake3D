@@ -4,6 +4,7 @@ import { snakeSteps } from '../../../types/animationTypes'
 import { getSnakeSpeed } from '../snakeSpeedSetting'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
+import { snakeMovesTowardsFood } from '../../../engine/events/snakeMovesTowardsFood'
 /**
  * @var счетчик шагов головы 3D змейки по оси X
  */
@@ -16,7 +17,10 @@ let counterHeadY = 0
  * @var начальная скорость змейки
  */
 let moveSpeed = 1
-
+/**
+ * @var шаг движения головы змейки по вертикали
+ */
+let stepHeadVerticalStep = 0
 /**
  * Проверяет корректность объекта шагов змейки
  * @param steps - объект, хранящий текущие и предыдущие направления движения
@@ -103,7 +107,8 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
     // В случае ошибки валидации, не меняем состояние счетчиков
     return
   }
-
+  stepHeadVerticalStep =
+    snakeMovesTowardsFood() === 2 ? 0 : snakeMovesTowardsFood() === 1 ? 1 : -1
   const { currentStepX, currentStepY } = steps
   if (!checkTimerStep()) {
     // Дополнительная проверка, что moveSpeed - положительное число
@@ -140,4 +145,11 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
  */
 export const getCounterHead = (): number[] => {
   return [counterHeadX, counterHeadY]
+}
+/**
+ * Возвращает шаг головы змейки по вертикали
+ * @returns stepHeadVerticalStep
+ */
+export const getHeadVerticalStep = (): number => {
+  return stepHeadVerticalStep
 }

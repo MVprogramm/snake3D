@@ -2,9 +2,10 @@ import { snakeSteps } from '../../../types/animationTypes'
 import { getSnakeUnitPosition, setSnakeUnitPosition } from './snakeBodyProps'
 import { getDiff } from './snakeDiff'
 import { getAmountOfFood } from '../../../engine/food/amountOfFoodPerLevel'
-import { getCounterHead } from '../headAnimations/snakeHeadLocation'
+import { getCounterHead, getHeadVerticalStep } from '../headAnimations/snakeHeadLocation'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
+import { getFoodEaten } from '../../../engine/events/snakeCatchesFoodEvent'
 // import * as TURN from './snakeBodyTurnaround'
 // import { getSnakeBodyCoord } from '../../../engine/snake/snake'
 
@@ -17,6 +18,7 @@ let counterUnits: number[][] = []
 const WAVE_FREQUENCY = 2 * Math.PI
 const WAVE_PHASE_STEP = Math.PI / 4
 let waveTime = 0
+let eatingTime = 0
 /*----------------------------------------------------------*/
 // const MOVE_PAUSE = 10
 // let pause = 1
@@ -27,6 +29,11 @@ export const setCounterUnits = () => {
 }
 
 export const getCounterUnits = () => counterUnits
+
+// function easeOutCubic(t: number) {
+//   return 1 - Math.pow(1 - t, 3)
+// }
+
 let moveSpeed = 1
 export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
   const [counterHeadX, counterHeadY] = getCounterHead()
@@ -37,8 +44,10 @@ export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
     //   counterTurnItem = TURN.getTurnItemNumber()
     // }
   }
+  const diffZ = getHeadVerticalStep()
   const WAVE_AMPLITUDE = moveSpeed / 200
   waveTime += delta * moveSpeed
+  // eatingTime += delta
   // console.log(TURN.getTurnItemNumber())
 
   // if (TURN.getTurnItemNumber() > 0 && !stopPause)
@@ -54,8 +63,9 @@ export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
 
   const pos = getSnakeUnitPosition().map((positions, index) => {
     const diff = getDiff()[index]
-    positions[0] += (diff.diffX * moveSpeed) /* pause*/ / SystemConfig.FPS
-    positions[1] += (diff.diffY * moveSpeed) /* pause*/ / SystemConfig.FPS
+    positions[0] += (diff.diffX * moveSpeed) / SystemConfig.FPS
+    positions[1] += (diff.diffY * moveSpeed) / SystemConfig.FPS
+    if (index === 0) positions[2] += (diffZ * moveSpeed) / SystemConfig.FPS / 1.3
     /*-------------------------------------------------*/
     if (index != 0) {
       const perpX = -diff.diffY
@@ -69,9 +79,10 @@ export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
     if (counterHeadX === 0 && counterHeadY === 0) {
       positions[0] = Math.round(positions[0])
       positions[1] = Math.round(positions[1])
+      // if (index === 0) positions[2] = Math.round(positions[2])
     }
-    positions[2] = 0
-
+    if (index !== 0) positions[2] = 0
+    if (getFoodEaten()) eatingTime = 0
     return positions
   })
 

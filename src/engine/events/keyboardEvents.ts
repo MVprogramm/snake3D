@@ -3,7 +3,7 @@
  *     @function keyboardEvents Переводит нажатие клавиш в события игры
  */
 import * as RENDER from '../render/isRender'
-import changeDirectionEvent from './changeDirectionEvent'
+import { changeDirectionEvent } from './changeDirectionEvent'
 import { checkPause, keyboardPauseEvent } from './pauseEvent'
 import * as TIMER from '../time/isTimer'
 import speedEvent from './speedEvent'

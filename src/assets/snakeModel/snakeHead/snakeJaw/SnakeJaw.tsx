@@ -1,8 +1,10 @@
 import { snakeCONFIG } from '../../../../config/snakeConfig/snakeCONFIG'
 import SnakeJawGeometry from './SnakeJawGeometry'
+import { getSnakeJawProps } from '../../../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
 function SnakeJaw() {
+  const jawProps = { ...getSnakeJawProps() }
   return (
-    <mesh {...snakeCONFIG.head.jaw} receiveShadow castShadow>
+    <mesh {...jawProps} receiveShadow castShadow>
       <SnakeJawGeometry />
       <meshStandardMaterial
         color={snakeCONFIG.colors.snakeSecondCOLOR}
