@@ -4,6 +4,7 @@ import { SystemConfig } from '../../../config/systemConfig'
 import { getCounterHead, getHeadVerticalStep } from './snakeHeadLocation'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import { snakeFoodEaten } from './snakeFoodEaten'
+import { snakeTongueMoving } from './snakeTongueMoving'
 import { MathUtils } from 'three'
 
 let moveSpeed = 1
@@ -12,6 +13,7 @@ export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
   const { currentStepX, currentStepY } = steps
   const currentStepZ = getHeadVerticalStep()
   snakeFoodEaten(delta)
+  snakeTongueMoving(steps, delta)
   const [counterHeadX, counterHeadY] = getCounterHead()
   if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
   const positionHead = getPositionHead()

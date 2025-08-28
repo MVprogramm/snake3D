@@ -1,6 +1,7 @@
 import { snakeCONFIG } from '../../../../config/snakeConfig/snakeCONFIG'
 import SnakeTongueGeometry from './SnakeTongueGeometry'
-import { getSnakeTongueProps } from '../../../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
+// import { getSnakeTongueProps } from '../../../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
+import { getSnakeTongueProps } from '../../../../animations/snakeAnimation/headAnimations/snakeTongueMoving'
 import { DoubleSide } from 'three'
 function SnakeTongue() {
   const tongueProps = { ...getSnakeTongueProps() }
