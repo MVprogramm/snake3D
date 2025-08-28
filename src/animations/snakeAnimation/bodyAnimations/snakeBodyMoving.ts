@@ -6,6 +6,7 @@ import { getCounterHead, getHeadVerticalStep } from '../headAnimations/snakeHead
 import { SystemConfig } from '../../../config/systemConfig'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import { getFoodEaten } from '../../../engine/events/snakeCatchesFoodEvent'
+import { MathUtils } from 'three'
 // import * as TURN from './snakeBodyTurnaround'
 // import { getSnakeBodyCoord } from '../../../engine/snake/snake'
 
@@ -65,7 +66,11 @@ export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
     const diff = getDiff()[index]
     positions[0] += (diff.diffX * moveSpeed) / SystemConfig.FPS
     positions[1] += (diff.diffY * moveSpeed) / SystemConfig.FPS
-    if (index === 0) positions[2] += (diffZ * moveSpeed) / SystemConfig.FPS / 1.3
+    // if (index === 0) positions[2] += (diffZ * moveSpeed) / SystemConfig.FPS / 1.3
+    if (index === 0) {
+      const targetZ = diffZ > 0 ? 0.5 : 0
+      positions[2] = MathUtils.damp(positions[2], targetZ, 5, delta)
+    }
     /*-------------------------------------------------*/
     if (index != 0) {
       const perpX = -diff.diffY

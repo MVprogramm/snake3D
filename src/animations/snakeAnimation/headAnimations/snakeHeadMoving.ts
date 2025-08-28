@@ -4,20 +4,23 @@ import { SystemConfig } from '../../../config/systemConfig'
 import { getCounterHead, getHeadVerticalStep } from './snakeHeadLocation'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import { snakeFoodEaten } from './snakeFoodEaten'
+import { MathUtils } from 'three'
 
 let moveSpeed = 1
 
 export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
   const { currentStepX, currentStepY } = steps
   const currentStepZ = getHeadVerticalStep()
-  snakeFoodEaten()
+  snakeFoodEaten(delta)
   const [counterHeadX, counterHeadY] = getCounterHead()
   if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
   const positionHead = getPositionHead()
 
   positionHead[0] += (currentStepX * moveSpeed) / SystemConfig.FPS
   positionHead[1] += (currentStepY * moveSpeed) / SystemConfig.FPS
-  positionHead[2] += (currentStepZ * moveSpeed) / SystemConfig.FPS / 2
+  // positionHead[2] += (currentStepZ * moveSpeed) / SystemConfig.FPS / 2
+  const targetZ = currentStepZ > 0 ? 0.5 : 0
+  positionHead[2] = MathUtils.damp(positionHead[2], targetZ, 5, delta)
   if (counterHeadX === 0 && counterHeadY === 0) {
     positionHead[0] = Math.round(positionHead[0])
     positionHead[1] = Math.round(positionHead[1])
