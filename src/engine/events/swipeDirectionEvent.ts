@@ -16,7 +16,9 @@ let previousHeadParams: SnakeHeadCoord = {
   snakeHeadStepY: 0,
 }
 
-const swipeDirectionEvent = (): Event => {
+let newSwipeMove = ''
+
+export const swipeDirectionEvent = (): Event => {
   const newEvent: Event = {
     name: '',
     value: 0,
@@ -49,17 +51,21 @@ const swipeDirectionEvent = (): Event => {
       ) {
         newEvent.name = 'Y'
         newEvent.value = -1
+        newSwipeMove = 'down'
       } else if (yDiff < 0 && moveDirection.name !== 'Y') {
         newEvent.name = 'Y'
         newEvent.value = 1
+        newSwipeMove = 'up'
       }
     } else {
       if (xDiff > 0 && moveDirection.name !== 'X') {
         newEvent.name = 'X'
         newEvent.value = 1
+        newSwipeMove = 'right'
       } else if (xDiff < 0 && moveDirection.name !== 'X') {
         newEvent.name = 'X'
         newEvent.value = -1
+        newSwipeMove = 'left'
       }
     }
     if (!TIMER.checkTimerWorking() && !checkPause()) {
@@ -97,4 +103,4 @@ const swipeDirectionEvent = (): Event => {
   return newEvent
 }
 
-export default swipeDirectionEvent
+export const getNewSwipeMove = () => newSwipeMove

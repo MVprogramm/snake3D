@@ -1,8 +1,8 @@
 import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import { getFoodCoord } from '../food/food'
 import { getSnakeHeadParams } from '../snake/snake'
-// import { getNewMove } from './changeDirectionEvent'
-import getSnakeMoveDirection from '../snake/getSnakeMoveDirection'
+import { getNewKeyboardMove } from './changeDirectionEvent'
+import { getNewSwipeMove } from './swipeDirectionEvent'
 import { getFoodEaten } from './snakeCatchesFoodEvent'
 
 /**
@@ -20,8 +20,13 @@ export function snakeMovesTowardsFood(): number {
   if (counterHeadX === 0 && counterHeadY === 0) {
     const { snakeHeadCoordX, snakeHeadCoordY } = getSnakeHeadParams()
     const [foodX, foodY] = getFoodCoord()
-    // const dir = getNewMove()
-    const [, dir] = getSnakeMoveDirection()
+
+    const dir =
+      getNewKeyboardMove() === ''
+        ? getNewSwipeMove() === ''
+          ? ''
+          : getNewSwipeMove()
+        : getNewKeyboardMove()
     const lineX = snakeHeadCoordX === foodX
     const lineY = snakeHeadCoordY === foodY
     const deltaX = foodX - snakeHeadCoordX

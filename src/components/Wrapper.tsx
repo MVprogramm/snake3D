@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import GameInfo from './GameInfo'
-import swipeDirectionEvent from '../engine/events/swipeDirectionEvent'
+import { swipeDirectionEvent } from '../engine/events/swipeDirectionEvent'
 import { setTouch } from '../engine/events/touchEvent'
 import protocolExecutor from '../engine/protocol/protocolExecutor'
 // import GameButtons from "../GameButtons/GameButtons";
