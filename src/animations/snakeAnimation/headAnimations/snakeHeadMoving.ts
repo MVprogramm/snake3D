@@ -6,7 +6,6 @@ import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import { snakeFoodEaten } from './snakeFoodEaten'
 import { snakeTongueMoving } from './snakeTongueMoving'
 import { MathUtils } from 'three'
-import { getFoodEaten } from '../../../engine/events/snakeCatchesFoodEvent'
 
 let moveSpeed = 1
 
