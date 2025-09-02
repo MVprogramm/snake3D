@@ -7,7 +7,6 @@ import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/s
 import { getPositionHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadProps'
 import allContactEvents from '../events/allContactEvents'
 import { breakContact } from '../events/isContact'
-import { snakeMovesTowardsFood } from '../events/snakeMovesTowardsFood'
 import { getField } from '../field/fieldPerLevel'
 import { checkMistake } from '../lives/isMistake'
 import { checkTimerWorking, startTimer } from '../time/isTimer'

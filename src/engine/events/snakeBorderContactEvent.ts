@@ -7,6 +7,7 @@ import { getCrossesBorders } from '../bonuses/bonusSnakeCrossesBorders'
 import { getField } from '../field/fieldPerLevel'
 import { isContact } from './isContact'
 import isCross from './isCross'
+import { getFoodEaten } from './snakeCatchesFoodEvent'
 /**
  * Срабатывает при контакте головы змейки с краем поля
  * @param snakeHead параметры головы змейки

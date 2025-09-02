@@ -3,9 +3,11 @@
  *     @function playLevel Последовательно запускает игровые функции
  */
 
+import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import bonusSelect from '../bonuses/bonusSelect'
 import snakeCatchesBonusEvent from '../events/snakeCatchesBonusEvent'
 import { snakeCatchesFoodEvent } from '../events/snakeCatchesFoodEvent'
+import { snakeFoodEaten } from '../events/snakeFoodEaten'
 import setObstacleParams from '../obstacles/setObstacleParams'
 import moveSnake from '../snake/moveSnake'
 /**
@@ -22,8 +24,13 @@ function playLevel() {
   bonusSelect()
   setObstacleParams(600)
   moveSnake()
-  snakeCatchesFoodEvent()
-  snakeCatchesBonusEvent()
+  const [counterHeadX, counterHeadY] = getCounterHead()
+  if (counterHeadX === 0 && counterHeadY === 0) {
+    snakeCatchesFoodEvent()
+
+    snakeCatchesBonusEvent()
+  }
+  snakeFoodEaten()
 }
 
 export default playLevel

@@ -4,7 +4,7 @@ import { getSnakeHeadParams } from '../snake/snake'
 import { getNewKeyboardMove } from './changeDirectionEvent'
 import { getNewSwipeMove } from './swipeDirectionEvent'
 import { getFoodEaten } from './snakeCatchesFoodEvent'
-
+import { checkMistake } from '../lives/isMistake'
 /**
  * Флаг, информирующий о поедании еды:
  * 0 - еда съедена, 1 - до еды 1 клетка, 2 - еда далеко
@@ -15,36 +15,43 @@ let distanceFromSnakeToFood = 2
  *  0 - еда съедена, 1 - до еды 1 клетка, 2 - еда далеко
  *  @returns distanceFromSnakeToFood
  */
-export function snakeMovesTowardsFood(): number {
-  const [counterHeadX, counterHeadY] = getCounterHead()
-  if (counterHeadX === 0 && counterHeadY === 0) {
-    const { snakeHeadCoordX, snakeHeadCoordY } = getSnakeHeadParams()
-    const [foodX, foodY] = getFoodCoord()
+export function snakeMovesTowardsFood(): void {
+  const { snakeHeadCoordX, snakeHeadCoordY } = getSnakeHeadParams()
+  const [foodX, foodY] = getFoodCoord()
 
-    const dir =
-      getNewKeyboardMove() === ''
-        ? getNewSwipeMove() === ''
-          ? ''
-          : getNewSwipeMove()
-        : getNewKeyboardMove()
-    const lineX = snakeHeadCoordX === foodX
-    const lineY = snakeHeadCoordY === foodY
-    const deltaX = foodX - snakeHeadCoordX
-    const deltaY = foodY - snakeHeadCoordY
-    distanceFromSnakeToFood =
-      dir === 'up' && lineX && deltaY === 1 ? 1 : distanceFromSnakeToFood
-    distanceFromSnakeToFood =
-      dir === 'right' && lineY && deltaX === 1 ? 1 : distanceFromSnakeToFood
-    distanceFromSnakeToFood =
-      dir === 'down' && lineX && deltaY === -1 ? 1 : distanceFromSnakeToFood
-    distanceFromSnakeToFood =
-      dir === 'left' && lineY && deltaX === -1 ? 1 : distanceFromSnakeToFood
-    distanceFromSnakeToFood = getFoodEaten()
-      ? 0
-      : distanceFromSnakeToFood === 0
-      ? 2
-      : distanceFromSnakeToFood
-  }
+  const dir =
+    getNewKeyboardMove() === ''
+      ? getNewSwipeMove() === ''
+        ? ''
+        : getNewSwipeMove()
+      : getNewKeyboardMove()
+  const lineX = snakeHeadCoordX === foodX
+  const lineY = snakeHeadCoordY === foodY
+  const deltaX = foodX - snakeHeadCoordX
+  const deltaY = foodY - snakeHeadCoordY
+  distanceFromSnakeToFood =
+    dir === 'up' && lineX && deltaY === 1 ? 1 : distanceFromSnakeToFood
+  distanceFromSnakeToFood =
+    dir === 'right' && lineY && deltaX === 1 ? 1 : distanceFromSnakeToFood
+  distanceFromSnakeToFood =
+    dir === 'down' && lineX && deltaY === -1 ? 1 : distanceFromSnakeToFood
+  distanceFromSnakeToFood =
+    dir === 'left' && lineY && deltaX === -1 ? 1 : distanceFromSnakeToFood
+  distanceFromSnakeToFood = getFoodEaten()
+    ? 0
+    : distanceFromSnakeToFood === 0
+    ? 2
+    : distanceFromSnakeToFood
+  // }
+  // console.log(checkMistake(), distanceFromSnakeToFood)
 
-  return distanceFromSnakeToFood
+  // if (getFoodEaten()) distanceFromSnakeToFood = 0
+
+  // return distanceFromSnakeToFood
 }
+
+export const setDistanceFromSnakeToFood = (dist: number) => {
+  distanceFromSnakeToFood = dist
+}
+
+export const getDistanceFromSnakeToFood = () => distanceFromSnakeToFood

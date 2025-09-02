@@ -1,10 +1,13 @@
 import { setSnakePosition } from '../../../engine/snake/setSnakePosition'
 import checkTimerStep from '../../../engine/time/checkTimerStep'
 import { snakeSteps } from '../../../types/animationTypes'
-import { getSnakeSpeed } from '../snakeSpeedSetting'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
-import { snakeMovesTowardsFood } from '../../../engine/events/snakeMovesTowardsFood'
+import {
+  getDistanceFromSnakeToFood,
+  setDistanceFromSnakeToFood,
+  snakeMovesTowardsFood,
+} from '../../../engine/events/snakeMovesTowardsFood'
 /**
  * @var счетчик шагов головы 3D змейки по оси X
  */
@@ -20,7 +23,7 @@ let moveSpeed = 1
 /**
  * @var шаг движения головы змейки по вертикали
  */
-let stepHeadVerticalStep = 0
+let headVerticalStep = 0
 /**
  * Проверяет корректность объекта шагов змейки
  * @param steps - объект, хранящий текущие и предыдущие направления движения
@@ -107,8 +110,9 @@ export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
     // В случае ошибки валидации, не меняем состояние счетчиков
     return
   }
-  stepHeadVerticalStep =
-    snakeMovesTowardsFood() === 2 ? 0 : snakeMovesTowardsFood() === 1 ? 1 : -1
+  snakeMovesTowardsFood()
+  const towardFood = getDistanceFromSnakeToFood()
+  headVerticalStep = towardFood === 2 ? 0 : towardFood === 1 ? 1 : -1
   const { currentStepX, currentStepY } = steps
   if (!checkTimerStep()) {
     // Дополнительная проверка, что moveSpeed - положительное число
@@ -151,5 +155,5 @@ export const getCounterHead = (): number[] => {
  * @returns stepHeadVerticalStep
  */
 export const getHeadVerticalStep = (): number => {
-  return stepHeadVerticalStep
+  return headVerticalStep
 }

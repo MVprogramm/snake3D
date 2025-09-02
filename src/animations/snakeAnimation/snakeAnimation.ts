@@ -1,5 +1,3 @@
-import { getNewKeyboardMove } from '../../engine/events/changeDirectionEvent'
-import { snakeMovesTowardsFood } from '../../engine/events/snakeMovesTowardsFood'
 import checkTimerStep from '../../engine/time/checkTimerStep'
 import { PreviousStep, snakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'

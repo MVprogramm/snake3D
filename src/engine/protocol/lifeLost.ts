@@ -37,7 +37,7 @@ function lifeLost(): void {
       // setSnakeOpacity(1);
     }, 5000)
 
-    noMistakeWasMade()
+    //noMistakeWasMade()
   }
 }
 

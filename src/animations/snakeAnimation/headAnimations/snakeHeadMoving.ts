@@ -6,27 +6,28 @@ import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import { snakeFoodEaten } from './snakeFoodEaten'
 import { snakeTongueMoving } from './snakeTongueMoving'
 import { MathUtils } from 'three'
+import { getFoodEaten } from '../../../engine/events/snakeCatchesFoodEvent'
 
 let moveSpeed = 1
 
 export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
   const { currentStepX, currentStepY } = steps
   const currentStepZ = getHeadVerticalStep()
+
   snakeFoodEaten(delta)
   snakeTongueMoving(steps, delta)
+
   const [counterHeadX, counterHeadY] = getCounterHead()
   if (counterHeadX === 0 && counterHeadY === 0) moveSpeed = getTimerStep()
   const positionHead = getPositionHead()
 
   positionHead[0] += (currentStepX * moveSpeed) / SystemConfig.FPS
   positionHead[1] += (currentStepY * moveSpeed) / SystemConfig.FPS
-  // positionHead[2] += (currentStepZ * moveSpeed) / SystemConfig.FPS / 2
   const targetZ = currentStepZ > 0 ? 0.5 : 0
-  positionHead[2] = MathUtils.damp(positionHead[2], targetZ, 5, delta)
+  positionHead[2] = MathUtils.damp(positionHead[2], targetZ, 50, delta)
   if (counterHeadX === 0 && counterHeadY === 0) {
     positionHead[0] = Math.round(positionHead[0])
     positionHead[1] = Math.round(positionHead[1])
-    // positionHead[2] = Math.round(positionHead[2])
   }
 
   setPositionHead(positionHead)
