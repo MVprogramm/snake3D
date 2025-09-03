@@ -10,10 +10,10 @@ let phase = 0
 
 export const snakeTongueMoving = (steps: snakeSteps, delta: number) => {
   const isMoving = steps.currentStepX !== 0 || steps.currentStepY !== 0
-  const lambda = 10
+  const lambda = 50
 
   if (isMoving) {
-    phase += delta * 10
+    phase += delta * 5
     const extendFactor = (Math.sin(phase) + 1) / 2
     const targetY = BASE_Y + EXTEND * extendFactor
     tongueProps.position.y = MathUtils.damp(
@@ -22,7 +22,7 @@ export const snakeTongueMoving = (steps: snakeSteps, delta: number) => {
       lambda,
       delta
     )
-    tongueProps['rotation-y'] = Math.sin(phase * 20) * WIGGLE_ANGLE
+    tongueProps['rotation-y'] = Math.sin(phase * 10) * WIGGLE_ANGLE
   } else {
     tongueProps.position.y = MathUtils.damp(tongueProps.position.y, BASE_Y, lambda, delta)
     tongueProps['rotation-y'] = MathUtils.damp(
