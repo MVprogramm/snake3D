@@ -16,38 +16,41 @@ let distanceFromSnakeToFood = 2
  *  @returns distanceFromSnakeToFood
  */
 export function snakeMovesTowardsFood(): void {
-  const { snakeHeadCoordX, snakeHeadCoordY } = getSnakeHeadParams()
-  const [foodX, foodY] = getFoodCoord()
+  const [counterHeadX, counterHeadY] = getCounterHead()
+  if (counterHeadX === 0 && counterHeadY === 0) {
+    const { snakeHeadCoordX, snakeHeadCoordY } = getSnakeHeadParams()
+    const [foodX, foodY] = getFoodCoord()
 
-  const dir =
-    getNewKeyboardMove() === ''
-      ? getNewSwipeMove() === ''
-        ? ''
-        : getNewSwipeMove()
-      : getNewKeyboardMove()
-  const lineX = snakeHeadCoordX === foodX
-  const lineY = snakeHeadCoordY === foodY
-  const deltaX = foodX - snakeHeadCoordX
-  const deltaY = foodY - snakeHeadCoordY
-  distanceFromSnakeToFood =
-    dir === 'up' && lineX && deltaY === 1 ? 1 : distanceFromSnakeToFood
-  distanceFromSnakeToFood =
-    dir === 'right' && lineY && deltaX === 1 ? 1 : distanceFromSnakeToFood
-  distanceFromSnakeToFood =
-    dir === 'down' && lineX && deltaY === -1 ? 1 : distanceFromSnakeToFood
-  distanceFromSnakeToFood =
-    dir === 'left' && lineY && deltaX === -1 ? 1 : distanceFromSnakeToFood
-  distanceFromSnakeToFood = getFoodEaten()
-    ? 0
-    : distanceFromSnakeToFood === 0
-    ? 2
-    : distanceFromSnakeToFood
-  // }
-  // console.log(checkMistake(), distanceFromSnakeToFood)
+    const dir =
+      getNewKeyboardMove() === ''
+        ? getNewSwipeMove() === ''
+          ? ''
+          : getNewSwipeMove()
+        : getNewKeyboardMove()
+    const lineX = snakeHeadCoordX === foodX
+    const lineY = snakeHeadCoordY === foodY
+    const deltaX = foodX - snakeHeadCoordX
+    const deltaY = foodY - snakeHeadCoordY
+    distanceFromSnakeToFood =
+      dir === 'up' && lineX && deltaY === 1 ? 1 : distanceFromSnakeToFood
+    distanceFromSnakeToFood =
+      dir === 'right' && lineY && deltaX === 1 ? 1 : distanceFromSnakeToFood
+    distanceFromSnakeToFood =
+      dir === 'down' && lineX && deltaY === -1 ? 1 : distanceFromSnakeToFood
+    distanceFromSnakeToFood =
+      dir === 'left' && lineY && deltaX === -1 ? 1 : distanceFromSnakeToFood
+    distanceFromSnakeToFood = getFoodEaten()
+      ? 0
+      : distanceFromSnakeToFood === 0
+      ? 2
+      : distanceFromSnakeToFood
+    // }
+    // console.log(checkMistake(), distanceFromSnakeToFood)
 
-  // if (getFoodEaten()) distanceFromSnakeToFood = 0
+    // if (getFoodEaten()) distanceFromSnakeToFood = 0
 
-  // return distanceFromSnakeToFood
+    // return distanceFromSnakeToFood
+  }
 }
 
 export const setDistanceFromSnakeToFood = (dist: number) => {
