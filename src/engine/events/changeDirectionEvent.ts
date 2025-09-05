@@ -35,7 +35,7 @@ export const changeDirectionEvent = (e: KeyboardEvent): Event => {
   // prohibitedMove.step =
   //   getSnakeMoveDirection()[1] === 'up' || getSnakeMoveDirection()[1] === 'right' ? -1 : 1
   if (!checkTimerWorking() || checkContact()) moveDirection.name = ''
-  if (checkTimerStep() || getInterruptGame()) return { name: newName, value: newValue }
+  // if (checkTimerStep() || getInterruptGame()) return { name: newName, value: newValue }
   if (e.code === 'ArrowUp' && moveDirection.name !== 'Y') {
     newName = 'Y'
     newValue = 1

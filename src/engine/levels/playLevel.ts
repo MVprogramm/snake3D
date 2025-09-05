@@ -21,16 +21,15 @@ import moveSnake from '../snake/moveSnake'
  *      - изменяются, если предусмотрено, координаты бонусов
  */
 function playLevel() {
+  // const [counterHeadX, counterHeadY] = getCounterHead()
+  // if (counterHeadX === 0 && counterHeadY === 0) {
   bonusSelect()
   setObstacleParams(600)
-  moveSnake()
-  const [counterHeadX, counterHeadY] = getCounterHead()
-  if (counterHeadX === 0 && counterHeadY === 0) {
-    snakeCatchesFoodEvent()
-
-    snakeCatchesBonusEvent()
-  }
+  snakeCatchesFoodEvent()
   snakeFoodEaten()
+  snakeCatchesBonusEvent()
+  //}
+  moveSnake()
 }
 
 export default playLevel

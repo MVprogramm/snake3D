@@ -5,6 +5,7 @@
  *     @function snakeCatchesFoodEvent Проверяет касание головы змейки с едой
  *     @function getFoodEaten Показывает, была ли съедена еда на текущем шаге
  */
+import { closeSnakeMouth } from '../../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import { getDoubleScoresFood } from '../bonuses/bonusDoubleScoresFood'
 import { getCurrentFoodNumber } from '../food/currentFoodNumber'
@@ -22,7 +23,7 @@ let isFoodEaten = false
  *  При контакте змейки с едой создает событие и запускает его обработку
  */
 export function snakeCatchesFoodEvent(): void {
-  // const [counterHeadX, counterHeadY] = getCounterHead()
+  const [counterHeadX, counterHeadY] = getCounterHead()
   // if (counterHeadX === 0 && counterHeadY === 0) {
   const snakeHead = getSnakeHeadParams()
   const foodCoord = getFoodCoord()
@@ -32,6 +33,7 @@ export function snakeCatchesFoodEvent(): void {
     snakeHead.snakeHeadCoordY === foodCoord[1]
   ) {
     setFoodEaten(true)
+
     if (getDoubleScoresFood())
       addEvent({ name: 'bonus doubleScoresFood', value: getFoodScores() * 2 })
     if (!checkMistake())
@@ -40,7 +42,6 @@ export function snakeCatchesFoodEvent(): void {
         value: getCurrentFoodNumber() + 1,
       })
   }
-  //}
 }
 
 export function setFoodEaten(eaten: boolean) {

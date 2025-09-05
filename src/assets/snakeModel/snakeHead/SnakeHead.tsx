@@ -2,7 +2,7 @@ import SnakeScull from './snakeScull/SnakeScull'
 import SnakeEyes from './snakeEyes/SnakeEyes'
 import SnakeJaw from './snakeJaw/SnakeJaw'
 import SnakeTongue from './snakeTongue/snakeTongue'
-import { getSnakeHeadProps } from '../../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
+import { getSnakeHeadProps } from '../../../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 function SnakeHead() {
   const headProps = { ...getSnakeHeadProps() }
   return (

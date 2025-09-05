@@ -3,7 +3,7 @@ import { getPositionHead, setPositionHead } from './snakeHeadProps'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getCounterHead, getHeadVerticalStep } from './snakeHeadLocation'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
-import { snakeFoodEaten } from './snakeFoodEaten'
+import { foodEatenAnimation } from './foodEatenAnimation'
 import { snakeTongueMoving } from './snakeTongueMoving'
 import { MathUtils } from 'three'
 
@@ -13,7 +13,7 @@ export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
   const { currentStepX, currentStepY } = steps
   const currentStepZ = getHeadVerticalStep()
 
-  snakeFoodEaten(delta)
+  foodEatenAnimation(delta)
   snakeTongueMoving(steps, delta)
 
   const [counterHeadX, counterHeadY] = getCounterHead()

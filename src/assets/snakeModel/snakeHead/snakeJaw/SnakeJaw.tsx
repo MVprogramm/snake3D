@@ -1,6 +1,6 @@
 import { snakeCONFIG } from '../../../../config/snakeConfig/snakeCONFIG'
 import SnakeJawGeometry from './SnakeJawGeometry'
-import { getSnakeJawProps } from '../../../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
+import { getSnakeJawProps } from '../../../../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 function SnakeJaw() {
   const jawProps = { ...getSnakeJawProps() }
   return (

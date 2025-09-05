@@ -2,7 +2,7 @@
  * @module allContactEvents.ts Проверяет запрещенные контакты змейки
  *    @function allContactEvents Объединяет все запрещенные контакты змейки
  */
-import { closeSnakeMouth } from '../../animations/snakeAnimation/headAnimations/snakeFoodEaten'
+import { closeSnakeMouth } from '../../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 import { SnakeHeadCoord } from '../../types/snakeTypes'
 import { checkMistake } from '../lives/isMistake'
 import { stopTimer } from '../time/isTimer'
@@ -24,7 +24,6 @@ function allContactEvents(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
 
   if (checkMistake()) {
     closeSnakeMouth()
-    setDistanceFromSnakeToFood(2)
     stopTimer()
   }
   return newSnakeHeadCoord

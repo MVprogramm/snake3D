@@ -27,6 +27,7 @@ export function snakeMovesTowardsFood(): void {
           ? ''
           : getNewSwipeMove()
         : getNewKeyboardMove()
+
     const lineX = snakeHeadCoordX === foodX
     const lineY = snakeHeadCoordY === foodY
     const deltaX = foodX - snakeHeadCoordX
