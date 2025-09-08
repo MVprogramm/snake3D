@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Object3D } from 'three'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { appleCONFIG } from '../config/appleConfig'
@@ -10,6 +11,8 @@ import { useShadowSetup } from '../hooks/useShadowSetup'
 import ErrorScreen from './ErrorScreen'
 import Spinner from './Spinner'
 import { SystemConfig } from '../config/systemConfig'
+import { getDistanceFromSnakeToFood } from '../engine/events/snakeMovesTowardsFood'
+
 const COUNTER_RESET_VALUE = 1000000 // Предотвращает переполнение счетчика
 const DEBUG_MODE = false
 const FORCE_SPINNER = false
@@ -37,19 +40,42 @@ const Apple: React.FC = () => {
   const { position, updatePosition } = useApplePosition(zLocation)
   const debouncedPosition = useDebounce(position, SystemConfig.DEBOUNCE_DELAY)
   useShadowSetup(gltf?.scene)
-  const counterRef = React.useRef<number>(0)
-  const scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
+  const counterRef = React.useRef<Object3D | null>(null)
+  const [eaten, setEaten] = React.useState(false)
+  const opacityRef = React.useRef(1)
+  let scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     try {
-      counterRef.current = (counterRef.current + 1) % COUNTER_RESET_VALUE
-      if (counterRef.current % FRAME_SKIP !== 0) return
+      // counterRef.current = (counterRef.current + 1) % COUNTER_RESET_VALUE
+      // if (counterRef.current % FRAME_SKIP !== 0) return
       updatePosition()
+      if (!eaten && getDistanceFromSnakeToFood() === 1) {
+        setEaten(true)
+      }
+
+      if (eaten && counterRef.current) {
+        opacityRef.current = Math.max(0, opacityRef.current - delta) // плавно уменьшаем
+        counterRef.current.traverse((child: any) => {
+          if (child.isMesh && child.material) {
+            child.material.opacity = opacityRef.current
+          }
+        })
+      }
     } catch (error) {
       console.error('Ошибка обновления позиции яблока:', error)
       setLoadError(error as Error)
     }
   })
+
+  React.useEffect(() => {
+    gltf.scene.traverse((child: any) => {
+      if (child.isMesh && child.material) {
+        child.material.transparent = true
+        child.material.opacity = 1
+      }
+    })
+  }, [gltf])
 
   React.useEffect(() => {
     return () => useGLTF.clear('/apple.glb')
@@ -61,13 +87,9 @@ const Apple: React.FC = () => {
   }
 
   // ⏳ Показываем спиннер
-  if (!gltf?.scene || (DEBUG_MODE && FORCE_SPINNER)) {
-    return <Spinner />
-  }
+  if (!gltf?.scene || (DEBUG_MODE && FORCE_SPINNER)) return <Spinner />
+  if (!gltf?.scene) return <Spinner />
 
-  if (!gltf?.scene) {
-    return <Spinner />
-  }
   return <primitive object={gltf.scene} position={debouncedPosition} scale={scaleArray} />
 }
 
