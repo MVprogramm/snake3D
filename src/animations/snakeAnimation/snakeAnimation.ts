@@ -12,7 +12,7 @@ import { snakeStepSetting } from './snakeStepSetting'
  * элемента змейки по осям X и Y. Исходное состояние массива
  * соответствует змейке на старте игры.
  */
-let snakePreviousStepsArray: PreviousStep[] = []
+const snakePreviousStepsArray: PreviousStep[] = []
 /**
  * Управляет анимацией змейки, выполняя расчеты в правильном порядке:
  * 1. Вычисление направлений движения
@@ -29,30 +29,26 @@ export const snakeAnimation = (delta: number): void => {
    * В момент создания масива, текущие направления неизвестены, и поэтому
    * они приравниваются предыдущим. Длина массива равна текущей длине змейки
    */
-  let snakeStepsForAnimation: SnakeSteps[] = getSnakePreviousStepsArray().map((step) => ({
+  const initialSteps = getSnakePreviousStepsArray().map((step) => ({
     ...step,
     currentStepX: step.previousStepX,
     currentStepY: step.previousStepY,
   }))
-  if (snakeStepsForAnimation.length === 0) return
-  // если скорость змейки равна 0 анимация не нужна
-  if (checkTimerStep()) return
-  // вычисляем направление движения всех элементов змейки
-  LOCATION.getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
-  snakeStepsForAnimation = snakeStepSetting(snakeStepsForAnimation)
+  if (initialSteps.length === 0 || checkTimerStep()) return
+  LOCATION.getSnakeBodyLocation().forEach((_, i) => snakeBodyDiff(i))
+  const steps = snakeStepSetting(initialSteps)
   LOCATION.updateSnakeBodyLocation()
-  snakeHeadLocation(snakeStepsForAnimation[0], delta)
-  snakeHeadMoving(snakeStepsForAnimation[0], delta)
-  snakeBodyMoving(snakeStepsForAnimation, delta)
+  snakeHeadLocation(steps[0], delta)
+  snakeHeadMoving(steps[0], delta)
+  snakeBodyMoving(steps, delta)
   snakeBodyTurnaround()
   setSnakePreviousStepsArray(
-    snakeStepsForAnimation.map((step) => ({
-      previousStepX: step.currentStepX,
-      previousStepY: step.currentStepY,
+    steps.map(({ currentStepX, currentStepY }) => ({
+      previousStepX: currentStepX,
+      previousStepY: currentStepY,
     }))
   )
 }
-
 /**
  * Устанавливает массив предыдущих шагов змейки
  * @param props - новый массив шагов для установки
@@ -60,7 +56,6 @@ export const snakeAnimation = (delta: number): void => {
 export const setSnakePreviousStepsArray = (props: PreviousStep[]): void => {
   snakePreviousStepsArray.splice(0, snakePreviousStepsArray.length, ...props)
 }
-
 /**
  * Возвращает текущий массив предыдущих шагов змейки
  * @returns readonly массив предыдущих шагов
