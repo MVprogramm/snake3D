@@ -1,4 +1,4 @@
-import { snakeSteps } from '../../../types/animationTypes'
+import { SnakeSteps } from '../../../types/animationTypes'
 import { getPositionHead, setPositionHead } from './snakeHeadProps'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getCounterHead, getHeadVerticalStep } from './snakeHeadLocation'
@@ -9,7 +9,7 @@ import { MathUtils } from 'three'
 
 let moveSpeed = 1
 
-export const snakeHeadMoving = (steps: snakeSteps, delta: number) => {
+export const snakeHeadMoving = (steps: SnakeSteps, delta: number) => {
   const { currentStepX, currentStepY } = steps
   const currentStepZ = getHeadVerticalStep()
 

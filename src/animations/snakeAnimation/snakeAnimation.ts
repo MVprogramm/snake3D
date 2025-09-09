@@ -1,14 +1,12 @@
 import checkTimerStep from '../../engine/time/checkTimerStep'
-import { PreviousStep, snakeSteps } from '../../types/animationTypes'
+import { PreviousStep, SnakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 import * as LOCATION from './bodyAnimations/snakeBodyLocation'
 import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
 import { snakeBodyTurnaround } from './bodyAnimations/snakeBodyTurnaround'
-import { getDiff } from './bodyAnimations/snakeDiff'
 import { snakeHeadLocation } from './headAnimations/snakeHeadLocation'
 import { snakeHeadMoving } from './headAnimations/snakeHeadMoving'
 import { snakeStepSetting } from './snakeStepSetting'
-
 /**
  * @var массив объектов с направлениями движения каждого
  * элемента змейки по осям X и Y. Исходное состояние массива
@@ -16,7 +14,11 @@ import { snakeStepSetting } from './snakeStepSetting'
  */
 let snakePreviousStepsArray: PreviousStep[] = []
 /**
- * Управляет змейкой, запуская процедуры расчета анимации в требуемом порядке.
+ * Управляет анимацией змейки, выполняя расчеты в правильном порядке:
+ * 1. Вычисление направлений движения
+ * 2. Настройка шагов анимации
+ * 3. Обновление позиций головы и тела
+ * 4. Обработка поворотов
  * @param delta - интервал рендера змейки, используется для управления скоростью
  * анимации
  */
@@ -27,32 +29,42 @@ export const snakeAnimation = (delta: number): void => {
    * В момент создания масива, текущие направления неизвестены, и поэтому
    * они приравниваются предыдущим. Длина массива равна текущей длине змейки
    */
-  let snakeSteps: snakeSteps[] = snakePreviousStepsArray.map((step) => ({
-    previousStepX: step.previousStepX,
-    previousStepY: step.previousStepY,
+  let snakeStepsForAnimation: SnakeSteps[] = getSnakePreviousStepsArray().map((step) => ({
+    ...step,
     currentStepX: step.previousStepX,
     currentStepY: step.previousStepY,
   }))
+  if (snakeStepsForAnimation.length === 0) return
   // если скорость змейки не равна 0
   if (!checkTimerStep()) {
     // вычисляем направление движения всех элементов змейки
     LOCATION.getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
-    snakeSteps = snakeStepSetting(snakeSteps)
+    snakeStepsForAnimation = snakeStepSetting(snakeStepsForAnimation)
     LOCATION.updateSnakeBodyLocation()
-    snakeHeadLocation(snakeSteps[0], delta)
-    snakeHeadMoving(snakeSteps[0], delta)
-    snakeBodyMoving(snakeSteps, delta)
+    snakeHeadLocation(snakeStepsForAnimation[0], delta)
+    snakeHeadMoving(snakeStepsForAnimation[0], delta)
+    snakeBodyMoving(snakeStepsForAnimation, delta)
     snakeBodyTurnaround()
-    snakePreviousStepsArray = snakeSteps.map((step) => {
-      step.previousStepX = step.currentStepX
-      step.previousStepY = step.currentStepY
-      return step
-    })
+    setSnakePreviousStepsArray(
+      snakeStepsForAnimation.map((step) => ({
+        previousStepX: step.currentStepX,
+        previousStepY: step.currentStepY,
+      }))
+    )
   }
 }
 
+/**
+ * Устанавливает массив предыдущих шагов змейки
+ * @param props - новый массив шагов для установки
+ */
 export const setSnakePreviousStepsArray = (props: PreviousStep[]) => {
-  snakePreviousStepsArray.length = 0
-
-  props.forEach((unit) => snakePreviousStepsArray.push(unit))
+  snakePreviousStepsArray.splice(0, snakePreviousStepsArray.length, ...props)
 }
+
+/**
+ * Возвращает текущий массив предыдущих шагов змейки
+ * @returns readonly массив предыдущих шагов
+ */
+export const getSnakePreviousStepsArray = (): ReadonlyArray<PreviousStep> =>
+  snakePreviousStepsArray

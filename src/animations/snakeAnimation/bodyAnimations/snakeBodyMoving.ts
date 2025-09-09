@@ -1,4 +1,4 @@
-import { snakeSteps } from '../../../types/animationTypes'
+import { SnakeSteps } from '../../../types/animationTypes'
 import { getSnakeUnitPosition, setSnakeUnitPosition } from './snakeBodyProps'
 import { getDiff } from './snakeDiff'
 import { getAmountOfFood } from '../../../engine/food/amountOfFoodPerLevel'
@@ -36,7 +36,7 @@ export const getCounterUnits = () => counterUnits
 // }
 
 let moveSpeed = 1
-export const snakeBodyMoving = (steps: snakeSteps[], delta: number) => {
+export const snakeBodyMoving = (steps: SnakeSteps[], delta: number) => {
   const [counterHeadX, counterHeadY] = getCounterHead()
   if (counterHeadX === 0 && counterHeadY === 0) {
     moveSpeed = getTimerStep()

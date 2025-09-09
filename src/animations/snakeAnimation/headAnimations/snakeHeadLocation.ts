@@ -1,6 +1,6 @@
 import { setSnakePosition } from '../../../engine/snake/setSnakePosition'
 import checkTimerStep from '../../../engine/time/checkTimerStep'
-import { snakeSteps } from '../../../types/animationTypes'
+import { SnakeSteps } from '../../../types/animationTypes'
 import { SystemConfig } from '../../../config/systemConfig'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import {
@@ -29,7 +29,7 @@ let headVerticalStep = 0
  * @param steps - объект, хранящий текущие и предыдущие направления движения
  * @returns true, если объект корректен, false в противном случае
  */
-const validateSteps = (steps: snakeSteps): boolean => {
+const validateSteps = (steps: SnakeSteps): boolean => {
   // Проверяем наличие всех необходимых свойств
   if (steps === null || steps === undefined || typeof steps !== 'object') {
     console.error('Error: steps parameter is not an object')
@@ -39,7 +39,7 @@ const validateSteps = (steps: snakeSteps): boolean => {
   // Проверяем наличие и тип всех необходимых свойств
   const requiredProps = ['previousStepX', 'previousStepY', 'currentStepX', 'currentStepY']
   for (const prop of requiredProps) {
-    if (!(prop in steps) || typeof steps[prop as keyof snakeSteps] !== 'number') {
+    if (!(prop in steps) || typeof steps[prop as keyof SnakeSteps] !== 'number') {
       console.error(`Error: steps.${prop} is missing or not a number`)
       return false
     }
@@ -48,7 +48,7 @@ const validateSteps = (steps: snakeSteps): boolean => {
   // Проверяем валидность значений шагов (могут быть только -1, 0, 1)
   const stepProps = ['previousStepX', 'previousStepY', 'currentStepX', 'currentStepY']
   for (const prop of stepProps) {
-    const value = steps[prop as keyof snakeSteps] as number
+    const value = steps[prop as keyof SnakeSteps] as number
     if (value !== -1 && value !== 0 && value !== 1) {
       console.error(
         `Error: steps.${prop} has invalid value ${value}. Must be -1, 0, or 1`
@@ -104,7 +104,7 @@ const validateDelta = (delta: number): boolean => {
  * @param steps - объект, хранящий текущие и предыдущие направления движения головы 3D змейки
  * @param delta - интервал рендера 3D змейки
  */
-export const snakeHeadLocation = (steps: snakeSteps, delta: number): void => {
+export const snakeHeadLocation = (steps: SnakeSteps, delta: number): void => {
   // Валидация входных параметров
   if (!validateSteps(steps) || !validateDelta(delta)) {
     // В случае ошибки валидации, не меняем состояние счетчиков

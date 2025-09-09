@@ -1,4 +1,4 @@
-import { snakeSteps } from '../../../types/animationTypes'
+import { SnakeSteps } from '../../../types/animationTypes'
 import { snakeCONFIG } from '../../../config/snakeConfig/snakeCONFIG'
 import { MathUtils, Vector3 } from 'three'
 
@@ -8,7 +8,7 @@ const EXTEND = 0.15
 const WIGGLE_ANGLE = 0.3
 let phase = 0
 
-export const snakeTongueMoving = (steps: snakeSteps, delta: number) => {
+export const snakeTongueMoving = (steps: SnakeSteps, delta: number) => {
   const isMoving = steps.currentStepX !== 0 || steps.currentStepY !== 0
   const lambda = 50
 
