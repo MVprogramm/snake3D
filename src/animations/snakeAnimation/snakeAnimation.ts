@@ -35,23 +35,22 @@ export const snakeAnimation = (delta: number): void => {
     currentStepY: step.previousStepY,
   }))
   if (snakeStepsForAnimation.length === 0) return
-  // если скорость змейки не равна 0
-  if (!checkTimerStep()) {
-    // вычисляем направление движения всех элементов змейки
-    LOCATION.getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
-    snakeStepsForAnimation = snakeStepSetting(snakeStepsForAnimation)
-    LOCATION.updateSnakeBodyLocation()
-    snakeHeadLocation(snakeStepsForAnimation[0], delta)
-    snakeHeadMoving(snakeStepsForAnimation[0], delta)
-    snakeBodyMoving(snakeStepsForAnimation, delta)
-    snakeBodyTurnaround()
-    setSnakePreviousStepsArray(
-      snakeStepsForAnimation.map((step) => ({
-        previousStepX: step.currentStepX,
-        previousStepY: step.currentStepY,
-      }))
-    )
-  }
+  // если скорость змейки равна 0 анимация не нужна
+  if (checkTimerStep()) return
+  // вычисляем направление движения всех элементов змейки
+  LOCATION.getSnakeBodyLocation().forEach((_, index) => snakeBodyDiff(index))
+  snakeStepsForAnimation = snakeStepSetting(snakeStepsForAnimation)
+  LOCATION.updateSnakeBodyLocation()
+  snakeHeadLocation(snakeStepsForAnimation[0], delta)
+  snakeHeadMoving(snakeStepsForAnimation[0], delta)
+  snakeBodyMoving(snakeStepsForAnimation, delta)
+  snakeBodyTurnaround()
+  setSnakePreviousStepsArray(
+    snakeStepsForAnimation.map((step) => ({
+      previousStepX: step.currentStepX,
+      previousStepY: step.currentStepY,
+    }))
+  )
 }
 
 /**
