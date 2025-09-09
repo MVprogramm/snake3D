@@ -1,5 +1,5 @@
 import checkTimerStep from '../../engine/time/checkTimerStep'
-import type { PreviousStep, SnakeSteps } from '../../types/animationTypes'
+import type { PreviousStep } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 import * as LOCATION from './bodyAnimations/snakeBodyLocation'
 import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
