@@ -1,5 +1,5 @@
 import checkTimerStep from '../../engine/time/checkTimerStep'
-import { PreviousStep, SnakeSteps } from '../../types/animationTypes'
+import type { PreviousStep, SnakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 import * as LOCATION from './bodyAnimations/snakeBodyLocation'
 import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
@@ -58,7 +58,7 @@ export const snakeAnimation = (delta: number): void => {
  * Устанавливает массив предыдущих шагов змейки
  * @param props - новый массив шагов для установки
  */
-export const setSnakePreviousStepsArray = (props: PreviousStep[]) => {
+export const setSnakePreviousStepsArray = (props: PreviousStep[]): void => {
   snakePreviousStepsArray.splice(0, snakePreviousStepsArray.length, ...props)
 }
 
