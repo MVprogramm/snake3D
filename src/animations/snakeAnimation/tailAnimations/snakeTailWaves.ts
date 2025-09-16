@@ -1,5 +1,4 @@
 import { checkTimerWorking } from '../../../engine/time/isTimer'
-import { snakeSteps } from '../../../types/animationTypes'
 //import { getHeadWave } from '../headAnimations/snakeHeadWaves'
 //import { getTailWavesAmplitude } from './tailWavesAmplitude'
 

@@ -11,7 +11,7 @@ import {
 } from '../../engine/snake/snake'
 import checkTimerStep from '../../engine/time/checkTimerStep'
 import { checkTimerWorking } from '../../engine/time/isTimer'
-import { snakeSteps } from '../../types/animationTypes'
+import { SnakeSteps } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 import {
   getSnakeBodyLocation,
@@ -43,8 +43,8 @@ export const getSnakeTurnAround = () => snakeTurnAround
  * @returns step, содержащий актуальные данные о направлении движения головы змейки
  *                с учетом корректировки
  */
-export const snakeStepSetting = (step: snakeSteps[]): snakeSteps[] => {
-  let newStep: snakeSteps[] = [...step]
+export const snakeStepSetting = (step: SnakeSteps[]): SnakeSteps[] => {
+  let newStep: SnakeSteps[] = [...step]
 
   // Функция работает только в момент нахождения рендера в узлах игрового поля
   if (getCounterHead()[0] === 0 && getCounterHead()[1] === 0 && checkTimerWorking()) {

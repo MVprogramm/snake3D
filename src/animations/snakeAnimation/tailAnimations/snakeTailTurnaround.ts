@@ -1,11 +1,11 @@
 // import { snakeTailANIMATION } from '../../../config/snakeConfig/snakeANIMATION/snakeTAIL/snakeTailAnimation'
-import { snakeSteps } from '../../../types/animationTypes'
+import { SnakeSteps } from '../../../types/animationTypes'
 import * as TAIL from './snakeTailAnimationSet'
 // import { setTailWavesAmplitude } from './tailWavesAmplitude'
 
 //const { waveAmplitude } = snakeTailANIMATION
 
-export const snakeTailTurnaround = (steps: snakeSteps) => {
+export const snakeTailTurnaround = (steps: SnakeSteps) => {
   if (TAIL.getTailAnimatingCounter() === 0 && TAIL.getTailAnimatingQueue().length > 0) {
     TAIL.setIsTailAnimating(true)
   }

@@ -1,7 +1,7 @@
-import { snakeSteps } from '../../../types/animationTypes'
+import { SnakeSteps } from '../../../types/animationTypes'
 import * as PROPS from './snakeHeadProps'
 
-export const snakeHeadTurnaround = (steps: snakeSteps) => {
+export const snakeHeadTurnaround = (steps: SnakeSteps) => {
   // const { previousStepX, previousStepY, currentStepX, currentStepY } = steps
   // const rotationHead = PROPS.getRotationHead()
   // if (previousStepX === 0 && currentStepX === 1) rotationHead[2] = 11
