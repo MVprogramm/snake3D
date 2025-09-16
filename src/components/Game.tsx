@@ -6,6 +6,7 @@ import setLoop from '../engine/time/setLoop'
 import { useMenuStore } from '../store/menuStore'
 import keyboardEvents from '../engine/events/keyboardEvents'
 import { keyboardPauseEvent } from '../engine/events/pauseEvent'
+import { getInterruptGame } from '../engine/events/interruptGameEvent'
 
 export const Game = () => {
   const isVisible = useMenuStore((state) => state.isVisible)
@@ -31,5 +32,5 @@ export const Game = () => {
     renderInfo()
   })
 
-  return <Scene />
+  return !getInterruptGame() && <Scene />
 }
