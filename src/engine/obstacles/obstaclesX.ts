@@ -11,7 +11,6 @@
  *    @function getObstaclesStepX Возвращает массив шагов
  */
 import { getObstacles } from './obstaclesPerLevel'
-import { Coordinate } from '../../types/obstacleTypes'
 /**
  * @var массив строк 'x' для каждого препятствия, движущегося по горизонтали
  */
@@ -19,7 +18,7 @@ let obstaclesX: string[] = []
 /**
  * @var массив координат [x, y] для препятствий, движущихся по горизонтали
  */
-let obstaclesXCoord: Coordinate = [0, 0]
+let obstaclesXCoord: number[][] = []
 /**
  * @var массив из 1 и -1, шагов для препятствий, движущихся по горизонтали
  */
@@ -35,7 +34,7 @@ export function setObstaclesX(): void {
  * Заносит массив координат [x, y] препятствий в obstaclesXCoord
  * @param obstacles массив координат [x, y] препятствий
  */
-export function setObstaclesXCoord(obstacles: Coordinate): void {
+export function setObstaclesXCoord(obstacles: number[][]): void {
   obstaclesXCoord = [...obstacles]
 }
 /**
@@ -54,7 +53,7 @@ export function getObstaclesX(): string[] {
 /**
  * Возвращает массив координат [x, y] препятствий, движущихся по горизонтали
  */
-export function getObstaclesXCoord(): Coordinate {
+export function getObstaclesXCoord(): number[][] {
   return obstaclesXCoord
 }
 /**

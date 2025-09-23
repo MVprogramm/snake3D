@@ -7,14 +7,13 @@ import { getObstaclesXCoord } from '../obstacles/obstaclesX'
 import { getObstaclesYCoord } from '../obstacles/obstaclesY'
 import { getFoodCoord } from '../food/food'
 import { getSnakeBodyCoord } from '../snake/snake'
-import { Coordinate } from '../../types/obstacleTypes'
 /**
  * Проверяет ячейку на наличие в ней объектов игрового поля
  * @param cell координаты проверяемой ячейки
  * @description ищет среди всех занятых ячеек проверяемую координату
  * @returns true, если ячейка свободна, false, если занята
  */
-const cellCheck = (cell: Coordinate): boolean => {
+const cellCheck = (cell: number[]): boolean => {
   const [cellX, cellY] = cell
 
   const bookedCells: number[][] = []

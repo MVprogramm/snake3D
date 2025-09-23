@@ -17,7 +17,7 @@ import { addEvent } from '../protocol/protocol'
 function setFoodEvent(): void {
   const booking: number[][] = []
   if (getCurrentFoodNumber() <= getAmountOfFood()) {
-    const [foodX, foodY] = getFreeCell(
+    const foodCell = getFreeCell(
       booking.concat(
         getObstaclesFixCoord(),
         getObstaclesXCoord(),
@@ -25,6 +25,11 @@ function setFoodEvent(): void {
         SNAKE.getSnakeBodyCoord()
       )
     )
+    if (!foodCell) {
+      console.log('WARNING! Unable to set food: no free cells available')
+      return
+    }
+    const [foodX, foodY] = foodCell
     FOOD.setFoodCoord([foodX, foodY])
     addEvent({
       name: 'set food',

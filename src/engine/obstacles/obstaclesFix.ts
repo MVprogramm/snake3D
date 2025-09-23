@@ -8,7 +8,6 @@
  *    @function getObstaclesFixCoord Возвращает массив координат
  */
 import { getObstacles } from './obstaclesPerLevel'
-import { Coordinate } from '../../types/obstacleTypes'
 /**
  * @var массив ключевых слов 'fix' для каждого препятствия, которое не движется
  */
@@ -16,7 +15,7 @@ let obstaclesFix: string[] = []
 /**
  * @var массив координат [x, y] для каждого препятствия, которое не движется
  */
-let obstaclesFixCoord: Coordinate = [0, 0]
+let obstaclesFixCoord: number[][] = []
 /**
  * Выделяет из массива всех препятствий массив препятствий, которые не движутся
  */
@@ -27,7 +26,7 @@ export function setObstaclesFix(): void {
  * Заносит массив координат [x, y] препятствий в obstaclesFixCoord
  * @param obstacles массив координат [x, y] препятствий
  */
-export function setObstaclesFixCoord(obstacles: Coordinate): void {
+export function setObstaclesFixCoord(obstacles: number[][]): void {
   obstaclesFixCoord = [...obstacles]
 }
 /**
@@ -39,6 +38,6 @@ export function getObstaclesFix(): string[] {
 /**
  * Возвращает массив координат [x, y] препятствий, которые не движутся
  */
-export function getObstaclesFixCoord(): Coordinate {
+export function getObstaclesFixCoord(): number[][] {
   return obstaclesFixCoord
 }
