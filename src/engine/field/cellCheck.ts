@@ -7,27 +7,37 @@ import { getObstaclesXCoord } from '../obstacles/obstaclesX'
 import { getObstaclesYCoord } from '../obstacles/obstaclesY'
 import { getFoodCoord } from '../food/food'
 import { getSnakeBodyCoord } from '../snake/snake'
+import { Coordinate } from '../../types/obstacleTypes'
 /**
  * Проверяет ячейку на наличие в ней объектов игрового поля
- * @param CellCheck координаты проверяемой ячейки
- * @description ищет в массиве занятых ячеек проверяемую
- * @returns возвращает true, если ячейка свободна, и false, если занята
+ * @param cell координаты проверяемой ячейки
+ * @description ищет среди всех занятых ячеек проверяемую координату
+ * @returns true, если ячейка свободна, false, если занята
  */
-const cellCheck = (cell: number[]): boolean => {
+const cellCheck = (cell: Coordinate): boolean => {
   const [cellX, cellY] = cell
+
   const bookedCells: number[][] = []
-  let isFree = false
-  bookedCells.push(
-    getFoodCoord(),
-    getObstaclesFixCoord().flat(),
-    getObstaclesYCoord().flat(),
-    getObstaclesXCoord().flat()
-  )
-  getSnakeBodyCoord().forEach((coord: number[]) => bookedCells.push(coord))
+  const isCoord = (coord: unknown): coord is number[] =>
+    Array.isArray(coord) &&
+    coord.length === 2 &&
+    coord.every((value) => typeof value === 'number')
 
-  isFree = bookedCells.every((coord) => coord[0] !== cellX || coord[1] !== cellY)
+  const addBookedCells = (coords?: any) => {
+    coords?.forEach((coord: unknown) => {
+      if (isCoord(coord)) bookedCells.push(coord)
+    })
+  }
 
-  return isFree
+  const foodCoord = getFoodCoord()
+  if (isCoord(foodCoord)) bookedCells.push(foodCoord)
+
+  addBookedCells(getObstaclesFixCoord())
+  addBookedCells(getObstaclesYCoord())
+  addBookedCells(getObstaclesXCoord())
+  addBookedCells(getSnakeBodyCoord())
+
+  return bookedCells.every((coord) => coord[0] !== cellX || coord[1] !== cellY)
 }
 
 export default cellCheck

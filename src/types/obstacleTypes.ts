@@ -1,4 +1,8 @@
 /**
+ * Тип для координат ячейки
+ */
+export type Coordinate = [number, number]
+/**
  * @type obstacleContactProps Аргументы функции, проверяющей контакты препятствий
  */
 /**
