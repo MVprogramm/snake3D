@@ -5,13 +5,10 @@ import SnakeHead from '../assets/snakeModel/snakeHead/SnakeHead'
 import SnakeTail from '../assets/snakeModel/snakeTail/snakeTail'
 import React from 'react'
 import { snakeAnimation } from '../animations/snakeAnimation/snakeAnimation'
-import { getCounterHead } from '../animations/snakeAnimation/headAnimations/snakeHeadLocation'
-import { getSnakeBodyCoord, getSnakeHeadParams } from '../engine/snake/snake'
+import { getSnakeBodyCoord } from '../engine/snake/snake'
 import SnakeBodyUnit from '../assets/snakeModel/snakeBody/snakeBodyUnit'
 import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
 import * as U from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
-import { getDiff } from '../animations/snakeAnimation/bodyAnimations/snakeDiff'
-import { getSnakeBodyLocation } from '../animations/snakeAnimation/bodyAnimations/snakeBodyLocation'
 import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
 
 /**
@@ -20,7 +17,6 @@ import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
 const Snake = () => {
   const snakeMaxLength = getAmountOfFood() + 1
   const [snakeCurrentLength, setSnakeCurrentLength] = useState(3)
-  // const snakeSeparate = Array(getAmountOfFood() + 2).fill(1)
   let snake = Array(getAmountOfFood() + 1).fill(1)
   const [snakeSeparate, setSnakeSeparate] = useState(Array(getAmountOfFood() + 1).fill(1))
   const snakeRefs: { [key: string]: RefObject<THREE.Group> } = {}
