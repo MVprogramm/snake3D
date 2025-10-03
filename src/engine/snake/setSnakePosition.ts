@@ -1,5 +1,8 @@
+/**
+ * @module setSnakePosition.ts Управляет позицией змейки
+ *    @function setSnakePosition Контролирует количество шагов головы 3D змейки по X и Y
+ */
 import { checkTimerWorking } from '../time/isTimer'
-import { getSnakeSpeed } from '../../animations/snakeAnimation/snakeSpeedSetting'
 import { getTimerStep } from '../time/timerStepPerLevel'
 /**
  * тип, описывающий счётчик шагов головы 3D змейки по X и Y

@@ -3,20 +3,33 @@
  *    @function cellsBookingAroundSnake Резервирует пустые ячейки вокруг змейки
  */
 /**
- * Вычисляет координаты ячеек в квадратной области по стороне и левому краю
- * @param side Сторона квадратной области с пустыми ячейками вокруг змейки
- * @param pos Положение змейки на старте уровня
- * @returns массив с координатами зарезервированных ячеек вокруг змейки
+ * Вычисляет координаты ячеек в квадратной области по стороне и левому верхнему углу
+ * @param topLeftX X-координата левого верхнего угла области
+ * @param topLeftY Y-координата левого верхнего угла области
+ * @param size Размер стороны квадратной области (по умолчанию 3)
+ * @param fieldSize Размер игрового поля (для проверки границ, опционально)
+ * @returns Массив с координатами зарезервированных ячеек вокруг змейки
  */
-function cellsBookingAroundSnake(pos: number): number[][] {
-  const booking: number[][] = [];
-  for (let row = 1; row <= 3; row++) {
-    for (let col = 1; col <= 3; col++) {
-      booking.push([pos + row - 1, pos + col - 1]);
+function cellsBookingAroundSnake(
+  topLeftX: number,
+  topLeftY: number,
+  size: number = 3,
+  fieldSize?: number
+): number[][] {
+  const booking: number[][] = []
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      const x = topLeftX + row
+      const y = topLeftY + col
+      if (
+        fieldSize === undefined ||
+        (x >= 0 && y >= 0 && x < fieldSize && y < fieldSize)
+      ) {
+        booking.push([x, y])
+      }
     }
   }
-
-  return booking;
+  return booking
 }
 
-export default cellsBookingAroundSnake;
+export default cellsBookingAroundSnake

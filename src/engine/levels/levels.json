@@ -1,11 +1,11 @@
 [
   {
-    "field": "25",
+    "field": "11",
     "time": "500000",
     "timerStep": "1",
     "food": "10",
     "lives": "3",
-    "obstacles": ["x", "x"],
+    "obstacles": [],
     "bonuses": [],
     "fog": "light",
     "maxScores": "30"
