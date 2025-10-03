@@ -29,9 +29,6 @@ let previousSnakeBody: SNAKE.SnakeBodyCoord = []
  */
 export function setSnakeHeadParams(snake: SNAKE.SnakeHeadCoord): void {
   snakeHead = Object.assign({}, snake)
-  // snakeBody.shift()
-  // snakeBody.unshift([snake.snakeHeadCoordX, snake.snakeHeadCoordY])
-  // console.log(snakeHead, snakeBody)
 }
 /**
  * Увеличивает тело змейки
@@ -47,9 +44,6 @@ export function addSnakeBodyCoord(link: number[]): void {
 export function setSnakeBodyCoord(body: SNAKE.SnakeBodyCoord): void {
   previousSnakeBody = [...snakeBody]
   snakeBody = [...body]
-  // snakeHead.snakeHeadCoordX = body[0][0]
-  // snakeHead.snakeHeadCoordY = body[0][1]
-  // console.log(snakeBody, snakeHead)
 }
 /**
  * Возвращает параметры головы змейки
