@@ -21,7 +21,8 @@ import { addEvent } from '../protocol/protocol'
  */
 function setObstacleEvent(): void {
   let booking: number[][] = []
-  booking = [...cellsBookingAroundSnake(Math.round(getField() / 2 - 1))]
+  const topLeftCoord = Math.round(getField() / 2 - 1)
+  booking = [...cellsBookingAroundSnake(topLeftCoord, topLeftCoord)]
   for (const type of ['x', 'y', 'fix'] as const) {
     const obstaclesDirection = selectionObstacleType(type)
     if (type === 'y') booking = booking.concat([...X.getObstaclesXCoord()])

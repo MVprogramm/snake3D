@@ -9,6 +9,7 @@ import { cameraCONFIG } from '../config/cameraConfig'
 import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import { getSnakeBodyCoord } from '../engine/snake/snake'
 import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
+import Obstacles from './Obstacles'
 
 let counter = 0
 let currentFoodNumber = 0
@@ -47,7 +48,7 @@ export function Scene() {
   return (
     <>
       {/* performance && <Perf position='top-left' /> */}
-
+      <Obstacles />
       <Snake />
       <Apple />
       <Field />

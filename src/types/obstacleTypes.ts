@@ -50,3 +50,12 @@ export interface MushroomProps extends assetsProps {}
 export interface RockProps extends assetsProps {
   color?: number
 }
+
+export interface allObstaclesData {
+  type: string[]
+  xCoord: number[][]
+  xStep: number[]
+  yCoord: number[][]
+  yStep: number[]
+  fixCoord: number[][]
+}
