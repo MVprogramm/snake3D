@@ -29,21 +29,21 @@ function Hedgehog(props: hedgehogProps) {
   return (
     <group
       position={[
-        line === 'X' ? direction[index] : 0,
-        line === 'Y' ? direction[index] : 0,
+        line === 'x' ? direction[index] : 0,
+        line === 'y' ? direction[index] : 0,
         0.1,
       ]}
     >
       <mesh
         position={[
-          line === 'Y' ? 0 : -0.2 * direction[index],
-          line === 'Y' ? -0.2 * direction[index] : 0,
+          line === 'y' ? 0 : -0.2 * direction[index],
+          line === 'y' ? -0.2 * direction[index] : 0,
           0,
         ]}
         rotation={[
           0,
           0,
-          line === 'X' ? direction[index] * -1.57 : ((direction[index] - 1) / 2) * 3.14,
+          line === 'x' ? direction[index] * -1.57 : ((direction[index] - 1) / 2) * 3.14,
         ]}
       >
         <coneGeometry args={[0.4, 0.5, 3, 1, false, 4.7, 3.14]} />
@@ -53,7 +53,7 @@ function Hedgehog(props: hedgehogProps) {
         rotation={[
           0,
           0,
-          line === 'Y' ? direction[index] * 1.57 + 1.57 : direction[index] * 1.57,
+          line === 'y' ? direction[index] * 1.57 + 1.57 : direction[index] * 1.57,
         ]}
       >
         <latheGeometry args={[frontPoints, 12, -Math.PI / 2, Math.PI]} />
@@ -64,7 +64,7 @@ function Hedgehog(props: hedgehogProps) {
         rotation={[
           0,
           0,
-          line === 'Y' ? direction[index] * 1.57 - 1.57 : direction[index] * -1.57,
+          line === 'y' ? direction[index] * 1.57 - 1.57 : direction[index] * -1.57,
         ]}
       >
         <latheGeometry args={[backPoints, 12, -Math.PI / 2, Math.PI]} />
@@ -73,8 +73,8 @@ function Hedgehog(props: hedgehogProps) {
 
       <mesh
         position={[
-          line === 'X' ? direction[index] * -0.03 : 0,
-          line === 'Y' ? direction[index] * -0.03 : 0,
+          line === 'x' ? direction[index] * -0.03 : 0,
+          line === 'y' ? direction[index] * -0.03 : 0,
           0.05,
         ]}
       >
@@ -83,7 +83,7 @@ function Hedgehog(props: hedgehogProps) {
       </mesh>
       <mesh
         position={
-          line === 'Y'
+          line === 'y'
             ? [direction[index] * 0.2, direction[index] * -0.3, 0.2]
             : [direction[index] * -0.3, -0.2, 0.2]
         }
@@ -93,7 +93,7 @@ function Hedgehog(props: hedgehogProps) {
       </mesh>
       <mesh
         position={
-          line === 'Y'
+          line === 'y'
             ? [direction[index] * -0.2, direction[index] * -0.3, 0.2]
             : [direction[index] * -0.3, 0.2, 0.2]
         }
