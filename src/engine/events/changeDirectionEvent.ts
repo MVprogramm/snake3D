@@ -10,7 +10,6 @@ import findLastMoveDirection from '../protocol/findLastMoveDirection'
 import { getInterruptGame } from './interruptGameEvent'
 import { checkPause } from './pauseEvent'
 import { checkTimerWorking } from '../time/isTimer'
-import getSnakeMoveDirection from '../snake/getSnakeMoveDirection'
 import { checkContact } from './isContact'
 /**
  * @var Новое направление головы змейки
