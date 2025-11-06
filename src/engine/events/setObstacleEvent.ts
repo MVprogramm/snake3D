@@ -48,6 +48,7 @@ function setObstacleEvent(): void {
       booking.push([obstacleX, obstacleY])
       obstacles.push([obstacleX, obstacleY])
     }
+
     if (type === 'x') X.setObstaclesXCoord(obstacles)
     if (type === 'y') Y.setObstaclesYCoord(obstacles)
     if (type === 'fix') FIX.setObstaclesFixCoord(obstacles)

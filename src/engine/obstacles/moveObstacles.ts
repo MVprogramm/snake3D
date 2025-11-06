@@ -3,14 +3,14 @@
  * @module moveObstacles.ts Перемещает препятствия по игровому полю
  *    @function moveObstacles Управляет движением среди других объектов на поле
  */
-import { checkTimerWorking } from "../time/isTimer";
-import selectObstacleDirection from "./selectObstacleDirection";
-import * as X from "./obstaclesX";
-import * as Y from "./obstaclesY";
-import checkObstaclePosition from "./checkObstaclePosition";
-import setObstacleStep from "./setObstacleStep";
-import { getSnakeHeadParams } from "../snake/snake";
-import { getStep } from "../time/timerStepPerLevel";
+import { checkTimerWorking } from '../time/isTimer'
+import selectObstacleDirection from './selectObstacleDirection'
+import * as X from './obstaclesX'
+import * as Y from './obstaclesY'
+import checkObstaclePosition from './checkObstaclePosition'
+import setObstacleStep from './setObstacleStep'
+import { getSnakeHeadParams } from '../snake/snake'
+import { getStep } from '../time/timerStepPerLevel'
 /**
  * Изменяет координаты препятствий и их шаг
  * @description
@@ -21,33 +21,52 @@ import { getStep } from "../time/timerStepPerLevel";
  *      - изменяет координаты препятствий на величину шага
  */
 function moveObstacles(type: string): void {
-  const stopDistance = getStep() + 2;
+  const stopDistance = getStep() + 2
   const isSnakeMoving =
-    getSnakeHeadParams().snakeHeadStepX !== 0 ||
-    getSnakeHeadParams().snakeHeadStepY !== 0;
-  let step: number[], twist: number[], coord: number[][];
-  let newPos: number[], newStep: number;
-  coord = [...selectObstacleDirection(type).coord];
-  step = [...selectObstacleDirection(type).step];
-  if (checkTimerWorking()) {
-    twist = type === "y" ? [0, 1] : [1, 0];
-    for (let i = 0; i < coord.length; i++) {
-      newPos = [...coord[i]];
-      step[i] = setObstacleStep({ i, twist, coord, step });
-      type === "x" ? X.setObstaclesStepX(step) : Y.setObstaclesStepY(step);
-      newPos[twist[0]] += checkTimerWorking() ? step[i] : 0;
-      newStep = !checkObstaclePosition(newPos) ? 0 : step[i];
-      newStep =
-        Math.abs(coord[i][0] - getSnakeHeadParams().snakeHeadCoordX) <
-          stopDistance &&
-        Math.abs(coord[i][1] - getSnakeHeadParams().snakeHeadCoordY) <
-          stopDistance &&
-        isSnakeMoving
-          ? 0
-          : newStep;
-      coord[i][twist[0]] += newStep;
+    getSnakeHeadParams().snakeHeadStepX !== 0 || getSnakeHeadParams().snakeHeadStepY !== 0
+  // Получаем копии данных направления, будем работать с ними и записать результат разом
+  const selected = selectObstacleDirection(type)
+  // coordCopy: глубокая копия вложенных массивов, чтобы избегать мутаций оригинала
+  const coordCopy: number[][] = selected.coord
+  const stepCopy: number[] = selected.step
+
+  if (!checkTimerWorking()) return
+
+  const twist = type === 'y' ? [1, 0] : [0, 1]
+
+  for (let i = 0; i < coordCopy.length; i++) {
+    // рассчитываем новый шаг с учётом всех столкновений, работаем с копией stepCopy
+    stepCopy[i] = setObstacleStep({ i, twist, coord: coordCopy, step: stepCopy })
+
+    // рассчёт предполагаемой новой позиции (без изменения оригинала)
+    const probePos = [...coordCopy[i]]
+    probePos[twist[0]] += stepCopy[i]
+
+    // если позиция недопустима — останавливаем
+    let newStep = !checkObstaclePosition(probePos) ? 0 : stepCopy[i]
+
+    // если змейка близко и движется — останавливаем препятствие
+    if (
+      Math.abs(coordCopy[i][0] - getSnakeHeadParams().snakeHeadCoordX) < stopDistance &&
+      Math.abs(coordCopy[i][1] - getSnakeHeadParams().snakeHeadCoordY) < stopDistance &&
+      isSnakeMoving
+    ) {
+      newStep = 0
     }
+
+    // применяем шаг к копии координат
+    coordCopy[i][twist[0]] += newStep
+    stepCopy[i] = newStep
+  }
+
+  // Записываем обновлённые массивы в соответствующие модули одним присваиванием
+  if (type === 'x') {
+    X.setObstaclesStepX(stepCopy)
+    X.setObstaclesXCoord(coordCopy)
+  } else {
+    Y.setObstaclesStepY(stepCopy)
+    Y.setObstaclesYCoord(coordCopy)
   }
 }
 
-export default moveObstacles;
+export default moveObstacles

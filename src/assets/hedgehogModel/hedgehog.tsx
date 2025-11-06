@@ -3,6 +3,8 @@ import { hedgehogProps } from '../../types/obstacleTypes'
 
 function Hedgehog(props: hedgehogProps) {
   const { direction, index, line } = props
+  // console.log(line, direction)
+
   const frontPoints = []
   for (let i = 0; i < 10; i++) {
     frontPoints.push(new Vector2((Math.sin(i * 0.2) * 8 + 8) / 25, (i + 6) / 15))

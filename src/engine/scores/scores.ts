@@ -20,5 +20,6 @@ export function setScores(score: number): void {
  * @returns scores
  */
 export function getScores(): number {
-  return scores
+  const output = scores
+  return output
 }

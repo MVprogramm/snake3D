@@ -35,6 +35,8 @@ export function setObstaclesY(): void {
  * @param obstacles массив координат [x, y] препятствий
  */
 export function setObstaclesYCoord(obstacles: number[][]): void {
+  console.log('y', obstacles[0][1])
+
   obstaclesYCoord = [...obstacles]
 }
 /**
@@ -54,6 +56,8 @@ export function getObstaclesY(): string[] {
  * Возвращает массив координат [x, y] препятствий, движущихся по вертикали
  */
 export function getObstaclesYCoord(): number[][] {
+  // console.log('y', obstaclesYCoord[0][1])
+
   return obstaclesYCoord
 }
 /**

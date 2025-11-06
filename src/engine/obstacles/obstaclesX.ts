@@ -35,6 +35,8 @@ export function setObstaclesX(): void {
  * @param obstacles массив координат [x, y] препятствий
  */
 export function setObstaclesXCoord(obstacles: number[][]): void {
+  console.log('x', obstacles[0][1])
+
   obstaclesXCoord = [...obstacles]
 }
 /**
@@ -48,17 +50,22 @@ export function setObstaclesStepX(steps: number[]): void {
  * Возвращает массив строк 'x' для препятствий, движущихся по горизонтали
  */
 export function getObstaclesX(): string[] {
-  return obstaclesX
+  const output = [...obstaclesX]
+  return output
 }
 /**
  * Возвращает массив координат [x, y] препятствий, движущихся по горизонтали
  */
 export function getObstaclesXCoord(): number[][] {
-  return obstaclesXCoord
+  // console.log('x: ', obstaclesXCoord[0][0])
+  const output = obstaclesXCoord.map((coord) => [...coord])
+
+  return output
 }
 /**
  * Возвращает массив шагов препятствий, движущихся по горизонтали
  */
 export function getObstaclesStepX(): number[] {
-  return obstaclesStepX
+  const output = [...obstaclesStepX]
+  return output
 }
