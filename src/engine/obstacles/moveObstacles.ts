@@ -11,6 +11,8 @@ import checkObstaclePosition from './checkObstaclePosition'
 import setObstacleStep from './setObstacleStep'
 import { getSnakeHeadParams } from '../snake/snake'
 import { getStep } from '../time/timerStepPerLevel'
+// хранит ненулевые шаги препятствий
+const prevSteps: number[] = []
 /**
  * Изменяет координаты препятствий и их шаг
  * @description
@@ -37,7 +39,7 @@ function moveObstacles(type: string): void {
   for (let i = 0; i < coordCopy.length; i++) {
     // рассчитываем новый шаг с учётом всех столкновений, работаем с копией stepCopy
     stepCopy[i] = setObstacleStep({ i, twist, coord: coordCopy, step: stepCopy })
-
+    if (stepCopy[i] !== 0) prevSteps[i] = stepCopy[i]
     // рассчёт предполагаемой новой позиции (без изменения оригинала)
     const probePos = [...coordCopy[i]]
     probePos[twist[0]] += stepCopy[i]
@@ -52,6 +54,11 @@ function moveObstacles(type: string): void {
       isSnakeMoving
     ) {
       newStep = 0
+    } else {
+      // если змейка не близко и препятствие было остановлено — возвращаем предыдущий шаг
+      if (newStep === 0 && prevSteps[i] !== undefined) {
+        newStep = prevSteps[i]
+      }
     }
 
     // применяем шаг к копии координат

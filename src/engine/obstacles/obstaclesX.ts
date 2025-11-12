@@ -35,8 +35,6 @@ export function setObstaclesX(): void {
  * @param obstacles массив координат [x, y] препятствий
  */
 export function setObstaclesXCoord(obstacles: number[][]): void {
-  console.log('x', obstacles[0][1])
-
   obstaclesXCoord = [...obstacles]
 }
 /**

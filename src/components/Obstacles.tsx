@@ -11,7 +11,6 @@ import { getField } from '../engine/field/fieldPerLevel'
 const Obstacles: React.FC = () => {
   const gridSize = getField()
   let { type, xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
-  // console.log(type, yCoord[0], yStep)
 
   // локальные состояния шагов для передачи в Hedgehog — будут обновляться в useFrame
   const [xStepState, setXStepState] = useState<number[]>(xStep)
@@ -50,7 +49,6 @@ const Obstacles: React.FC = () => {
       const [obsType, indexStr] = key.split('_')
       const index = parseInt(indexStr, 10)
       if (obsType === 'fix') return null
-      // const directionArray = obsType === 'x' ? xStepState : yStepState
       const directionArray = obsType === 'x' ? xStep : yStep
       const ref = obstaclesRefs.current[key]
       return {
@@ -67,12 +65,17 @@ const Obstacles: React.FC = () => {
   }[]
 
   useFrame((_, delta) => {
-    // обновляем параметры препятствий каждый кадр
-    // ;({ type, xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles())
+    const movedXObstacles = xStep.map((s, i) => {
+      if (s === 0) return xStepState[i]
+      return s
+    })
+    const movedYObstacles = yStep.map((s, i) => {
+      if (s === 0) return yStepState[i]
+      return s
+    })
 
-    // обновляем состояния шагов, чтобы Hedgehog получал актуальные значения
-    setXStepState([...xStep])
-    setYStepState([...yStep])
+    setXStepState([...movedXObstacles])
+    setYStepState([...movedYObstacles])
 
     const threeCoordX = xCoord.map(
       (coord) =>
@@ -100,9 +103,6 @@ const Obstacles: React.FC = () => {
       const vec: THREE.Vector3 | undefined =
         obsType === 'x' ? threeCoordX[index] : threeCoordY[index]
       if (!vec) return
-      // if (obsType === 'x') vec.x += delta * xStepState[index]
-      // if (obsType === 'y') vec.y += delta * yStepState[index]
-      // console.log(vec.x, vec.y)
 
       ref.current?.position.set(vec.x, vec.y, 0)
     })
@@ -111,14 +111,13 @@ const Obstacles: React.FC = () => {
   return (
     <>
       {Object.entries(obstaclesRefs.current || {}).map(([key, ref]) => {
-        // console.log(ref.current?.position)
         const [obsType, indexStr] = key.split('_')
         const index = parseInt(indexStr, 10)
         if (obsType === 'fix') return null
         const directionArray = obsType === 'x' ? xStepState : yStepState
 
         return (
-          <group key={key} ref={ref}>
+          <group key={key} ref={ref} scale={[0.65, 0.65, 0.65]}>
             <Hedgehog direction={directionArray} index={index} line={obsType} />
           </group>
         )

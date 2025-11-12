@@ -31,8 +31,8 @@ function Hedgehog(props: hedgehogProps) {
   return (
     <group
       position={[
-        line === 'x' ? direction[index] : 0,
-        line === 'y' ? direction[index] : 0,
+        line === 'x' ? direction[index] * 0.75 : 0,
+        line === 'y' ? direction[index] * 0.75 : 0,
         0.1,
       ]}
     >
