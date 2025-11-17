@@ -5,7 +5,7 @@
     "timerStep": "1",
     "food": "10",
     "lives": "3",
-    "obstacles": ["x", "y", "x", "y"],
+    "obstacles": ["y"],
     "bonuses": [],
     "fog": "light",
     "maxScores": "30"

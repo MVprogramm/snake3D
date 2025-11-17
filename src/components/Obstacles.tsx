@@ -7,6 +7,12 @@ import { getAllObstacles } from '../engine/obstacles/getAllObstacles'
 import { useFrame } from '@react-three/fiber'
 import Hedgehog from '../assets/hedgehogModel/hedgehog'
 import { getField } from '../engine/field/fieldPerLevel'
+import { SystemConfig } from '../config/systemConfig'
+import { checkTimerWorking } from '../engine/time/isTimer'
+
+let threeCoordX: THREE.Vector3[] = []
+let threeCoordY: THREE.Vector3[] = []
+let counter = -1
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
@@ -64,7 +70,7 @@ const Obstacles: React.FC = () => {
     element: React.ReactElement
   }[]
 
-  useFrame((_, delta) => {
+  useFrame(() => {
     const movedXObstacles = xStep.map((s, i) => {
       if (s === 0) return xStepState[i]
       return s
@@ -77,22 +83,25 @@ const Obstacles: React.FC = () => {
     setXStepState([...movedXObstacles])
     setYStepState([...movedYObstacles])
 
-    const threeCoordX = xCoord.map(
-      (coord) =>
-        new THREE.Vector3(
-          Math.round(coord[0] - gridSize / 2 - 1),
-          Math.round(coord[1] - gridSize / 2 - 1),
-          0
-        )
-    )
-    const threeCoordY = yCoord.map(
-      (coord) =>
-        new THREE.Vector3(
-          Math.round(coord[0] - gridSize / 2 - 1),
-          Math.round(coord[1] - gridSize / 2 - 1),
-          0
-        )
-    )
+    if (counter === -1) {
+      counter = 0
+      threeCoordX = xCoord.map(
+        (coord) =>
+          new THREE.Vector3(
+            Math.round(coord[0] - gridSize / 2 - 1),
+            Math.round(coord[1] - gridSize / 2 - 1),
+            0
+          )
+      )
+      threeCoordY = yCoord.map(
+        (coord) =>
+          new THREE.Vector3(
+            Math.round(coord[0] - gridSize / 2 - 1),
+            Math.round(coord[1] - gridSize / 2 - 1),
+            0
+          )
+      )
+    } else counter += 1 / SystemConfig.FPS
 
     // обновляем позиции рефов — делаем это в useFrame, а не во время рендера
     Object.entries(obstaclesRefs.current).forEach(([key, ref]) => {
@@ -103,7 +112,13 @@ const Obstacles: React.FC = () => {
       const vec: THREE.Vector3 | undefined =
         obsType === 'x' ? threeCoordX[index] : threeCoordY[index]
       if (!vec) return
+      if (checkTimerWorking()) {
+        const deltaX = obsType === 'x' ? xStep[index] / SystemConfig.FPS : 0
+        const deltaY = obsType === 'y' ? yStep[index] / SystemConfig.FPS : 0
 
+        vec.x += deltaX
+        vec.y += deltaY
+      }
       ref.current?.position.set(vec.x, vec.y, 0)
     })
   })

@@ -11,8 +11,9 @@ import checkObstaclePosition from './checkObstaclePosition'
 import setObstacleStep from './setObstacleStep'
 import { getSnakeHeadParams } from '../snake/snake'
 import { getStep } from '../time/timerStepPerLevel'
-// хранит ненулевые шаги препятствий
-const prevSteps: number[] = []
+// хранит ненулевые шаги препятствий отдельно для X и Y, чтобы избежать коллизий индексов
+const prevStepsX: number[] = []
+const prevStepsY: number[] = []
 /**
  * Изменяет координаты препятствий и их шаг
  * @description
@@ -23,14 +24,15 @@ const prevSteps: number[] = []
  *      - изменяет координаты препятствий на величину шага
  */
 function moveObstacles(type: string): void {
+  // фиксированный радиус останова препятствий (не зависит от скорости змейки)
   const stopDistance = getStep() + 2
   const isSnakeMoving =
     getSnakeHeadParams().snakeHeadStepX !== 0 || getSnakeHeadParams().snakeHeadStepY !== 0
   // Получаем копии данных направления, будем работать с ними и записать результат разом
   const selected = selectObstacleDirection(type)
   // coordCopy: глубокая копия вложенных массивов, чтобы избегать мутаций оригинала
-  const coordCopy: number[][] = selected.coord
-  const stepCopy: number[] = selected.step
+  const coordCopy: number[][] = selected.coord.map((c) => [...c])
+  const stepCopy: number[] = [...selected.step]
 
   if (!checkTimerWorking()) return
 
@@ -39,7 +41,9 @@ function moveObstacles(type: string): void {
   for (let i = 0; i < coordCopy.length; i++) {
     // рассчитываем новый шаг с учётом всех столкновений, работаем с копией stepCopy
     stepCopy[i] = setObstacleStep({ i, twist, coord: coordCopy, step: stepCopy })
-    if (stepCopy[i] !== 0) prevSteps[i] = stepCopy[i]
+    // сохраняем последний ненулевой шаг в массив, специфичный для типа
+    const prev = type === 'x' ? prevStepsX : prevStepsY
+    if (stepCopy[i] !== 0) prev[i] = stepCopy[i]
     // рассчёт предполагаемой новой позиции (без изменения оригинала)
     const probePos = [...coordCopy[i]]
     probePos[twist[0]] += stepCopy[i]
@@ -56,8 +60,11 @@ function moveObstacles(type: string): void {
       newStep = 0
     } else {
       // если змейка не близко и препятствие было остановлено — возвращаем предыдущий шаг
-      if (newStep === 0 && prevSteps[i] !== undefined) {
-        newStep = prevSteps[i]
+      if (newStep === 0) {
+        const prev = type === 'x' ? prevStepsX : prevStepsY
+        if (prev[i] !== undefined) {
+          newStep = prev[i]
+        }
       }
     }
 
