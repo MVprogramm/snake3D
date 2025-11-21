@@ -4,6 +4,7 @@
  */
 
 import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
+import { SystemConfig } from '../../config/systemConfig'
 import bonusSelect from '../bonuses/bonusSelect'
 import snakeCatchesBonusEvent from '../events/snakeCatchesBonusEvent'
 import { snakeCatchesFoodEvent } from '../events/snakeCatchesFoodEvent'
@@ -24,7 +25,7 @@ function playLevel() {
   // const [counterHeadX, counterHeadY] = getCounterHead()
   // if (counterHeadX === 0 && counterHeadY === 0) {
   bonusSelect()
-  setObstacleParams(61)
+  // setObstacleParams(SystemConfig.FPS)
   snakeCatchesFoodEvent()
   snakeFoodEaten()
   snakeCatchesBonusEvent()

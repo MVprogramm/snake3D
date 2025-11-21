@@ -9,13 +9,16 @@ import Hedgehog from '../assets/hedgehogModel/hedgehog'
 import { getField } from '../engine/field/fieldPerLevel'
 import { SystemConfig } from '../config/systemConfig'
 import { checkTimerWorking } from '../engine/time/isTimer'
+import moveObstacles from '../engine/obstacles/moveObstacles'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
 let counter = -1
+let initialized = false
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
+
   let { type, xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
 
   // локальные состояния шагов для передачи в Hedgehog — будут обновляться в useFrame
@@ -84,25 +87,37 @@ const Obstacles: React.FC = () => {
     setYStepState([...movedYObstacles])
 
     if (counter === -1) {
-      counter = 0
       threeCoordX = xCoord.map(
-        (coord) =>
+        (coord, i) =>
           new THREE.Vector3(
-            Math.round(coord[0] - gridSize / 2 - 1),
-            Math.round(coord[1] - gridSize / 2 - 1),
+            Math.round(coord[0] - gridSize / 2) - 1 - xStep[i],
+            Math.round(coord[1] - gridSize / 2) - 1,
             0
           )
       )
       threeCoordY = yCoord.map(
-        (coord) =>
+        (coord, i) =>
           new THREE.Vector3(
-            Math.round(coord[0] - gridSize / 2 - 1),
-            Math.round(coord[1] - gridSize / 2 - 1),
+            Math.round(coord[0] - gridSize / 2) - 1,
+            Math.round(coord[1] - gridSize / 2) - 1 - yStep[i],
             0
           )
       )
-    } else counter += 1 / SystemConfig.FPS
+      counter = 0
+    }
 
+    if (checkTimerWorking()) {
+      counter += 1 / SystemConfig.FPS
+
+      if (counter >= 1) {
+        counter = 0
+        // попросим движок сдвинуть препятствия на величину их текущих шагов
+        // вызываем для обоих направлений — x и y
+        // moveObstacles('x')
+        // moveObstacles('y')
+        ;['x', 'y'].forEach((type) => moveObstacles(type))
+      }
+    }
     // обновляем позиции рефов — делаем это в useFrame, а не во время рендера
     Object.entries(obstaclesRefs.current).forEach(([key, ref]) => {
       const [obsType, indexStr] = key.split('_')
@@ -119,6 +134,7 @@ const Obstacles: React.FC = () => {
         vec.x += deltaX
         vec.y += deltaY
       }
+
       ref.current?.position.set(vec.x, vec.y, 0)
     })
   })

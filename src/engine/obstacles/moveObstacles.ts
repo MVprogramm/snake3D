@@ -11,6 +11,7 @@ import checkObstaclePosition from './checkObstaclePosition'
 import setObstacleStep from './setObstacleStep'
 import { getSnakeHeadParams } from '../snake/snake'
 import { getStep } from '../time/timerStepPerLevel'
+
 // хранит ненулевые шаги препятствий отдельно для X и Y, чтобы избежать коллизий индексов
 const prevStepsX: number[] = []
 const prevStepsY: number[] = []
