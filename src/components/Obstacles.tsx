@@ -18,6 +18,7 @@ let initialized = false
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
+  const fieldBoundary = Math.round(gridSize / 2) - 1
 
   let { type, xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
 
@@ -88,18 +89,18 @@ const Obstacles: React.FC = () => {
 
     if (counter === -1) {
       threeCoordX = xCoord.map(
-        (coord, i) =>
+        (coord) =>
           new THREE.Vector3(
-            Math.round(coord[0] - gridSize / 2) - 1 - xStep[i],
+            Math.round(coord[0] - gridSize / 2) - 1,
             Math.round(coord[1] - gridSize / 2) - 1,
             0
           )
       )
       threeCoordY = yCoord.map(
-        (coord, i) =>
+        (coord) =>
           new THREE.Vector3(
             Math.round(coord[0] - gridSize / 2) - 1,
-            Math.round(coord[1] - gridSize / 2) - 1 - yStep[i],
+            Math.round(coord[1] - gridSize / 2) - 1,
             0
           )
       )
@@ -107,15 +108,15 @@ const Obstacles: React.FC = () => {
     }
 
     if (checkTimerWorking()) {
-      counter += 1 / SystemConfig.FPS
+      if (counter === 0) {
+        ;['x', 'y'].forEach((type) => moveObstacles(type))
+      }
+    }
+    counter += 1 / SystemConfig.FPS
 
+    if (checkTimerWorking()) {
       if (counter >= 1) {
         counter = 0
-        // попросим движок сдвинуть препятствия на величину их текущих шагов
-        // вызываем для обоих направлений — x и y
-        // moveObstacles('x')
-        // moveObstacles('y')
-        ;['x', 'y'].forEach((type) => moveObstacles(type))
       }
     }
     // обновляем позиции рефов — делаем это в useFrame, а не во время рендера
@@ -131,8 +132,17 @@ const Obstacles: React.FC = () => {
         const deltaX = obsType === 'x' ? xStep[index] / SystemConfig.FPS : 0
         const deltaY = obsType === 'y' ? yStep[index] / SystemConfig.FPS : 0
 
-        vec.x += deltaX
-        vec.y += deltaY
+        // останавливаем движение если препятствие подходит к границам поля
+
+        const nextX = vec.x + deltaX
+        const nextY = vec.y + deltaY
+
+        if (nextX >= -fieldBoundary && nextX <= fieldBoundary) {
+          vec.x = nextX
+        }
+        if (nextY >= -fieldBoundary && nextY <= fieldBoundary) {
+          vec.y = nextY
+        }
       }
 
       ref.current?.position.set(vec.x, vec.y, 0)

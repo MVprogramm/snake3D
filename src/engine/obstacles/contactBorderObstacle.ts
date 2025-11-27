@@ -15,8 +15,9 @@ import { getField } from '../field/fieldPerLevel'
  */
 function contactBorderObstacle(props: obstacleContactProps): number {
   const { i, twist, coord, step } = props
-  if (coord[i][twist[0]] === 1) step[i] = 1
-  if (coord[i][twist[0]] === getField()) step[i] = -1
+
+  if (coord[i][twist[0]] <= 1) step[i] = 1
+  if (coord[i][twist[0]] >= getField()) step[i] = -1
 
   return step[i]
 }

@@ -15,6 +15,7 @@ function obstacleBounce(props: newObstacleStep): number {
   const { i, twist, coord, step, cell } = props
   if (cell) {
     const [posX, posY] = cell
+
     if (
       coord[i][twist[0]] + step[i] === [posX, posY][twist[0]] &&
       coord[i][twist[1]] === [posX, posY][twist[1]]

@@ -11,6 +11,7 @@ import checkObstaclePosition from './checkObstaclePosition'
 import setObstacleStep from './setObstacleStep'
 import { getSnakeHeadParams } from '../snake/snake'
 import { getStep } from '../time/timerStepPerLevel'
+import { getField } from '../field/fieldPerLevel'
 
 // хранит ненулевые шаги препятствий отдельно для X и Y, чтобы избежать коллизий индексов
 const prevStepsX: number[] = []
@@ -23,8 +24,10 @@ const prevStepsY: number[] = []
  *      - изменяет шаг на обратный при контакте препятствий с другими объектами
  *      - останавливает препятствия при приближении головы змейки
  *      - изменяет координаты препятствий на величину шага
+ * @param type - направление движения препятствия, x или y
  */
 function moveObstacles(type: string): void {
+  const gridSize = getField()
   // фиксированный радиус останова препятствий (не зависит от скорости змейки)
   const stopDistance = getStep() + 2
   const isSnakeMoving =
@@ -34,6 +37,7 @@ function moveObstacles(type: string): void {
   // coordCopy: глубокая копия вложенных массивов, чтобы избегать мутаций оригинала
   const coordCopy: number[][] = selected.coord.map((c) => [...c])
   const stepCopy: number[] = [...selected.step]
+  // if (type === 'y') console.log('move: ', coordCopy[0])
 
   if (!checkTimerWorking()) return
 
