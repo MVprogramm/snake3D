@@ -10,6 +10,7 @@ import { getField } from '../engine/field/fieldPerLevel'
 import { SystemConfig } from '../config/systemConfig'
 import { checkTimerWorking } from '../engine/time/isTimer'
 import moveObstacles from '../engine/obstacles/moveObstacles'
+import { getFoodCoord } from '../engine/food/food'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
@@ -18,6 +19,8 @@ let initialized = false
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
+  const foodCoordX = Math.round(getFoodCoord()[0] - gridSize / 2) - 1
+  const foodCoordY = Math.round(getFoodCoord()[1] - gridSize / 2) - 1
   const fieldBoundary = Math.round(gridSize / 2) - 1
 
   let { type, xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
@@ -133,14 +136,19 @@ const Obstacles: React.FC = () => {
         const deltaY = obsType === 'y' ? yStep[index] / SystemConfig.FPS : 0
 
         // останавливаем движение если препятствие подходит к границам поля
-
         const nextX = vec.x + deltaX
         const nextY = vec.y + deltaY
-
         if (nextX >= -fieldBoundary && nextX <= fieldBoundary) {
           vec.x = nextX
         }
         if (nextY >= -fieldBoundary && nextY <= fieldBoundary) {
+          vec.y = nextY
+        }
+        // дополнительно останавливаем препятствие, если оно близко к еде
+        if (Math.abs(nextX - foodCoordX) >= 2) {
+          vec.x = nextX
+        }
+        if (Math.abs(nextY - foodCoordY) >= 2) {
           vec.y = nextY
         }
       }
