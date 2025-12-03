@@ -138,17 +138,20 @@ const Obstacles: React.FC = () => {
         // останавливаем движение если препятствие подходит к границам поля
         const nextX = vec.x + deltaX
         const nextY = vec.y + deltaY
-        if (nextX >= -fieldBoundary && nextX <= fieldBoundary) {
+        const isFoodXStopDistance =
+          Math.round(nextY) === foodCoordY ? Math.round(nextX) !== foodCoordX : true
+        const isFoodYStopDistance =
+          Math.round(nextX) === foodCoordX ? Math.round(nextY) !== foodCoordY : true
+        const isStopDistanceX =
+          nextX >= -fieldBoundary && nextX <= fieldBoundary && isFoodXStopDistance
+
+        const isStopDistanceY =
+          nextY >= -fieldBoundary && nextY <= fieldBoundary && isFoodYStopDistance
+
+        if (isStopDistanceX) {
           vec.x = nextX
         }
-        if (nextY >= -fieldBoundary && nextY <= fieldBoundary) {
-          vec.y = nextY
-        }
-        // дополнительно останавливаем препятствие, если оно близко к еде
-        if (Math.abs(nextX - foodCoordX) >= 2) {
-          vec.x = nextX
-        }
-        if (Math.abs(nextY - foodCoordY) >= 2) {
+        if (isStopDistanceY) {
           vec.y = nextY
         }
       }
