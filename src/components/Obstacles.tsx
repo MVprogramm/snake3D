@@ -11,19 +11,33 @@ import { SystemConfig } from '../config/systemConfig'
 import { checkTimerWorking } from '../engine/time/isTimer'
 import moveObstacles from '../engine/obstacles/moveObstacles'
 import { getFoodCoord } from '../engine/food/food'
+import { getCurrentHeadState } from '../engine/snake/getCurrentHeadState'
+import { getPositionHead } from '../animations/snakeAnimation/headAnimations/snakeHeadProps'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
 let counter = -1
-let initialized = false
+// let initialized = false
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
   const foodCoordX = Math.round(getFoodCoord()[0] - gridSize / 2) - 1
   const foodCoordY = Math.round(getFoodCoord()[1] - gridSize / 2) - 1
   const fieldBoundary = Math.round(gridSize / 2) - 1
+  const snakeHead = getCurrentHeadState()
+  const [positionX, positionY] = getPositionHead()
+  const currentSnakeX = Math.round(positionX)
+  const currentSnakeY = Math.round(positionY)
+  const nextSnakeX =
+    snakeHead.snakeHeadStepX !== 0
+      ? currentSnakeX + snakeHead.snakeHeadStepX
+      : currentSnakeX
+  const nextSnakeY =
+    snakeHead.snakeHeadStepY !== 0
+      ? currentSnakeY + snakeHead.snakeHeadStepY
+      : currentSnakeY
 
-  let { type, xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
+  let { xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
 
   // локальные состояния шагов для передачи в Hedgehog — будут обновляться в useFrame
   const [xStepState, setXStepState] = useState<number[]>(xStep)
@@ -138,20 +152,32 @@ const Obstacles: React.FC = () => {
         // останавливаем движение если препятствие подходит к границам поля
         const nextX = vec.x + deltaX
         const nextY = vec.y + deltaY
+
+        const currentHedgehogX = Math.round(vec.x)
+        const currentHedgehogY = Math.round(vec.y)
+        const nextHedgehogX =
+          obsType === 'x' ? currentHedgehogX + xStep[index] : currentHedgehogX
+        const nextHedgehogY =
+          obsType === 'y' ? currentHedgehogY + yStep[index] : currentHedgehogY
+
+        const isSnakeHeadStopDistance =
+          obsType === 'x'
+            ? nextHedgehogX === nextSnakeX && nextHedgehogY === nextSnakeY
+            : nextHedgehogY === nextSnakeY && nextHedgehogX === nextSnakeX
+
         const isFoodXStopDistance =
           Math.round(nextY) === foodCoordY ? Math.round(nextX) !== foodCoordX : true
         const isFoodYStopDistance =
           Math.round(nextX) === foodCoordX ? Math.round(nextY) !== foodCoordY : true
         const isStopDistanceX =
           nextX >= -fieldBoundary && nextX <= fieldBoundary && isFoodXStopDistance
-
         const isStopDistanceY =
           nextY >= -fieldBoundary && nextY <= fieldBoundary && isFoodYStopDistance
 
-        if (isStopDistanceX) {
+        if (isStopDistanceX && !isSnakeHeadStopDistance) {
           vec.x = nextX
         }
-        if (isStopDistanceY) {
+        if (isStopDistanceY && !isSnakeHeadStopDistance) {
           vec.y = nextY
         }
       }
