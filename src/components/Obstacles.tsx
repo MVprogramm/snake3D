@@ -27,6 +27,7 @@ const Obstacles: React.FC = () => {
   const snakeHead = getCurrentHeadState()
   const [positionX, positionY] = getPositionHead()
   const currentSnakeX = Math.round(positionX)
+  // console.log(currentSnakeX)
   const currentSnakeY = Math.round(positionY)
   const nextSnakeX =
     snakeHead.snakeHeadStepX !== 0
@@ -141,15 +142,17 @@ const Obstacles: React.FC = () => {
       const [obsType, indexStr] = key.split('_')
       const index = parseInt(indexStr, 10)
       if (obsType === 'fix') return
-
+      let nextStepX = true
+      let nextStepY = true
       const vec: THREE.Vector3 | undefined =
         obsType === 'x' ? threeCoordX[index] : threeCoordY[index]
+      // if (counter === 0) console.log(vec.x)
+
       if (!vec) return
       if (checkTimerWorking()) {
         const deltaX = obsType === 'x' ? xStep[index] / SystemConfig.FPS : 0
         const deltaY = obsType === 'y' ? yStep[index] / SystemConfig.FPS : 0
 
-        // останавливаем движение если препятствие подходит к границам поля
         const nextX = vec.x + deltaX
         const nextY = vec.y + deltaY
 
@@ -160,26 +163,55 @@ const Obstacles: React.FC = () => {
         const nextHedgehogY =
           obsType === 'y' ? currentHedgehogY + yStep[index] : currentHedgehogY
 
-        const isSnakeHeadStopDistance =
-          obsType === 'x'
-            ? nextHedgehogX === nextSnakeX && nextHedgehogY === nextSnakeY
-            : nextHedgehogY === nextSnakeY && nextHedgehogX === nextSnakeX
+        // console.log('hh: ', currentHedgehogX, nextHedgehogX)
+        // console.log('sh: ', currentSnakeX, nextSnakeX)
+        if (counter === 0) {
+          const isSnakeHeadStopDistance =
+            obsType === 'x'
+              ? nextHedgehogX === nextSnakeX && nextHedgehogY === nextSnakeY
+              : nextHedgehogY === nextSnakeY && nextHedgehogX === nextSnakeX
 
-        const isFoodXStopDistance =
-          Math.round(nextY) === foodCoordY ? Math.round(nextX) !== foodCoordX : true
-        const isFoodYStopDistance =
-          Math.round(nextX) === foodCoordX ? Math.round(nextY) !== foodCoordY : true
-        const isStopDistanceX =
-          nextX >= -fieldBoundary && nextX <= fieldBoundary && isFoodXStopDistance
-        const isStopDistanceY =
-          nextY >= -fieldBoundary && nextY <= fieldBoundary && isFoodYStopDistance
+          const isFoodXStopDistance =
+            Math.round(nextY) === foodCoordY ? Math.round(nextX) !== foodCoordX : true
+          const isFoodYStopDistance =
+            Math.round(nextX) === foodCoordX ? Math.round(nextY) !== foodCoordY : true
+          // Проверка столкновения с другими ежиками
+          let isAnotherHedgehogCollision = false
+          Object.entries(obstaclesRefs.current).forEach(([otherKey, otherRef]) => {
+            if (otherKey === key) return // пропускаем самого себя
 
-        if (isStopDistanceX && !isSnakeHeadStopDistance) {
-          vec.x = nextX
+            const [otherType, otherIndexStr] = otherKey.split('_')
+            const otherIndex = parseInt(otherIndexStr, 10)
+            if (otherType === 'fix') return
+
+            const otherVec =
+              otherType === 'x' ? threeCoordX[otherIndex] : threeCoordY[otherIndex]
+            if (!otherVec) return
+
+            // Проверяем, будет ли столкновение на следующей позиции
+            if (
+              Math.round(nextX) === Math.round(otherVec.x) &&
+              Math.round(nextY) === Math.round(otherVec.y)
+            ) {
+              isAnotherHedgehogCollision = true
+            }
+          })
+          const isStopDistanceX =
+            nextX >= -fieldBoundary &&
+            nextX <= fieldBoundary &&
+            isFoodXStopDistance &&
+            !isAnotherHedgehogCollision
+          const isStopDistanceY =
+            nextY >= -fieldBoundary &&
+            nextY <= fieldBoundary &&
+            isFoodYStopDistance &&
+            !isAnotherHedgehogCollision
+
+          nextStepX = isStopDistanceX && !isSnakeHeadStopDistance
+          nextStepY = isStopDistanceY && !isSnakeHeadStopDistance
         }
-        if (isStopDistanceY && !isSnakeHeadStopDistance) {
-          vec.y = nextY
-        }
+        if (nextStepX) vec.x = nextX
+        if (nextStepY) vec.y = nextY
       }
 
       ref.current?.position.set(vec.x, vec.y, 0)

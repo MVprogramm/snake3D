@@ -11,7 +11,7 @@ const SNAKE_HEAD_POSITION_Z = 0
 const SNAKE_HEAD_ROTATION_X = 0
 const SNAKE_HEAD_ROTATION_Y = 0
 const SNAKE_HEAD_ROTATION_Z = 0
-const SNAKE_HEAD_SCALE = 1
+const SNAKE_HEAD_SCALE = 0.9
 
 export const snakeHEAD = {
   head: <GeometryProps>{
