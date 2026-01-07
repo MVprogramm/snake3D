@@ -31,6 +31,8 @@ function snakeObstacleContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
       snakeHead = getBreaksObstacles()
         ? isBroken(snakeHead)
         : isContact(snakeHead, 'obstacle')
+    if (contact)
+      console.log(snakeHead.snakeHeadCoordX, pos[0], snakeHead.snakeHeadCoordY, pos[1])
   })
 
   return snakeHead

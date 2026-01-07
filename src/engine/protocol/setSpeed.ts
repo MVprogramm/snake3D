@@ -12,7 +12,7 @@ import * as TIMER from '../time/timerStepPerLevel'
 /**
  * Текущие шаги движения змейки в виде [x, y]
  */
-let snakeHeadSteps: number[]
+let snakeHeadSteps: number[] = [0, 0]
 /**
  * Изменяет интервал перерисовки игрового поля на величину speed
  * @param speed Шаг изменения интервала перерисовки, может быть 1 или -1
@@ -55,8 +55,8 @@ function setSpeed(speed: number) {
     if (TIMER.getStep() === 1 && checkTimerStep())
       setSnakeHeadParams({
         ...getSnakeHeadParams(),
-        snakeHeadStepX: snakeHeadSteps[0],
-        snakeHeadStepY: snakeHeadSteps[1],
+        snakeHeadStepX: snakeHeadSteps?.[0] ?? 0,
+        snakeHeadStepY: snakeHeadSteps?.[1] ?? 0,
       })
   }
   changeSnakeSpeed(TIMER.getStep())
