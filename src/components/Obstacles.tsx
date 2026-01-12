@@ -35,22 +35,24 @@ const Obstacles: React.FC = () => {
 
   if (counter === 0) {
     const [positionX, positionY] = getPositionHead()
-    currentSnakeX = currentSnakeStepX < 0 ? Math.ceil(positionX) : Math.floor(positionX)
-    currentSnakeY = currentSnakeStepY < 0 ? Math.ceil(positionY) : Math.floor(positionY)
-    if (counter === 0)
-      console.log(
-        'eng: ',
-        Math.round(snakeHead.snakeHeadCoordX - gridSize / 2) - 1,
-        'rnd: ',
-        currentSnakeX,
-        'step: ',
-        currentSnakeStepX
-      )
-
+    //currentSnakeX = currentSnakeStepX < 0 ? Math.ceil(positionX) : Math.floor(positionX)
+    currentSnakeX = Math.round(snakeHead.snakeHeadCoordX - gridSize / 2) - 1
+    currentSnakeY = Math.round(snakeHead.snakeHeadCoordY - gridSize / 2) - 1
+    // currentSnakeY = currentSnakeStepY < 0 ? Math.ceil(positionY) : Math.floor(positionY)
     const nextSnakeX =
       snakeHead.snakeHeadStepX !== 0
         ? currentSnakeX + snakeHead.snakeHeadStepX
         : currentSnakeX
+    // if (counter === 0)
+    //   console.log(
+    //     'eng: ',
+    //     Math.round(snakeHead.snakeHeadCoordX - gridSize / 2) - 1,
+    //     'rnd: ',
+    //     currentSnakeX,
+    //     'step: ',
+    //     currentSnakeStepX
+    //   )
+
     const nextSnakeY =
       snakeHead.snakeHeadStepY !== 0
         ? currentSnakeY + snakeHead.snakeHeadStepY
@@ -178,11 +180,8 @@ const Obstacles: React.FC = () => {
       //     'renderX: ',
       //     Math.round(vec.x),
       //     'engineX: ',
-      //     Math.round(getObstaclesXCoord()[0][0] - gridSize / 2) - 1,
-      //     'stepX',
-      //     getObstaclesStepX()[0]
+      //     Math.round(getObstaclesXCoord()[0][0] - gridSize / 2) - 1
       //   )
-
       if (!vec) return
       if (checkTimerWorking()) {
         const deltaX = obsType === 'x' ? xStep[index] / SystemConfig.FPS : 0
@@ -200,11 +199,11 @@ const Obstacles: React.FC = () => {
         // if (counter === 0) {
         //   console.log(
         //     'hh: ',
-        //     currentHedgehogX,
-        //     Math.round(getObstaclesXCoord()[0][0] - gridSize / 2) - 1,
-        //     xStep[index],
-        //     getObstaclesStepX()[0]
-        //   )
+        //     currentHedgehogX
+        // Math.round(getObstaclesXCoord()[0][0] - gridSize / 2) - 1,
+        // xStep[index],
+        // getObstaclesStepX()[0]
+        //)
 
         // console.log(
         //   'rnd: ',
@@ -237,7 +236,7 @@ const Obstacles: React.FC = () => {
           const otherIndex = parseInt(otherIndexStr, 10)
           const index = parseInt(indexStr, 10)
           if (otherType === 'fix') return
-          /*
+
           if (type === 'x') {
             // Формируем массив объектов { y, index } для всех элементов threeCoordX,
             // у которых координата y совпадает с текущей (по округлению).
@@ -249,14 +248,14 @@ const Obstacles: React.FC = () => {
                   item.y !== undefined && Math.round(item.y) === Math.round(currentY)
               )
             // matchingY теперь содержит объекты вида { y, index } для совпадающих по y элементов
-            if (!loggedMatchingY && matchingY.length > 1) {
-              console.log(matchingY)
+            if (/*!loggedMatchingY &&*/ matchingY.length > 1) {
+              console.log(currentHedgehogX, currentY)
               loggedMatchingY = true
             }
           }
           // if (type === 'y' && threeCoordY[otherIndex].x === threeCoordY[index].x)
           //   console.log(type, otherType, index, otherIndex)
-*/
+
           const otherVec =
             otherType === 'x' ? threeCoordX[otherIndex] : threeCoordY[otherIndex]
           if (!otherVec) return
@@ -269,6 +268,7 @@ const Obstacles: React.FC = () => {
             isAnotherHedgehogCollision = true
           }
         })
+
         const isStopDistanceX = nextX >= -fieldBoundary && nextX <= fieldBoundary
 
         // &&
@@ -287,12 +287,14 @@ const Obstacles: React.FC = () => {
           isStopDistanceX &&
           !isSnakeHeadStopDistance &&
           isFoodXStopDistance &&
-          !isAnotherHedgehogCollision
+          !isAnotherHedgehogCollision &&
+          counter !== 0
         nextStepY =
           isStopDistanceY &&
           !isSnakeHeadStopDistance &&
           isFoodYStopDistance &&
-          !isAnotherHedgehogCollision
+          !isAnotherHedgehogCollision &&
+          counter !== 0
         // } else {
         //   // при залипании на краю поля продолжаем движение внутрь
         //   nextStepX = isStopDistanceX
