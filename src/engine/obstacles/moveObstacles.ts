@@ -8,7 +8,7 @@ import selectObstacleDirection from './selectObstacleDirection'
 import * as X from './obstaclesX'
 import * as Y from './obstaclesY'
 import checkObstaclePosition from './checkObstaclePosition'
-import setObstacleStep from './setObstacleStep'
+import setObstacleStep, { resetCollidingPositionsCache } from './setObstacleStep'
 import { getSnakeHeadParams } from '../snake/snake'
 import { getStep } from '../time/timerStepPerLevel'
 import { getField } from '../field/fieldPerLevel'
@@ -32,6 +32,10 @@ function moveObstacles(type: string): void {
   const stopDistance = getStep() + 2
   const isSnakeMoving =
     getSnakeHeadParams().snakeHeadStepX !== 0 || getSnakeHeadParams().snakeHeadStepY !== 0
+
+  // Reset cache at the start of each frame
+  resetCollidingPositionsCache()
+
   // Получаем копии данных направления, будем работать с ними и записать результат разом
   const selected = selectObstacleDirection(type)
   // coordCopy: глубокая копия вложенных массивов, чтобы избегать мутаций оригинала
