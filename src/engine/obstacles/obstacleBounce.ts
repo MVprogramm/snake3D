@@ -18,6 +18,7 @@ function obstacleBounce(props: newObstacleStep): number {
 
     if (
       coord[i][twist[0]] + step[i] === [posX, posY][twist[0]] &&
+      /* ||         coord[i][twist[0]] === [posX, posY][twist[0]] */
       coord[i][twist[1]] === [posX, posY][twist[1]]
     )
       step[i] = step[i] * -1

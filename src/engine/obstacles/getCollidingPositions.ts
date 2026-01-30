@@ -28,8 +28,12 @@ import { getObstaclesFixCoord } from './obstaclesFix'
 /**
  * Compute all next-step positions for moving objects (snake head + all obstacles)
  * and return only coordinates that collide (appear more than once).
- * If next position is blocked, use the opposite position (current - step).
- * @returns array of unique coordinates where multiple objects will be on the next step
+ *
+ * ВАЖНО: Функция вычисляет ЖЕЛАЕМЫЕ позиции каждого объекта (по текущему шагу).
+ * Реальные позиции могут отличаться из-за отскоков и проверок в moveObstacles.
+ * Эта функция только обнаруживает ПОТЕНЦИАЛЬНЫЕ столкновения, которые нужно обработать.
+ *
+ * @returns array of coordinates where multiple objects want to be on the next step
  */
 export const getCollidingPositions = (): number[][] => {
   const { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } =
@@ -38,47 +42,24 @@ export const getCollidingPositions = (): number[][] => {
   const obstaclesYCoord = getObstaclesYCoord()
   const obstaclesStepX = getObstaclesStepX()
   const obstaclesStepY = getObstaclesStepY()
-  const foodCoord = getFoodCoord()
-  const fixedObstacles = getObstaclesFixCoord()
 
-  // Array to store all next-step positions (may contain duplicates)
+  // Array to store all desired next-step positions (may contain duplicates)
   const allPositions: number[][] = []
 
-  // Add snake head's next position
+  // Add snake head's desired next position
   allPositions.push([snakeHeadCoordX + snakeHeadStepX, snakeHeadCoordY + snakeHeadStepY])
 
-  // Add next positions for horizontally moving obstacles
+  // Add desired next positions for horizontally moving obstacles
+  // Вычисляем желаемую позицию БЕЗ проверок - система отскоков уже проверит доступность
   for (let i = 0; i < obstaclesXCoord.length; i++) {
     const nextPos = [obstaclesXCoord[i][0] + obstaclesStepX[i], obstaclesXCoord[i][1]]
-
-    // Check if next position is available
-    if (checkObstaclePosition(nextPos)) {
-      allPositions.push(nextPos)
-    } else {
-      // If blocked, use opposite position (current - step)
-      const oppositePos = [
-        obstaclesXCoord[i][0] - obstaclesStepX[i],
-        obstaclesXCoord[i][1],
-      ]
-      allPositions.push(oppositePos)
-    }
+    allPositions.push(nextPos)
   }
 
-  // Add next positions for vertically moving obstacles
+  // Add desired next positions for vertically moving obstacles
   for (let i = 0; i < obstaclesYCoord.length; i++) {
     const nextPos = [obstaclesYCoord[i][0], obstaclesYCoord[i][1] + obstaclesStepY[i]]
-
-    // Check if next position is available
-    if (checkObstaclePosition(nextPos)) {
-      allPositions.push(nextPos)
-    } else {
-      // If blocked, use opposite position (current - step)
-      const oppositePos = [
-        obstaclesYCoord[i][0],
-        obstaclesYCoord[i][1] - obstaclesStepY[i],
-      ]
-      allPositions.push(oppositePos)
-    }
+    allPositions.push(nextPos)
   }
 
   // Count occurrences of each coordinate
@@ -88,7 +69,8 @@ export const getCollidingPositions = (): number[][] => {
     coordMap.set(key, (coordMap.get(key) ?? 0) + 1)
   }
 
-  // Extract only coordinates that appear more than once
+  // Extract only coordinates where multiple objects want to go
+  // Эти позиции требуют обработки отскоков
   const collidingPositions: number[][] = []
   coordMap.forEach((count, key) => {
     if (count > 1) {

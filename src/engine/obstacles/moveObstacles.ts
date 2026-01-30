@@ -90,6 +90,12 @@ function moveObstacles(type: string): void {
     Y.setObstaclesStepY(stepCopy)
     Y.setObstaclesYCoord(coordCopy)
   }
+  // console.log(
+  //   'engine X: ',
+  //   Math.round(X.getObstaclesXCoord()[0][0] - gridSize / 2) - 1,
+  //   // 'engine Y: ',
+  //   // Y.getObstaclesYCoord()[1],
+  // )
 }
 
 export default moveObstacles
