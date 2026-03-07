@@ -33,7 +33,7 @@ function Hedgehog(props: hedgehogProps) {
       position={[
         line === 'x' ? direction[index] * 0.75 : 0,
         line === 'y' ? direction[index] * 0.75 : 0,
-        0.1,
+        0,
       ]}
     >
       <mesh
@@ -47,6 +47,8 @@ function Hedgehog(props: hedgehogProps) {
           0,
           line === 'x' ? direction[index] * -1.57 : ((direction[index] - 1) / 2) * 3.14,
         ]}
+        receiveShadow
+        castShadow
       >
         <coneGeometry args={[0.4, 0.5, 3, 1, false, 4.7, 3.14]} />
         <meshStandardMaterial color='#A18E74' />
@@ -57,6 +59,8 @@ function Hedgehog(props: hedgehogProps) {
           0,
           line === 'y' ? direction[index] * 1.57 + 1.57 : direction[index] * 1.57,
         ]}
+        receiveShadow
+        castShadow
       >
         <latheGeometry args={[frontPoints, 12, -Math.PI / 2, Math.PI]} />
         <meshStandardMaterial color={'#5B586A'} />
@@ -68,6 +72,8 @@ function Hedgehog(props: hedgehogProps) {
           0,
           line === 'y' ? direction[index] * 1.57 - 1.57 : direction[index] * -1.57,
         ]}
+        receiveShadow
+        castShadow
       >
         <latheGeometry args={[backPoints, 12, -Math.PI / 2, Math.PI]} />
         <meshStandardMaterial color={'#5B586A'} />
@@ -79,6 +85,8 @@ function Hedgehog(props: hedgehogProps) {
           line === 'y' ? direction[index] * -0.03 : 0,
           0.05,
         ]}
+        receiveShadow
+        castShadow
       >
         <sphereGeometry args={[0.1, 5]} />
         <meshStandardMaterial color={'#5B586A'} />
@@ -89,6 +97,8 @@ function Hedgehog(props: hedgehogProps) {
             ? [direction[index] * 0.2, direction[index] * -0.3, 0.2]
             : [direction[index] * -0.3, -0.2, 0.2]
         }
+        receiveShadow
+        castShadow
       >
         <sphereGeometry args={[0.1, 5]} />
         <meshStandardMaterial color={'#5B586A'} />
@@ -99,6 +109,8 @@ function Hedgehog(props: hedgehogProps) {
             ? [direction[index] * -0.2, direction[index] * -0.3, 0.2]
             : [direction[index] * -0.3, 0.2, 0.2]
         }
+        receiveShadow
+        castShadow
       >
         <sphereGeometry args={[0.1, 5]} />
         <meshStandardMaterial color={'#5B586A'} />

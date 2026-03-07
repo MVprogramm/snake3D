@@ -1,3 +1,4 @@
+//
 import { getObstacles } from '../engine/obstacles/obstaclesPerLevel'
 import React, { useRef, useState } from 'react'
 import * as THREE from 'three'
@@ -6,6 +7,7 @@ import { getObstaclesStepY, getObstaclesYCoord } from '../engine/obstacles/obsta
 import { getAllObstacles } from '../engine/obstacles/getAllObstacles'
 import { useFrame } from '@react-three/fiber'
 import Hedgehog from '../assets/hedgehogModel/hedgehog'
+import Mushroom from '../assets/mushroomModel/Mushroom'
 import { getField } from '../engine/field/fieldPerLevel'
 import { SystemConfig } from '../config/systemConfig'
 import { checkTimerWorking } from '../engine/time/isTimer'
@@ -352,9 +354,40 @@ const Obstacles: React.FC = () => {
       {Object.entries(obstaclesRefs.current || {}).map(([key, ref]) => {
         const [obsType, indexStr] = key.split('_')
         const index = parseInt(indexStr, 10)
-        if (obsType === 'fix') return null
         const directionArray = obsType === 'x' ? xStepState : yStepState
 
+        // Грибы — неподвижные препятствия (fix)
+        if (obsType === 'fix') {
+          const fixCoords = fixCoord[index]
+          if (!fixCoords) return null
+          const gridSize = getField()
+          const fx = Math.round(fixCoords[0] - gridSize / 2) - 1
+          const fy = Math.round(fixCoords[1] - gridSize / 2) - 1
+
+          // Определяем тип fix-препятствия из массива obstacles (fix / fix-M / fix-R)
+          const allObstacleTypes = getObstacles()
+          const fixTypes = allObstacleTypes.filter((o) => o.substring(0, 3) === 'fix')
+          const obstacleType = fixTypes[index] ?? 'fix'
+          const isMushroom = obstacleType === 'fix-M' || obstacleType === 'fix'
+
+          if (isMushroom) {
+            return (
+              <group key={key} position={[fx, fy, 0]} scale={[0.06, 0.06, 0.06]}>
+                <Mushroom />
+              </group>
+            )
+          }
+
+          // Заглушка для других fix-типов (например fix-R — камень, пока не реализован)
+          return (
+            <mesh key={key} position={[fx, fy, 0]}>
+              <boxGeometry args={[0.8, 0.8, 0.8]} />
+              <meshStandardMaterial color={'#888'} />
+            </mesh>
+          )
+        }
+
+        // Ежи — движущиеся препятствия (x, y)
         return (
           <group key={key} ref={ref} scale={[0.65, 0.65, 0.65]}>
             <Hedgehog direction={directionArray} index={index} line={obsType} />

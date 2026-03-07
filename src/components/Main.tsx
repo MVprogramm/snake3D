@@ -62,7 +62,7 @@ import { cameraCONFIG } from '../config/cameraConfig'
 import '../styles/main.css'
 
 const LevaMonitor = lazy(() =>
-  import('./LevaMonitor').then((m) => ({ default: m.LevaMonitor }))
+  import('./LevaMonitor').then((m) => ({ default: m.LevaMonitor })),
 )
 const Game = lazy(() => import('./Game').then((m) => ({ default: m.Game })))
 const Menu = lazy(() => import('./Menu'))
@@ -74,7 +74,7 @@ const isDev = import.meta.env.DEV
 // Держим сам компонент всегда lazy-определённым,
 // а рендерим его только в dev — так проще для TS и JSX.
 const OrbitControls = lazy(() =>
-  import('@react-three/drei').then((m) => ({ default: m.OrbitControls }))
+  import('@react-three/drei').then((m) => ({ default: m.OrbitControls })),
 )
 
 const GL_SETTINGS = {

@@ -13,9 +13,9 @@ export const Grid = () => {
       resolution.x,
       resolution.y,
       0xffffff,
-      0xffffff
+      0xffffff,
     )
-    gridHelper.position.set(0, 0, 0.1)
+    gridHelper.position.set(0, 0, 0)
     gridHelper.rotation.x = Math.PI / 2
     gridHelper.material.transparent = true
     gridHelper.material.opacity = 0.3
