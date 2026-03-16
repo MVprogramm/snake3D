@@ -10,7 +10,7 @@ export const lightCONFIG: lightConfig = {
   },
   directionalLight: {
     shadowMapSize: [1024, 1024], // размер текстуры теней: чем больше, тем чётче тени, но выше нагрузка.
-    castShadow: true, // включает/выключает тени
+    castShadow: true, // включает/выключивает тени
     // объём теневой камеры (ортографической), которая фиксирует, какие области сцены отбрасывают тень.
     shadowCameraNear: 0.1,
     shadowCameraFar: 20,

@@ -5,7 +5,18 @@
     "timerStep": "1",
     "food": "10",
     "lives": "3",
-    "obstacles": ["x", "y", "x", "y", "x", "y", "fix", "fix", "fix-M"],
+    "obstacles": [
+      "x",
+      "y",
+      "x",
+      "y",
+      "fix-M",
+      "fix-M",
+      "fix-R",
+      "fix-R",
+      "fix-R",
+      "fix-R"
+    ],
     "bonuses": [],
     "fog": "light",
     "maxScores": "30"

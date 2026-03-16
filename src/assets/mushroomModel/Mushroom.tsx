@@ -43,10 +43,10 @@ function Mushroom(props: MushroomProps) {
     <group
       position={position}
       rotation={[rotation[0] + Math.PI / 2, rotation[1], rotation[2]]} // +45° по X
-      scale={scale}
+      scale={[0.9, 0.9, 0.8]}
     >
       {/* Ствол */}
-      <mesh position={[0, 4, -2]} scale={[0.8, 1.5, 0.8]} receiveShadow castShadow>
+      <mesh position={[0, 4, 5]} scale={[0.8, 1.5, 0.4]} /*receiveShadow castShadow*/>
         <cylinderGeometry args={[5, 6, 12, 9]} />
         <meshStandardMaterial color={'#f5e642'} />
       </mesh>
@@ -60,7 +60,7 @@ function Mushroom(props: MushroomProps) {
 
         {/* Белые точки: координаты локальные, никаких магических офсетов */}
         {dotPositions.map((pos, i) => (
-          <mesh key={i} position={pos} receiveShadow castShadow>
+          <mesh key={i} position={pos} /*receiveShadow castShadow*/>
             <sphereGeometry args={[0.35, 12, 12]} />
             <meshStandardMaterial color={'white'} />
           </mesh>

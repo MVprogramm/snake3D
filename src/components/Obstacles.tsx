@@ -16,6 +16,7 @@ import { getFoodCoord } from '../engine/food/food'
 import { getCurrentHeadState } from '../engine/snake/getCurrentHeadState'
 import { getPositionHead } from '../animations/snakeAnimation/headAnimations/snakeHeadProps'
 import { getSnakeHeadParams } from '../engine/snake/snake'
+import Rock from '../assets/rockModel/Rock'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
@@ -24,7 +25,8 @@ let nextStepX: boolean[] = []
 let nextStepY: boolean[] = []
 let currentSnakeX = 0
 let currentSnakeY = 0
-let loggedMatchingY = false
+
+// let loggedMatchingY = false
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
@@ -182,13 +184,13 @@ const Obstacles: React.FC = () => {
       const vec: THREE.Vector3 | undefined =
         obsType === 'x' ? threeCoordX[index] : threeCoordY[index]
 
-      if (counter === 0)
-        console.log(
-          'renderY: ',
-          Math.round(vec.y),
-          'engineY: ',
-          Math.round(getObstaclesYCoord()[0][1] - gridSize / 2) - 1,
-        )
+      // if (counter === 0)
+      //   console.log(
+      //     'renderY: ',
+      //     Math.round(vec.y),
+      //     'engineY: ',
+      //     Math.round(getObstaclesYCoord()[0][1] - gridSize / 2) - 1,
+      //   )
 
       if (!vec) return
       if (checkTimerWorking() /*&& counter !== 0*/) {
@@ -238,46 +240,35 @@ const Obstacles: React.FC = () => {
           /*  ? */ (currentHedgehogX === currentSnakeX ||
             nextHedgehogX === currentSnakeX) &&
           (currentHedgehogY === currentSnakeY || nextHedgehogY === currentSnakeY)
-        //  : currentHedgehogY === currentSnakeY && currentHedgehogX === currentSnakeX
-        const isFoodXStopDistance =
-          currentHedgehogY === foodCoordY
-            ? currentHedgehogX !== foodCoordX || nextHedgehogY !== foodCoordX
-            : true
-        const isFoodYStopDistance =
-          currentHedgehogX === foodCoordX
-            ? currentHedgehogY !== foodCoordY || nextHedgehogY !== foodCoordY
-            : true
+
         // Проверка столкновения с другими ежиками
         let isAnotherHedgehogCollision = false
-        Object.entries(obstaclesRefs.current).forEach(([otherKey, otherRef]) => {
+        let isFixCollision = false
+        Object.entries(obstaclesRefs.current).forEach(([otherKey /*, otherRef */]) => {
           if (otherKey === key) return // пропускаем самого себя
 
           const [otherType, otherIndexStr] = otherKey.split('_')
-          const [type, indexStr] = key.split('_')
+          //const [indexStr] = key.split('_')
 
           const otherIndex = parseInt(otherIndexStr, 10)
-          const index = parseInt(indexStr, 10)
-          if (otherType === 'fix') return
+          /// const index = parseInt(indexStr, 10)
+          if (otherType === 'fix') {
+            // Проверка столкновения с неподвижными препятствиями (fix)
+            const fixCoords = fixCoord[otherIndex]
+            if (!fixCoords) return
+            const fixX = Math.round(fixCoords[0] - gridSize / 2) - 1
+            const fixY = Math.round(fixCoords[1] - gridSize / 2) - 1
 
-          if (type === 'x') {
-            // Формируем массив объектов { y, index } для всех элементов threeCoordX,
-            // у которых координата y совпадает с текущей (по округлению).
-            const currentY = threeCoordX[index]?.y
-            const matchingY = threeCoordX
-              .map((v, i) => ({ y: v?.y, index: i }))
-              .filter(
-                (item) =>
-                  item.y !== undefined && Math.round(item.y) === Math.round(currentY),
-              )
-            // matchingY теперь содержит объекты вида { y, index } для совпадающих по y элементов
-            if (/*!loggedMatchingY &&*/ matchingY.length > 1) {
-              // console.log(currentHedgehogX, currentY)
-              loggedMatchingY = true
+            // Проверяем, будет ли столкновение на следующей позиции
+            if (
+              (currentHedgehogX === fixX || nextHedgehogX === fixX) &&
+              (currentHedgehogY === fixY || nextHedgehogY === fixY)
+            ) {
+              isFixCollision = true
             }
-          }
-          // if (type === 'y' && threeCoordY[otherIndex].x === threeCoordY[index].x)
-          //   console.log(type, otherType, index, otherIndex)
 
+            return
+          }
           const otherVec =
             otherType === 'x' ? threeCoordX[otherIndex] : threeCoordY[otherIndex]
           if (!otherVec) return
@@ -301,6 +292,18 @@ const Obstacles: React.FC = () => {
         // isFoodXStopDistance &&
         // !isAnotherHedgehogCollision
         const isStopDistanceY = nextY >= -fieldBoundary && nextY <= fieldBoundary
+        const isFoodXStopDistance =
+          currentHedgehogY === foodCoordY && nextX > foodCoordX
+            ? nextX > foodCoordX + 1
+            : currentHedgehogY === foodCoordY && nextX < foodCoordX
+              ? nextX < foodCoordX - 1
+              : true
+        const isFoodYStopDistance =
+          currentHedgehogX === foodCoordX && nextY > foodCoordY
+            ? nextY > foodCoordY + 1
+            : currentHedgehogX === foodCoordX && nextY < foodCoordY
+              ? nextY < foodCoordY - 1
+              : true
         // &&
         // isFoodYStopDistance &&
         // !isAnotherHedgehogCollision
@@ -314,12 +317,14 @@ const Obstacles: React.FC = () => {
           isStopDistanceX &&
           /* counter !== 0 ||*/ !isSnakeHeadStopDistance &&
           isFoodXStopDistance &&
-          !isAnotherHedgehogCollision
+          !isAnotherHedgehogCollision &&
+          !isFixCollision
         nextStepY =
           isStopDistanceY &&
           /* counter !== 0 ||*/ !isSnakeHeadStopDistance &&
           isFoodYStopDistance &&
-          !isAnotherHedgehogCollision
+          !isAnotherHedgehogCollision &&
+          !isFixCollision
         // } else {
         //   // при залипании на краю поля продолжаем движение внутрь
         //   nextStepX = isStopDistanceX
@@ -369,11 +374,19 @@ const Obstacles: React.FC = () => {
           const fixTypes = allObstacleTypes.filter((o) => o.substring(0, 3) === 'fix')
           const obstacleType = fixTypes[index] ?? 'fix'
           const isMushroom = obstacleType === 'fix-M' || obstacleType === 'fix'
+          const isRock = obstacleType === 'fix-R'
 
           if (isMushroom) {
             return (
               <group key={key} position={[fx, fy, 0]} scale={[0.06, 0.06, 0.06]}>
                 <Mushroom />
+              </group>
+            )
+          }
+          if (isRock) {
+            return (
+              <group key={key} position={[fx, fy, -0.3]} scale={[1.3, 1.3, 1.3]}>
+                <Rock seed={index + 1000} />
               </group>
             )
           }
