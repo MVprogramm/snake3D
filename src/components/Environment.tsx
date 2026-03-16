@@ -8,7 +8,7 @@ export function Environment() {
     <group>
       <Sky sunPosition={position} />
       <AmbientLight />
-      <DirectionalLight intensity={intensity} position={position} />
+      <DirectionalLight intensity={intensity} />
     </group>
   )
 }
