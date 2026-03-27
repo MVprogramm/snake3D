@@ -7,6 +7,7 @@ import { SystemConfig } from '../../../config/systemConfig'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import { getFoodEaten } from '../../../engine/events/snakeCatchesFoodEvent'
 import { MathUtils } from 'three'
+import { getField } from '../../../engine/field/fieldPerLevel'
 // import * as TURN from './snakeBodyTurnaround'
 // import { getSnakeBodyCoord } from '../../../engine/snake/snake'
 
@@ -86,6 +87,12 @@ export const snakeBodyMoving = (steps: SnakeSteps[], delta: number) => {
       positions[1] = Math.round(positions[1])
       // if (index === 0) positions[2] = Math.round(positions[2])
     }
+    const fieldBoundary = Math.round(getField() / 2) - 1
+    const minBound = -fieldBoundary
+    const maxBound = fieldBoundary
+    positions[0] = Math.max(minBound, Math.min(maxBound, positions[0]))
+    positions[1] = Math.max(minBound, Math.min(maxBound, positions[1]))
+
     if (index !== 0) positions[2] = 0
     if (getFoodEaten()) eatingTime = 0
     return positions

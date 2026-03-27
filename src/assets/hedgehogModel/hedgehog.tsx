@@ -1,31 +1,40 @@
 import { Vector2 } from 'three'
 import { hedgehogProps } from '../../types/obstacleTypes'
+import mulberry32 from '../../commands/mulberry32'
 
 function Hedgehog(props: hedgehogProps) {
-  const { direction, index, line } = props
-  // console.log(line, direction)
+  const { direction, index, line, seed = index } = props
+
+  const rnd = mulberry32(seed)
+  const sizeScale = 0.7 + rnd() * 0.6 // размер от 0.7 до 1.3
 
   const frontPoints = []
   for (let i = 0; i < 10; i++) {
-    frontPoints.push(new Vector2((Math.sin(i * 0.2) * 8 + 8) / 25, (i + 6) / 15))
+    frontPoints.push(
+      new Vector2(
+        ((Math.sin(i * 0.2) * 8 + 8) / 25) * sizeScale,
+        ((i + 6) / 15) * sizeScale,
+      ),
+    )
   }
 
-  // const backPoints = []
-  // for (let i = 0; i < 10; i++) {
-  //   backPoints.push(new Vector2((Math.sin(i * 0.2) * 8 + 8) / 25, (i * 0.9 - 21) / 15))
-  // }
   const backPoints = []
 
   // Полукруглая заглушка (3 точки)
-  const r = (Math.sin(0 * 0.2) * 8 + 8) / 65
-  const y0 = (0 * 0.9 - 21) / 15
+  const r = ((Math.sin(0 * 0.2) * 8 + 8) / 65) * sizeScale
+  const y0 = ((0 * 0.9 - 21) / 15) * sizeScale
   backPoints.push(new Vector2(r, y0)) // край
   backPoints.push(new Vector2(r * 0.7, y0 - r * 0.3)) // середина дуги
   backPoints.push(new Vector2(0, y0 - r)) // центр (закрывает дырку)
 
   // Основные точки
   for (let i = 0; i < 10; i++) {
-    backPoints.push(new Vector2((Math.sin(i * 0.2) * 8 + 8) / 25, (i * 0.9 - 21) / 15))
+    backPoints.push(
+      new Vector2(
+        ((Math.sin(i * 0.2) * 8 + 8) / 25) * sizeScale,
+        ((i * 0.9 - 21) / 15) * sizeScale,
+      ),
+    )
   }
 
   return (
@@ -50,7 +59,7 @@ function Hedgehog(props: hedgehogProps) {
         receiveShadow
         castShadow
       >
-        <coneGeometry args={[0.4, 0.5, 3, 1, false, 4.7, 3.14]} />
+        <coneGeometry args={[0.4 * sizeScale, 0.5 * sizeScale, 3, 1, false, 4.7, 3.14]} />
         <meshStandardMaterial color='#A18E74' />
       </mesh>
       <mesh
@@ -88,7 +97,7 @@ function Hedgehog(props: hedgehogProps) {
         receiveShadow
         castShadow
       >
-        <sphereGeometry args={[0.1, 5]} />
+        <sphereGeometry args={[0.1 * sizeScale, 5]} />
         <meshStandardMaterial color={'#5B586A'} />
       </mesh>
       <mesh
@@ -100,7 +109,7 @@ function Hedgehog(props: hedgehogProps) {
         receiveShadow
         castShadow
       >
-        <sphereGeometry args={[0.1, 5]} />
+        <sphereGeometry args={[0.1 * sizeScale, 5]} />
         <meshStandardMaterial color={'#5B586A'} />
       </mesh>
       <mesh
@@ -112,7 +121,7 @@ function Hedgehog(props: hedgehogProps) {
         receiveShadow
         castShadow
       >
-        <sphereGeometry args={[0.1, 5]} />
+        <sphereGeometry args={[0.1 * sizeScale, 5]} />
         <meshStandardMaterial color={'#5B586A'} />
       </mesh>
     </group>

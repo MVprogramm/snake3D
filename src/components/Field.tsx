@@ -10,10 +10,10 @@ export const Field = () => {
   return (
     <group>
       <Grid />
-      <mesh position={position} receiveShadow>
+      {/* <mesh position={position} receiveShadow>
         <planeGeometry args={fieldDimensions} />
         <meshStandardMaterial color={backgroundColor} />
-      </mesh>
+      </mesh> */}
     </group>
   )
 }

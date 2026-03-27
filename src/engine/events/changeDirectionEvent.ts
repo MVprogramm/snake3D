@@ -11,6 +11,7 @@ import { getInterruptGame } from './interruptGameEvent'
 import { checkPause } from './pauseEvent'
 import { checkTimerWorking } from '../time/isTimer'
 import { checkContact } from './isContact'
+
 /**
  * @var Новое направление головы змейки
  */

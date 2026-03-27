@@ -1,3 +1,4 @@
+import { getNewKeyboardMove } from '../../engine/events/changeDirectionEvent'
 import checkTimerStep from '../../engine/time/checkTimerStep'
 import type { PreviousStep } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
@@ -6,6 +7,7 @@ import { snakeBodyMoving } from './bodyAnimations/snakeBodyMoving'
 import { snakeBodyTurnaround } from './bodyAnimations/snakeBodyTurnaround'
 import { snakeHeadLocation } from './headAnimations/snakeHeadLocation'
 import { snakeHeadMoving } from './headAnimations/snakeHeadMoving'
+import { snakeHeadTurnaround } from './headAnimations/snakeHeadTurnaround'
 import { snakeStepSetting } from './snakeStepSetting'
 /**
  * @var массив объектов с направлениями движения каждого
@@ -46,7 +48,7 @@ export const snakeAnimation = (delta: number): void => {
     steps.map(({ currentStepX, currentStepY }) => ({
       previousStepX: currentStepX,
       previousStepY: currentStepY,
-    }))
+    })),
   )
 }
 /**

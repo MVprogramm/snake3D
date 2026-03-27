@@ -37,6 +37,7 @@ export type hedgehogProps = {
   direction: number[]
   index: number
   line: string
+  seed?: number
 }
 
 interface assetsProps {

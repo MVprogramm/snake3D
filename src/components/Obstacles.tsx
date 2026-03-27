@@ -379,7 +379,7 @@ const Obstacles: React.FC = () => {
           if (isMushroom) {
             return (
               <group key={key} position={[fx, fy, 0]} scale={[0.06, 0.06, 0.06]}>
-                <Mushroom />
+                <Mushroom seed={index + 1000} />
               </group>
             )
           }
@@ -392,12 +392,12 @@ const Obstacles: React.FC = () => {
           }
 
           // Заглушка для других fix-типов (например fix-R — камень, пока не реализован)
-          return (
-            <mesh key={key} position={[fx, fy, 0]}>
-              <boxGeometry args={[0.8, 0.8, 0.8]} />
-              <meshStandardMaterial color={'#888'} />
-            </mesh>
-          )
+          // return (
+          //   <mesh key={key} position={[fx, fy, 0]}>
+          //     <boxGeometry args={[0.8, 0.8, 0.8]} />
+          //     <meshStandardMaterial color={'#888'} />
+          //   </mesh>
+          // )
         }
 
         // Ежи — движущиеся препятствия (x, y)

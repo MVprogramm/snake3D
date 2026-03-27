@@ -10,6 +10,7 @@ import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimation
 import { getSnakeBodyCoord } from '../engine/snake/snake'
 import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
 import Obstacles from './Obstacles'
+import { Landscape } from './Landscape'
 
 let counter = 0
 let currentFoodNumber = 0
@@ -33,7 +34,7 @@ export function Scene() {
     camera.position.set(
       x + getSnakeUnitPosition()[0][0],
       y + getSnakeUnitPosition()[0][1] - snakeLength,
-      z + snakeLength
+      z + snakeLength,
     )
     camera.updateProjectionMatrix()
     if (counter >= 1 && counter < 60) {
@@ -52,6 +53,7 @@ export function Scene() {
       <Snake />
       <Apple />
       <Field />
+      <Landscape />
       <Environment />
     </>
   )

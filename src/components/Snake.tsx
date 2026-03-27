@@ -10,6 +10,9 @@ import SnakeBodyUnit from '../assets/snakeModel/snakeBody/snakeBodyUnit'
 import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
 import * as U from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
+import { snakeHeadTurnaround } from '../animations/snakeAnimation/headAnimations/snakeHeadTurnaround'
+import { getNewKeyboardMove } from '../engine/events/changeDirectionEvent'
+import checkTimerStep from '../engine/time/checkTimerStep'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
@@ -44,27 +47,29 @@ const Snake = () => {
           snakeRefs['headRef'].current?.position.set(
             U.getSnakeUnitPosition()[0][0],
             U.getSnakeUnitPosition()[0][1],
-            U.getSnakeUnitPosition()[0][2]
+            U.getSnakeUnitPosition()[0][2],
           )
-
-          snakeRefs['headRef'].current?.rotation.set(0, 0, U.getSnakeUnitRotation()[0][2])
+          const rotationZ = checkTimerStep()
+            ? snakeHeadTurnaround(getNewKeyboardMove())
+            : U.getSnakeUnitRotation()[0]?.[2]
+          snakeRefs['headRef'].current?.rotation.set(0, 0, rotationZ)
         }
         const index = +key[key.length - 1]
         if (key === 'tailRef') {
           snakeRefs['tailRef'].current?.position.set(
             U.getSnakeUnitPosition()[snakeCurrentLength - 2][0],
             U.getSnakeUnitPosition()[snakeCurrentLength - 2][1],
-            U.getSnakeUnitPosition()[snakeCurrentLength - 2][2]
+            U.getSnakeUnitPosition()[snakeCurrentLength - 2][2],
           )
           snakeRefs['tailRef'].current?.rotation.set(
             0,
             0,
-            U.getSnakeUnitRotation()[snakeCurrentLength - 2][2]
+            U.getSnakeUnitRotation()[snakeCurrentLength - 2][2],
           )
           snakeRefs['tailRef'].current?.scale.set(
             0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
             0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
-            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length)
+            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
           )
         }
 
@@ -73,12 +78,12 @@ const Snake = () => {
             snakeRefs[`bodyUnitRef_${index}`].current?.position.set(
               U.getSnakeUnitPosition()[index][0],
               U.getSnakeUnitPosition()[index][1],
-              U.getSnakeUnitPosition()[index][2]
+              U.getSnakeUnitPosition()[index][2],
             )
             snakeRefs[`bodyUnitRef_${index}`].current?.rotation.set(
               0,
               0,
-              U.getSnakeUnitRotation()[index][2]
+              U.getSnakeUnitRotation()[index][2],
             )
             snakeRefs[`bodyUnitRef_${index}`].current?.scale.set(
               0.65 +
@@ -88,7 +93,8 @@ const Snake = () => {
                 (0.35 * (getSnakeBodyCoord().length - index)) /
                   getSnakeBodyCoord().length,
               0.65 +
-                (0.35 * (getSnakeBodyCoord().length - index)) / getSnakeBodyCoord().length
+                (0.35 * (getSnakeBodyCoord().length - index)) /
+                  getSnakeBodyCoord().length,
             )
           }
         }

@@ -21,22 +21,22 @@ export const snakeBodyTurnaround = () => {
         diffCurrentX === 1 && diffCurrentY === 0
           ? 'right'
           : diffCurrentX === 0 && diffCurrentY === -1
-          ? 'down'
-          : diffCurrentX === -1 && diffCurrentY === 0
-          ? 'left'
-          : diffCurrentX === 0 && diffCurrentY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffCurrentX === -1 && diffCurrentY === 0
+              ? 'left'
+              : diffCurrentX === 0 && diffCurrentY === 1
+                ? 'up'
+                : ''
       unit[2] =
         currentDirection === 'up'
           ? 0
           : currentDirection === 'down'
-          ? 3.14
-          : currentDirection === 'right'
-          ? -1.57
-          : currentDirection === 'left'
-          ? 1.57
-          : 0
+            ? 3.14
+            : currentDirection === 'right'
+              ? -1.57
+              : currentDirection === 'left'
+                ? 1.57
+                : 0
     }
     if (index > 0 && index < getSnakeBodyCoord().length - 2) {
       const diffPreviousX = DIFF.getPreviousDiff()[index - 1].diffX
@@ -47,22 +47,22 @@ export const snakeBodyTurnaround = () => {
         diffPreviousX === 1 && diffPreviousY === 0
           ? 'right'
           : diffPreviousX === 0 && diffPreviousY === -1
-          ? 'down'
-          : diffPreviousX === -1 && diffPreviousY === 0
-          ? 'left'
-          : diffPreviousX === 0 && diffPreviousY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffPreviousX === -1 && diffPreviousY === 0
+              ? 'left'
+              : diffPreviousX === 0 && diffPreviousY === 1
+                ? 'up'
+                : ''
       let currentDirection =
         diffCurrentX === 1 && diffCurrentY === 0
           ? 'right'
           : diffCurrentX === 0 && diffCurrentY === -1
-          ? 'down'
-          : diffCurrentX === -1 && diffCurrentY === 0
-          ? 'left'
-          : diffCurrentX === 0 && diffCurrentY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffCurrentX === -1 && diffCurrentY === 0
+              ? 'left'
+              : diffCurrentX === 0 && diffCurrentY === 1
+                ? 'up'
+                : ''
       if (
         (previousDirection === 'right' && currentDirection === 'up') ||
         (previousDirection === 'left' && currentDirection === 'down') ||
@@ -116,22 +116,22 @@ export const snakeBodyTurnaround = () => {
         diffPreviousX === 1 && diffPreviousY === 0
           ? 'right'
           : diffPreviousX === 0 && diffPreviousY === -1
-          ? 'down'
-          : diffPreviousX === -1 && diffPreviousY === 0
-          ? 'left'
-          : diffPreviousX === 0 && diffPreviousY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffPreviousX === -1 && diffPreviousY === 0
+              ? 'left'
+              : diffPreviousX === 0 && diffPreviousY === 1
+                ? 'up'
+                : ''
       let currentDirection =
         diffCurrentX === 1 && diffCurrentY === 0
           ? 'right'
           : diffCurrentX === 0 && diffCurrentY === -1
-          ? 'down'
-          : diffCurrentX === -1 && diffCurrentY === 0
-          ? 'left'
-          : diffCurrentX === 0 && diffCurrentY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffCurrentX === -1 && diffCurrentY === 0
+              ? 'left'
+              : diffCurrentX === 0 && diffCurrentY === 1
+                ? 'up'
+                : ''
       if (
         (previousDirection === 'right' && currentDirection === 'up') ||
         (previousDirection === 'left' && currentDirection === 'down') ||
@@ -160,22 +160,22 @@ export const snakeBodyTurnaround = () => {
         diffPreviousX === 1 && diffPreviousY === 0
           ? 'right'
           : diffPreviousX === 0 && diffPreviousY === -1
-          ? 'down'
-          : diffPreviousX === -1 && diffPreviousY === 0
-          ? 'left'
-          : diffPreviousX === 0 && diffPreviousY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffPreviousX === -1 && diffPreviousY === 0
+              ? 'left'
+              : diffPreviousX === 0 && diffPreviousY === 1
+                ? 'up'
+                : ''
       let currentDirection =
         diffCurrentX === 1 && diffCurrentY === 0
           ? 'right'
           : diffCurrentX === 0 && diffCurrentY === -1
-          ? 'down'
-          : diffCurrentX === -1 && diffCurrentY === 0
-          ? 'left'
-          : diffCurrentX === 0 && diffCurrentY === 1
-          ? 'up'
-          : ''
+            ? 'down'
+            : diffCurrentX === -1 && diffCurrentY === 0
+              ? 'left'
+              : diffCurrentX === 0 && diffCurrentY === 1
+                ? 'up'
+                : ''
       if (
         (previousDirection === 'right' && currentDirection === 'up') ||
         (previousDirection === 'left' && currentDirection === 'down') ||
