@@ -8,6 +8,7 @@ import { getSnakeHeadParams } from '../snake/snake'
 import { SnakeHeadCoord } from '../../types/snakeTypes'
 import { checkContact } from './isContact'
 import checkTimerStep from '../time/checkTimerStep'
+import { setNewMoveDirection } from './changeDirectionEvent'
 
 let previousHeadParams: SnakeHeadCoord = {
   snakeHeadCoordX: 0,
@@ -52,20 +53,24 @@ export const swipeDirectionEvent = (): Event => {
         newEvent.name = 'Y'
         newEvent.value = -1
         newSwipeMove = 'down'
+        setNewMoveDirection('down')
       } else if (yDiff < 0 && moveDirection.name !== 'Y') {
         newEvent.name = 'Y'
         newEvent.value = 1
         newSwipeMove = 'up'
+        setNewMoveDirection('up')
       }
     } else {
       if (xDiff > 0 && moveDirection.name !== 'X') {
         newEvent.name = 'X'
         newEvent.value = 1
         newSwipeMove = 'right'
+        setNewMoveDirection('right')
       } else if (xDiff < 0 && moveDirection.name !== 'X') {
         newEvent.name = 'X'
         newEvent.value = -1
         newSwipeMove = 'left'
+        setNewMoveDirection('left')
       }
     }
     if (!TIMER.checkTimerWorking() && !checkPause()) {

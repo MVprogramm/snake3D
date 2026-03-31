@@ -1,7 +1,7 @@
 import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import { getFoodCoord } from '../food/food'
 import { getSnakeHeadParams } from '../snake/snake'
-import { getNewKeyboardMove } from './changeDirectionEvent'
+import { getNewMoveDirection } from './changeDirectionEvent'
 import { getNewSwipeMove } from './swipeDirectionEvent'
 import { getFoodEaten } from './snakeCatchesFoodEvent'
 import { checkMistake } from '../lives/isMistake'
@@ -22,11 +22,11 @@ export function snakeMovesTowardsFood(): void {
     const [foodX, foodY] = getFoodCoord()
 
     const dir =
-      getNewKeyboardMove() === ''
+      getNewMoveDirection() === ''
         ? getNewSwipeMove() === ''
           ? ''
           : getNewSwipeMove()
-        : getNewKeyboardMove()
+        : getNewMoveDirection()
 
     const lineX = snakeHeadCoordX === foodX
     const lineY = snakeHeadCoordY === foodY
@@ -43,8 +43,8 @@ export function snakeMovesTowardsFood(): void {
     distanceFromSnakeToFood = getFoodEaten()
       ? 0
       : distanceFromSnakeToFood === 0
-      ? 2
-      : distanceFromSnakeToFood
+        ? 2
+        : distanceFromSnakeToFood
     // }
     // console.log(checkMistake(), distanceFromSnakeToFood)
 

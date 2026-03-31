@@ -15,7 +15,12 @@ import { checkContact } from './isContact'
 /**
  * @var Новое направление головы змейки
  */
-let newKeyboardMove = ''
+let newMoveDirection = ''
+export const setNewMoveDirection = (move: string) => {
+  newMoveDirection = move
+}
+export const getNewMoveDirection = (): string => newMoveDirection
+
 /**
  * Изменяет направление движения змейки при нажатии клавиш со стрелками
  * @param e событие нажатия клавиши на клавиатуре
@@ -39,7 +44,7 @@ export const changeDirectionEvent = (e: KeyboardEvent): Event => {
   if (e.code === 'ArrowUp' && moveDirection.name !== 'Y') {
     newName = 'Y'
     newValue = 1
-    newKeyboardMove = 'up'
+    setNewMoveDirection('up')
   } else if (
     e.code === 'ArrowDown' &&
     moveDirection.name !== 'Y' &&
@@ -47,15 +52,15 @@ export const changeDirectionEvent = (e: KeyboardEvent): Event => {
   ) {
     newName = 'Y'
     newValue = -1
-    newKeyboardMove = 'down'
+    setNewMoveDirection('down')
   } else if (e.code === 'ArrowLeft' && moveDirection.name !== 'X') {
     newName = 'X'
     newValue = -1
-    newKeyboardMove = 'left'
+    setNewMoveDirection('left')
   } else if (e.code === 'ArrowRight' && moveDirection.name !== 'X') {
     newName = 'X'
     newValue = 1
-    newKeyboardMove = 'right'
+    newMoveDirection = 'right'
   }
 
   // if (newName === prohibitedMove.direction && newValue === prohibitedMove.step)
@@ -65,5 +70,3 @@ export const changeDirectionEvent = (e: KeyboardEvent): Event => {
 
   return newEvent
 }
-
-export const getNewKeyboardMove = () => newKeyboardMove

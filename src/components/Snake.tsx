@@ -11,7 +11,7 @@ import { getAmountOfFood } from '../engine/food/amountOfFoodPerLevel'
 import * as U from '../animations/snakeAnimation/bodyAnimations/snakeBodyProps'
 import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
 import { snakeHeadTurnaround } from '../animations/snakeAnimation/headAnimations/snakeHeadTurnaround'
-import { getNewKeyboardMove } from '../engine/events/changeDirectionEvent'
+import { getNewMoveDirection } from '../engine/events/changeDirectionEvent'
 import checkTimerStep from '../engine/time/checkTimerStep'
 
 /**
@@ -49,10 +49,19 @@ const Snake = () => {
             U.getSnakeUnitPosition()[0][1],
             U.getSnakeUnitPosition()[0][2],
           )
-          const rotationZ = checkTimerStep()
-            ? snakeHeadTurnaround(getNewKeyboardMove())
+          // console.log(findLastMoveDirection())
+          let isStop = checkTimerStep() ? true : false
+          let rotationZ = checkTimerStep()
+            ? snakeHeadTurnaround(getNewMoveDirection())
             : U.getSnakeUnitRotation()[0]?.[2]
+
           snakeRefs['headRef'].current?.rotation.set(0, 0, rotationZ)
+
+          if (isStop && rotationZ !== U.getSnakeUnitRotation()[0]?.[2]) {
+            rotationZ = U.getSnakeUnitRotation()[0]?.[2]
+            isStop = false
+          }
+          // console.log(rotationZ, U.getSnakeUnitRotation()[0]?.[2])
         }
         const index = +key[key.length - 1]
         if (key === 'tailRef') {
