@@ -10,7 +10,7 @@ import { getSnakeUnitPosition } from '../animations/snakeAnimation/bodyAnimation
 import { getSnakeBodyCoord } from '../engine/snake/snake'
 import { getCurrentFoodNumber } from '../engine/food/currentFoodNumber'
 import Obstacles from './Obstacles'
-import { Landscape } from './Landscape'
+import Landscape from './Landscape'
 
 let counter = 0
 let currentFoodNumber = 0

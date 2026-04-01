@@ -4,7 +4,7 @@
     "time": "500000",
     "timerStep": "1",
     "food": "10",
-    "lives": "3",
+    "lives": "30",
     "obstacles": [
       "x",
       "y",

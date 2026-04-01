@@ -11,7 +11,8 @@ import { checkMistake } from '../lives/isMistake'
 import { getTimer } from '../time/timer'
 import protocolExecutor from '../protocol/protocolExecutor'
 import { howMuchIsLeftToEat } from '../food/currentFoodNumber'
-// import findLastMoveDirection from "../protocol/findLastMoveDirection";
+import findLastMoveDirection from '../protocol/findLastMoveDirection'
+import { getProtocol } from '../protocol/protocol'
 // import { checkExecution } from "../protocol/protocolExecutor";
 /**
  * Следит за нажатием клавиш со стрелками и Space
@@ -28,7 +29,13 @@ function keyboardEvents(e: KeyboardEvent) {
     return
   if ((TIMER.checkTimerWorking() || !checkMistake() || getTimer() === 0) && !checkPause())
     newDirection.name !== '' ? protocolExecutor(newDirection) : protocolExecutor(newSpeed)
-
+  if (getProtocol()[getProtocol().length - 2]?.name === 'life lost') {
+    console.log(
+      'life lost',
+      getProtocol()[getProtocol().length - 3],
+      findLastMoveDirection(),
+    )
+  }
   RENDER.renderNotComplete()
 }
 
