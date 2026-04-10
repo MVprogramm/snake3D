@@ -13,6 +13,19 @@ import protocolExecutor from '../protocol/protocolExecutor'
 import { howMuchIsLeftToEat } from '../food/currentFoodNumber'
 import findLastMoveDirection from '../protocol/findLastMoveDirection'
 import { getProtocol } from '../protocol/protocol'
+import { getSnakeHeadParams } from '../snake/snake'
+import { getIsDistraintContact } from './allContactEvents'
+import noMoves from './noMovesEvent'
+
+const isArrowKey = (code: string): boolean => {
+  return (
+    code === 'ArrowUp' ||
+    code === 'ArrowDown' ||
+    code === 'ArrowLeft' ||
+    code === 'ArrowRight'
+  )
+}
+
 // import { checkExecution } from "../protocol/protocolExecutor";
 /**
  * Следит за нажатием клавиш со стрелками и Space
@@ -20,22 +33,38 @@ import { getProtocol } from '../protocol/protocol'
  * @returns прерывает выполнение функции, если нажата неиспользуемая клавиша
  */
 function keyboardEvents(e: KeyboardEvent) {
+  // if (getProtocol()[getProtocol().length - 1]?.name === 'life lost') {
+  //   console.log(
+  //     'life lost',
+  //     getProtocol()[getProtocol().length - 3]?.name,
+  //     getProtocol()[getProtocol().length - 3]?.value,
+  //     findLastMoveDirection(),
+  //     getIsDistraintContact(),
+  //   )
+  // }
+  if (
+    isArrowKey(e.code) &&
+    checkMistake() &&
+    !TIMER.checkTimerWorking() &&
+    noMoves(getSnakeHeadParams()) &&
+    getProtocol()[getProtocol().length - 1]?.name !== 'game over'
+  ) {
+    protocolExecutor({ name: 'game over', value: 'no moves' })
+    RENDER.renderNotComplete()
+    return
+  }
+
   const newDirection = changeDirectionEvent(e)
   const newSpeed = speedEvent(e)
   const pause = keyboardPauseEvent(e)
+
   // findLastMoveDirection().name !== "" ? keyboardPauseEvent(e) : false;
   if (!pause && newDirection.name !== '') TIMER.startTimer()
   if ((newDirection.name === '' && newSpeed.name === '') || howMuchIsLeftToEat() === 0)
     return
   if ((TIMER.checkTimerWorking() || !checkMistake() || getTimer() === 0) && !checkPause())
     newDirection.name !== '' ? protocolExecutor(newDirection) : protocolExecutor(newSpeed)
-  if (getProtocol()[getProtocol().length - 2]?.name === 'life lost') {
-    console.log(
-      'life lost',
-      getProtocol()[getProtocol().length - 3],
-      findLastMoveDirection(),
-    )
-  }
+
   RENDER.renderNotComplete()
 }
 

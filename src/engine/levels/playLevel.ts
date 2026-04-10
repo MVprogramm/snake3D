@@ -8,7 +8,6 @@ import { SystemConfig } from '../../config/systemConfig'
 import bonusSelect from '../bonuses/bonusSelect'
 import snakeCatchesBonusEvent from '../events/snakeCatchesBonusEvent'
 import { snakeCatchesFoodEvent } from '../events/snakeCatchesFoodEvent'
-import { snakeFoodEaten } from '../events/snakeFoodEaten'
 import setObstacleParams from '../obstacles/setObstacleParams'
 import moveSnake from '../snake/moveSnake'
 /**
@@ -26,11 +25,12 @@ function playLevel() {
   // if (counterHeadX === 0 && counterHeadY === 0) {
   bonusSelect()
   // setObstacleParams(SystemConfig.FPS)
-  snakeCatchesFoodEvent()
-  snakeFoodEaten()
-  snakeCatchesBonusEvent()
   //}
   moveSnake()
+  // Проверяем контакт с едой после фактического шага змейки,
+  // чтобы не было кадра, где яблоко еще видно внутри головы.
+  snakeCatchesFoodEvent()
+  snakeCatchesBonusEvent()
 }
 
 export default playLevel

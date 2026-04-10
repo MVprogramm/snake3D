@@ -2,7 +2,7 @@
  * @module advanceSnake.ts Вычисляет координаты головы в координатах сетки поля
  *    @function advanceSnake Пересчитывает координаты для следующего положения змейки
  */
-import allContactEvents from '../events/allContactEvents'
+import allContactEvents, { setIsDistraintContact } from '../events/allContactEvents'
 import { breakContact } from '../events/isContact'
 import { checkMistake } from '../lives/isMistake'
 import { checkTimerWorking, startTimer } from '../time/isTimer'
@@ -32,6 +32,7 @@ export function advanceSnake(): void {
       nextSnakeHeadCoord.snakeHeadCoordX !== potentialHead.snakeHeadCoordX ||
       nextSnakeHeadCoord.snakeHeadCoordY !== potentialHead.snakeHeadCoordY
     ) {
+      setIsDistraintContact(true)
       currentHead = stopSnakeHead(nextSnakeHeadCoord)
       shiftSnakeBody(newBodyCoord, snakeHeadCoordX, snakeHeadCoordY)
     }
@@ -39,6 +40,8 @@ export function advanceSnake(): void {
     breakContact()
     if (checkTimerWorking() && !checkMistake()) {
       shiftSnakeBody(newBodyCoord, snakeHeadCoordX, snakeHeadCoordY)
-    } else startTimer()
+    } else if (!checkMistake()) {
+      startTimer()
+    }
   }
 }

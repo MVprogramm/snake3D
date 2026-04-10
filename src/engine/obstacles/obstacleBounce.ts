@@ -15,13 +15,17 @@ function obstacleBounce(props: newObstacleStep): number {
   const { i, twist, coord, step, cell } = props
   if (cell) {
     const [posX, posY] = cell
+    const current = coord[i][twist[0]]
+    const next = current + step[i]
+    const cellPrimary = [posX, posY][twist[0]]
+    const sameLane = coord[i][twist[1]] === [posX, posY][twist[1]]
+    const movesPositive = step[i] > 0
+    const movesNegative = step[i] < 0
+    const reachedOrCrossed =
+      (movesPositive && current < cellPrimary && next >= cellPrimary) ||
+      (movesNegative && current > cellPrimary && next <= cellPrimary)
 
-    if (
-      coord[i][twist[0]] + step[i] === [posX, posY][twist[0]] &&
-      /* ||         coord[i][twist[0]] === [posX, posY][twist[0]] */
-      coord[i][twist[1]] === [posX, posY][twist[1]]
-    )
-      step[i] = step[i] * -1
+    if (sameLane && reachedOrCrossed) step[i] = step[i] * -1
   }
   return step[i]
 }

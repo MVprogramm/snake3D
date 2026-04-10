@@ -5,6 +5,7 @@
  */
 import { Event } from '../../types/eventTypes'
 import findLastMoveDirection from '../protocol/findLastMoveDirection'
+
 import checkTimerStep from '../time/checkTimerStep'
 import { checkTimerWorking } from '../time/isTimer'
 /**
@@ -23,6 +24,8 @@ let currentDirection: string | number
  * @returns событие изменения скорости змейки
  */
 function speedEvent(e: KeyboardEvent): Event {
+  // console.log(getIsDistraintContact())
+
   let newEvent: Event = Object.assign({}, { name: '', value: '' })
   if (!checkTimerWorking()) return newEvent
   const moveDirection = findLastMoveDirection()

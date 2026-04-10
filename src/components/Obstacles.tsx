@@ -1,9 +1,6 @@
-//
 import { getObstacles } from '../engine/obstacles/obstaclesPerLevel'
 import React, { useRef, useState } from 'react'
 import * as THREE from 'three'
-import { getObstaclesStepX, getObstaclesXCoord } from '../engine/obstacles/obstaclesX'
-import { getObstaclesStepY, getObstaclesYCoord } from '../engine/obstacles/obstaclesY'
 import { getAllObstacles } from '../engine/obstacles/getAllObstacles'
 import { useFrame } from '@react-three/fiber'
 import Hedgehog from '../assets/hedgehogModel/hedgehog'
@@ -12,72 +9,29 @@ import { getField } from '../engine/field/fieldPerLevel'
 import { SystemConfig } from '../config/systemConfig'
 import { checkTimerWorking } from '../engine/time/isTimer'
 import moveObstacles from '../engine/obstacles/moveObstacles'
-import { getFoodCoord } from '../engine/food/food'
-import { getCurrentHeadState } from '../engine/snake/getCurrentHeadState'
-import { getPositionHead } from '../animations/snakeAnimation/headAnimations/snakeHeadProps'
-import { getSnakeHeadParams } from '../engine/snake/snake'
 import Rock from '../assets/rockModel/Rock'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
 let counter = -1
-let nextStepX: boolean[] = []
-let nextStepY: boolean[] = []
-let currentSnakeX = 0
-let currentSnakeY = 0
-
-// let loggedMatchingY = false
+let prevVisualX: number[] = []
+let prevVisualY: number[] = []
+let nextEngineX: number[] = []
+let nextEngineY: number[] = []
 
 const Obstacles: React.FC = () => {
   const gridSize = getField()
-  const foodCoordX = Math.round(getFoodCoord()[0] - gridSize / 2) - 1
-  const foodCoordY = Math.round(getFoodCoord()[1] - gridSize / 2) - 1
-  const fieldBoundary = Math.round(gridSize / 2) - 1
-  const snakeHead = getSnakeHeadParams()
-  const currentSnakeStepX = snakeHead.snakeHeadStepX
-  const currentSnakeStepY = snakeHead.snakeHeadStepY
-
-  if (counter === 0) {
-    const [positionX, positionY] = getPositionHead()
-    //currentSnakeX = currentSnakeStepX < 0 ? Math.ceil(positionX) : Math.floor(positionX)
-    currentSnakeX = Math.round(snakeHead.snakeHeadCoordX - gridSize / 2) - 1
-    currentSnakeY = Math.round(snakeHead.snakeHeadCoordY - gridSize / 2) - 1
-    // currentSnakeY = currentSnakeStepY < 0 ? Math.ceil(positionY) : Math.floor(positionY)
-    const nextSnakeX =
-      snakeHead.snakeHeadStepX !== 0
-        ? currentSnakeX + snakeHead.snakeHeadStepX
-        : currentSnakeX
-    // if (counter === 0)
-    //   console.log(
-    //     'eng: ',
-    //     Math.round(snakeHead.snakeHeadCoordX - gridSize / 2) - 1,
-    //     'rnd: ',
-    //     currentSnakeX,
-    //     'step: ',
-    //     currentSnakeStepX
-    //   )
-
-    const nextSnakeY =
-      snakeHead.snakeHeadStepY !== 0
-        ? currentSnakeY + snakeHead.snakeHeadStepY
-        : currentSnakeY
-  }
-  let { xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
+  const { xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
 
   // локальные состояния шагов для передачи в Hedgehog — будут обновляться в useFrame
   const [xStepState, setXStepState] = useState<number[]>(xStep)
   const [yStepState, setYStepState] = useState<number[]>(yStep)
 
-  // контейнер рефов, обеспечивающий стабильность ссылок между рендерами
   const obstaclesRefs = useRef<Record<string, React.RefObject<THREE.Group>>>({})
-  // сохранение последних ненулевых шагов для восстановления после остановки
-  const prevXStepRef = useRef<number[]>([])
-  const prevYStepRef = useRef<number[]>([])
+  const lastXStep = useRef<number[]>([...xStep])
+  const lastYStep = useRef<number[]>([...yStep])
   // Создаём стабильные рефы по индексам координат для каждого типа препятствий.
-  // Ранее рефы формировались по массиву `type`, что могло не совпадать с порядком
-  // и количеством координат в xCoord/yCoord, приводя к отсутствию некоторых объектов.
-  // Здесь мы явно создаём ключи `x_0..x_n`, `y_0..y_n`, `fix_0..fix_n` на основе
-  // размеров массивов координат, чтобы индексы совпадали с индексами данных.
+  // Ключи x_0..x_n, y_0..y_n, fix_0..fix_n совпадают с индексами данных.
   const xCount = xCoord.length
   for (let i = 0; i < xCount; i++) {
     const key = `x_${i}`
@@ -92,13 +46,6 @@ const Obstacles: React.FC = () => {
       obstaclesRefs.current[key] = React.createRef<THREE.Group>()
   }
 
-  if (!nextStepX.length) {
-    nextStepX = new Array(xCount).fill(true)
-  }
-  if (!nextStepY.length) {
-    nextStepY = new Array(yCount).fill(true)
-  }
-
   const fixCount = fixCoord.length
   for (let i = 0; i < fixCount; i++) {
     const key = `fix_${i}`
@@ -106,45 +53,43 @@ const Obstacles: React.FC = () => {
       obstaclesRefs.current[key] = React.createRef<THREE.Group>()
   }
 
-  Object.entries(obstaclesRefs.current || {})
-    .map(([key]) => {
-      const [obsType, indexStr] = key.split('_')
-      const index = parseInt(indexStr, 10)
-      if (obsType === 'fix') return null
-      const directionArray = obsType === 'x' ? xStep : yStep
-      const ref = obstaclesRefs.current[key]
-      return {
-        key,
-        ref,
-        // Передаём весь массив шагов для линии; внутри Hedgehog используется direction[index]
-        element: <Hedgehog direction={directionArray} index={index} line={obsType} />,
-      }
-    })
-    .filter(Boolean) as {
-    key: string
-    ref: React.RefObject<THREE.Group>
-    element: React.ReactElement
-  }[]
-
   useFrame(() => {
-    if (checkTimerWorking()) {
-      if (counter === 0) {
-        ;['x', 'y'].forEach((type) => moveObstacles(type))
-      }
+    // 1. Тик: запускаем движок на границе периода (до инициализации, чтобы в первом кадре не срабатывало)
+    if (counter === 0 && checkTimerWorking()) {
+      // Сохраняем текущие экранные позиции как начало интерполяции
+      threeCoordX.forEach((v, i) => {
+        prevVisualX[i] = v.x
+      })
+      threeCoordY.forEach((v, i) => {
+        prevVisualY[i] = v.y
+      })
+      // Шаг движка
+      moveObstacles('x')
+      moveObstacles('y')
+      // Читаем новые целевые позиции движка
+      const updated = getAllObstacles()
+      nextEngineX = updated.xCoord.map((c) => Math.round(c[0] - gridSize / 2) - 1)
+      nextEngineY = updated.yCoord.map((c) => Math.round(c[1] - gridSize / 2) - 1)
+      // Обновляем направление ежей, сохраняя последнее ненулевое
+      const newXSteps = updated.xStep.map((s, i) => {
+        if (s !== 0) {
+          lastXStep.current[i] = s
+          return s
+        }
+        return lastXStep.current[i] ?? s
+      })
+      const newYSteps = updated.yStep.map((s, i) => {
+        if (s !== 0) {
+          lastYStep.current[i] = s
+          return s
+        }
+        return lastYStep.current[i] ?? s
+      })
+      setXStepState(newXSteps)
+      setYStepState(newYSteps)
     }
 
-    const movedXObstacles = xStep.map((s, i) => {
-      if (s === 0) return xStepState[i]
-      return s
-    })
-    const movedYObstacles = yStep.map((s, i) => {
-      if (s === 0) return yStepState[i]
-      return s
-    })
-
-    setXStepState([...movedXObstacles])
-    setYStepState([...movedYObstacles])
-
+    // 2. Инициализация на первом кадре
     if (counter === -1) {
       threeCoordX = xCoord.map(
         (coord) =>
@@ -162,194 +107,38 @@ const Obstacles: React.FC = () => {
             0,
           ),
       )
-
+      prevVisualX = threeCoordX.map((v) => v.x)
+      prevVisualY = threeCoordY.map((v) => v.y)
+      nextEngineX = [...prevVisualX]
+      nextEngineY = [...prevVisualY]
       counter = 0
     }
 
+    // 3. Продвигаем счётчик
     counter += 1 / SystemConfig.FPS
+    const tickProgress = counter // захватываем до сброса
+    if (checkTimerWorking() && counter >= 1) counter = 0
 
-    if (checkTimerWorking()) {
-      if (counter >= 1) {
-        counter = 0
-      }
+    // 4. Плавная интерполяция prevVisual → nextEngine
+    if (threeCoordX.length > 0) {
+      const t = Math.min(tickProgress, 1)
+      threeCoordX.forEach((vec, i) => {
+        if (prevVisualX[i] !== undefined && nextEngineX[i] !== undefined)
+          vec.x = prevVisualX[i] + (nextEngineX[i] - prevVisualX[i]) * t
+      })
+      threeCoordY.forEach((vec, i) => {
+        if (prevVisualY[i] !== undefined && nextEngineY[i] !== undefined)
+          vec.y = prevVisualY[i] + (nextEngineY[i] - prevVisualY[i]) * t
+      })
     }
 
-    // обновляем позиции рефов — делаем это в useFrame, а не во время рендера
+    // 5. Передаём позиции в рефы
     Object.entries(obstaclesRefs.current).forEach(([key, ref]) => {
       const [obsType, indexStr] = key.split('_')
       const index = parseInt(indexStr, 10)
       if (obsType === 'fix') return
-      let nextStepX = true
-      let nextStepY = true
-      const vec: THREE.Vector3 | undefined =
-        obsType === 'x' ? threeCoordX[index] : threeCoordY[index]
-
-      // if (counter === 0)
-      //   console.log(
-      //     'renderY: ',
-      //     Math.round(vec.y),
-      //     'engineY: ',
-      //     Math.round(getObstaclesYCoord()[0][1] - gridSize / 2) - 1,
-      //   )
-
+      const vec = obsType === 'x' ? threeCoordX[index] : threeCoordY[index]
       if (!vec) return
-      if (checkTimerWorking() /*&& counter !== 0*/) {
-        const deltaX = obsType === 'x' ? xStep[index] / (SystemConfig.FPS - 1) : 0
-        const deltaY = obsType === 'y' ? yStep[index] / (SystemConfig.FPS - 1) : 0
-
-        const nextX = vec.x + deltaX
-        const nextY = vec.y + deltaY
-
-        const currentHedgehogX = Math.round(vec.x)
-        const currentHedgehogY = Math.round(vec.y)
-        // if (counter === 0) console.log('render X: ', currentHedgehogX)
-        // const currentHedgehogY =
-        //   yStep[index] > 0 ? Math.floor(vec.y) - 1 : Math.ceil(vec.y) - 1
-        const nextHedgehogX =
-          obsType === 'x' ? currentHedgehogX + xStep[index] : currentHedgehogX
-        const nextHedgehogY =
-          obsType === 'y' ? currentHedgehogY + yStep[index] : currentHedgehogY
-        // if (counter === 0) {
-        //   console.log(
-        //     'hh: ',
-        //     // 'r: ',
-        //     // currentHedgehogX,
-        //     // vec.x,
-        //     'index: ',
-        //     index,
-        //     'x: ',
-        //     Math.round(getObstaclesXCoord()[index][0] - gridSize / 2) - 1
-        //     // xStep[index],
-        //     // getObstaclesStepX()[0]
-        //   )
-
-        // console.log(
-        //   'rnd: ',
-        //   currentSnakeX,
-        //   'eng: ',
-        //   Math.round(getSnakeHeadParams().snakeHeadCoordX - gridSize / 2) - 1
-        // )
-        //}
-        // if (counter === 0) {
-        // const isSnakeHeadStopDistance =
-        //   obsType === 'x'
-        //     ? nextHedgehogX === nextSnakeX && nextHedgehogY === nextSnakeY
-        //     : nextHedgehogY === nextSnakeY && nextHedgehogX === nextSnakeX
-        const isSnakeHeadStopDistance =
-          /* obsType === 'x' */
-          /*  ? */ (currentHedgehogX === currentSnakeX ||
-            nextHedgehogX === currentSnakeX) &&
-          (currentHedgehogY === currentSnakeY || nextHedgehogY === currentSnakeY)
-
-        // Проверка столкновения с другими ежиками
-        let isAnotherHedgehogCollision = false
-        let isFixCollision = false
-        Object.entries(obstaclesRefs.current).forEach(([otherKey /*, otherRef */]) => {
-          if (otherKey === key) return // пропускаем самого себя
-
-          const [otherType, otherIndexStr] = otherKey.split('_')
-          //const [indexStr] = key.split('_')
-
-          const otherIndex = parseInt(otherIndexStr, 10)
-          /// const index = parseInt(indexStr, 10)
-          if (otherType === 'fix') {
-            // Проверка столкновения с неподвижными препятствиями (fix)
-            const fixCoords = fixCoord[otherIndex]
-            if (!fixCoords) return
-            const fixX = Math.round(fixCoords[0] - gridSize / 2) - 1
-            const fixY = Math.round(fixCoords[1] - gridSize / 2) - 1
-
-            // Проверяем, будет ли столкновение на следующей позиции
-            if (
-              (currentHedgehogX === fixX || nextHedgehogX === fixX) &&
-              (currentHedgehogY === fixY || nextHedgehogY === fixY)
-            ) {
-              isFixCollision = true
-            }
-
-            return
-          }
-          const otherVec =
-            otherType === 'x' ? threeCoordX[otherIndex] : threeCoordY[otherIndex]
-          if (!otherVec) return
-          const currentOtherX = Math.round(otherVec.x)
-          const currentOtherY = Math.round(otherVec.y)
-          // if (counter === 0) console.log(currentHedgehogX, nextHedgehogX, currentOtherX)
-
-          // Проверяем, будет ли столкновение на следующей позиции
-          if (
-            (currentHedgehogX === currentOtherX || nextHedgehogX === currentOtherX) &&
-            (currentHedgehogY === currentOtherY || nextHedgehogY === currentOtherY)
-          ) {
-            isAnotherHedgehogCollision = true
-            // console.log(otherVec.x, otherVec.y)
-          }
-        })
-
-        const isStopDistanceX = nextX >= -fieldBoundary && nextX <= fieldBoundary
-
-        // &&
-        // isFoodXStopDistance &&
-        // !isAnotherHedgehogCollision
-        const isStopDistanceY = nextY >= -fieldBoundary && nextY <= fieldBoundary
-        const isFoodXStopDistance =
-          currentHedgehogY === foodCoordY && nextX > foodCoordX
-            ? nextX > foodCoordX + 1
-            : currentHedgehogY === foodCoordY && nextX < foodCoordX
-              ? nextX < foodCoordX - 1
-              : true
-        const isFoodYStopDistance =
-          currentHedgehogX === foodCoordX && nextY > foodCoordY
-            ? nextY > foodCoordY + 1
-            : currentHedgehogX === foodCoordX && nextY < foodCoordY
-              ? nextY < foodCoordY - 1
-              : true
-        // &&
-        // isFoodYStopDistance &&
-        // !isAnotherHedgehogCollision
-
-        // nextStepX[index] = isStopDistanceX && !isSnakeHeadStopDistance ? true : false
-        // nextStepY[index] = isStopDistanceY && !isSnakeHeadStopDistance ? true : false
-
-        // отключаем шаг по X, если хотя бы одна проверка возвращает false
-        // Check snake head distance only when counter === 0
-        nextStepX =
-          isStopDistanceX &&
-          /* counter !== 0 ||*/ !isSnakeHeadStopDistance &&
-          isFoodXStopDistance &&
-          !isAnotherHedgehogCollision &&
-          !isFixCollision
-        nextStepY =
-          isStopDistanceY &&
-          /* counter !== 0 ||*/ !isSnakeHeadStopDistance &&
-          isFoodYStopDistance &&
-          !isAnotherHedgehogCollision &&
-          !isFixCollision
-        // } else {
-        //   // при залипании на краю поля продолжаем движение внутрь
-        //   nextStepX = isStopDistanceX
-        //
-        // nextStepY = isStopDistanceY
-        // }
-        // console.log(nextStepX[index], fieldBoundary)
-        // if (nextStepX[index]) vec.x = nextX
-        // if (nextStepY[index]) vec.y = nextY
-        if (nextStepX /* && counter !== 0*/) vec.x = nextX
-        //
-
-        //   {
-        //   console.log('move')
-
-        //   vec.x = nextX
-        // } else {
-        //   console.log('stop', nextX)
-
-        //   // исправление залипания на краю поля
-        //   vec.x = Math.round(getObstaclesXCoord()[0][0] - gridSize / 2) - 1
-        // }
-        if (nextStepY /* && counter !== 0*/) vec.y = nextY
-      }
-      // if (counter === 0) console.log('render X: ', vec.x /* 'render Y: ', 6 + vec.y*/)
       ref.current?.position.set(vec.x, vec.y, 0)
     })
   })
@@ -365,7 +154,6 @@ const Obstacles: React.FC = () => {
         if (obsType === 'fix') {
           const fixCoords = fixCoord[index]
           if (!fixCoords) return null
-          const gridSize = getField()
           const fx = Math.round(fixCoords[0] - gridSize / 2) - 1
           const fy = Math.round(fixCoords[1] - gridSize / 2) - 1
 
@@ -390,14 +178,6 @@ const Obstacles: React.FC = () => {
               </group>
             )
           }
-
-          // Заглушка для других fix-типов (например fix-R — камень, пока не реализован)
-          // return (
-          //   <mesh key={key} position={[fx, fy, 0]}>
-          //     <boxGeometry args={[0.8, 0.8, 0.8]} />
-          //     <meshStandardMaterial color={'#888'} />
-          //   </mesh>
-          // )
         }
 
         // Ежи — движущиеся препятствия (x, y)

@@ -14,13 +14,12 @@ import { SnakeHeadCoord, HeadCompare } from '../../types/snakeTypes'
 function snakeCoordCompare(
   snakeHead: SnakeHeadCoord,
   pos: number[],
-  contact: boolean
+  contact: boolean,
 ): HeadCompare {
-  contact =
+  const isCollision =
     snakeHead.snakeHeadCoordY === pos[1] && snakeHead.snakeHeadCoordX === pos[0]
-      ? true
-      : false
-  if (contact) {
+  contact = contact || isCollision
+  if (isCollision) {
     snakeHead.snakeHeadCoordY = snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY
     snakeHead.snakeHeadCoordX = snakeHead.snakeHeadCoordX - snakeHead.snakeHeadStepX
   }

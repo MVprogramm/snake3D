@@ -21,6 +21,7 @@ let cachedCollidingPositions: number[][] | undefined = undefined
  */
 function setObstacleStep(props: obstacleContactProps): number {
   const { step, i } = props
+  const initialStep = step[i]
 
   // // Compute colliding positions once per frame
   // if (cachedCollidingPositions === undefined) {
@@ -32,10 +33,20 @@ function setObstacleStep(props: obstacleContactProps): number {
   // const propsWithColliding = { ...props, collidingPositions: cachedCollidingPositions }
 
   step[i] = contactBorderObstacle(props)
+  if (step[i] !== initialStep) return step[i]
+
   step[i] = contactFoodObstacle(props)
+  if (step[i] !== initialStep) return step[i]
+
   step[i] = contactObstacleObstacle(props)
+  if (step[i] !== initialStep) return step[i]
+
   step[i] = contactObstacleCollidingPosition(props)
+  if (step[i] !== initialStep) return step[i]
+
   step[i] = contactBonusObstacle(props)
+  if (step[i] !== initialStep) return step[i]
+
   step[i] = contactSnakeBodyObstacle(props)
 
   return step[i]

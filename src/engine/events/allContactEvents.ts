@@ -10,6 +10,15 @@ import snakeBorderContactEvent from './snakeBorderContactEvent'
 import snakeHeadBodyContactEvent from './snakeHeadBodyContactEvent'
 import { setDistanceFromSnakeToFood } from './snakeMovesTowardsFood'
 import snakeObstacleContactEvent from './snakeObstacleContactEvent'
+
+let isDistraintContact = false
+
+export const setIsDistraintContact = (value: boolean) => {
+  isDistraintContact = value
+}
+
+export const getIsDistraintContact = () => isDistraintContact
+
 /**
  *  Тестирует контакт головы змейки с краями поля, препятствиями и своим телом
  *  @param snakeHead Текущие координаты головы змейки
@@ -18,15 +27,21 @@ import snakeObstacleContactEvent from './snakeObstacleContactEvent'
  */
 function allContactEvents(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
   let { ...newSnakeHeadCoord } = snakeHead
-  newSnakeHeadCoord = snakeBorderContactEvent(newSnakeHeadCoord)
-  newSnakeHeadCoord = snakeObstacleContactEvent(newSnakeHeadCoord)
-  newSnakeHeadCoord = snakeHeadBodyContactEvent(newSnakeHeadCoord)
+  let checkedSnakeHeadCoord = { ...newSnakeHeadCoord }
+  checkedSnakeHeadCoord = snakeBorderContactEvent(checkedSnakeHeadCoord)
+  checkedSnakeHeadCoord = snakeObstacleContactEvent(checkedSnakeHeadCoord)
+  checkedSnakeHeadCoord = snakeHeadBodyContactEvent(checkedSnakeHeadCoord)
 
   if (checkMistake()) {
     closeSnakeMouth()
     stopTimer()
   }
-  return newSnakeHeadCoord
+  setIsDistraintContact(
+    newSnakeHeadCoord.snakeHeadCoordX !== checkedSnakeHeadCoord.snakeHeadCoordX ||
+      newSnakeHeadCoord.snakeHeadCoordY !== checkedSnakeHeadCoord.snakeHeadCoordY,
+  )
+
+  return checkedSnakeHeadCoord
 }
 
 export default allContactEvents

@@ -72,7 +72,13 @@ function moveObstacles(type: string): void {
       if (newStep === 0) {
         const prev = type === 'x' ? prevStepsX : prevStepsY
         if (prev[i] !== undefined) {
-          newStep = prev[i]
+          const restoredProbePos = [...coordCopy[i]]
+          restoredProbePos[twist[0]] += prev[i]
+          // Возвращаем предыдущий шаг только если он снова ведет в допустимую клетку.
+          // Иначе препятствие должно остаться на месте, чтобы не проскочить сквозь объект.
+          if (checkObstaclePosition(restoredProbePos)) {
+            newStep = prev[i]
+          }
         }
       }
     }

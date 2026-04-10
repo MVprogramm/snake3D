@@ -13,6 +13,9 @@ import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
 import { snakeHeadTurnaround } from '../animations/snakeAnimation/headAnimations/snakeHeadTurnaround'
 import { getNewMoveDirection } from '../engine/events/changeDirectionEvent'
 import checkTimerStep from '../engine/time/checkTimerStep'
+import { getIsDistraintContact } from '../engine/events/allContactEvents'
+import { checkTimerWorking } from '../engine/time/isTimer'
+import { checkMistake } from '../engine/lives/isMistake'
 
 /**
  * Компонент Snake рендерит 3D-модель змеи, состоящую из головы, тела и хвоста.
@@ -49,11 +52,17 @@ const Snake = () => {
             U.getSnakeUnitPosition()[0][1],
             U.getSnakeUnitPosition()[0][2],
           )
-          // console.log(findLastMoveDirection())
+          // console.log('Snake', getIsDistraintContact())
           let isStop = checkTimerStep() ? true : false
-          let rotationZ = checkTimerStep()
+          const shouldTurnOnForbiddenStop = !checkTimerWorking() && checkMistake()
+
+          let rotationZ = shouldTurnOnForbiddenStop
             ? snakeHeadTurnaround(getNewMoveDirection())
             : U.getSnakeUnitRotation()[0]?.[2]
+          // let rotationZ =
+          //   checkTimerWorking() && checkMistake()
+          //     ? snakeHeadTurnaround(getNewMoveDirection())
+          //     : U.getSnakeUnitRotation()[0]?.[2]
 
           snakeRefs['headRef'].current?.rotation.set(0, 0, rotationZ)
 

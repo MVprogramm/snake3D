@@ -9,6 +9,8 @@ let contact = false
 import { SnakeHeadCoord } from '../../types/snakeTypes'
 import { mistakeWasMade } from '../lives/isMistake'
 import protocolExecutor from '../protocol/protocolExecutor'
+import { setIsDistraintContact } from './allContactEvents'
+
 /**
  *  Выполняет действия, связанные с запрещенным контактом головы змейки
  * @param snakeHead Параметры головы змейки
@@ -21,6 +23,8 @@ import protocolExecutor from '../protocol/protocolExecutor'
  * @returns Измененные параметры головы змейки
  */
 export function isContact(snakeHead: SnakeHeadCoord, mistake: string): SnakeHeadCoord {
+  if (contact) return snakeHead
+
   snakeHead.snakeHeadStepX = 0
   snakeHead.snakeHeadStepY = 0
   const coordX = snakeHead.snakeHeadCoordX
@@ -47,4 +51,5 @@ export function checkContact(): boolean {
  */
 export function breakContact(): void {
   contact = false
+  // setIsDistraintContact(false)
 }

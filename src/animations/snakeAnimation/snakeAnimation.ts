@@ -1,5 +1,5 @@
-import { getNewKeyboardMove } from '../../engine/events/changeDirectionEvent'
 import checkTimerStep from '../../engine/time/checkTimerStep'
+import { checkTimerWorking } from '../../engine/time/isTimer'
 import type { PreviousStep } from '../../types/animationTypes'
 import snakeBodyDiff from './bodyAnimations/snakeBodyDiff'
 import * as LOCATION from './bodyAnimations/snakeBodyLocation'
@@ -36,7 +36,7 @@ export const snakeAnimation = (delta: number): void => {
     currentStepX: step.previousStepX,
     currentStepY: step.previousStepY,
   }))
-  if (initialSteps.length === 0 || checkTimerStep()) return
+  if (initialSteps.length === 0 || !checkTimerWorking() || checkTimerStep()) return
   LOCATION.getSnakeBodyLocation().forEach((_, i) => snakeBodyDiff(i))
   const steps = snakeStepSetting(initialSteps)
   LOCATION.updateSnakeBodyLocation()
