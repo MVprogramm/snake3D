@@ -15,16 +15,18 @@ import obstacleBounce from './obstacleBounce'
  */
 function contactObstacleObstacle(props: obstacleContactProps): number {
   const { i, step } = props
-  getObstaclesFixCoord().forEach(
-    (pos) => (step[i] = obstacleBounce({ ...props, cell: pos }))
-  )
-  getObstaclesXCoord().forEach(
-    (pos) => (step[i] = obstacleBounce({ ...props, cell: pos }))
-  )
-  getObstaclesYCoord().forEach(
-    (pos) => (step[i] = obstacleBounce({ ...props, cell: pos }))
-  )
-
+  const initialStep = step[i]
+  const allCells = [
+    ...getObstaclesFixCoord(),
+    ...getObstaclesXCoord(),
+    ...getObstaclesYCoord(),
+  ]
+  for (const pos of allCells) {
+    step[i] = obstacleBounce({ ...props, cell: pos })
+    // Останавливаемся после первого эффективного разворота,
+    // чтобы последующие ячейки не отменили его вторым инвертом.
+    if (step[i] !== initialStep) break
+  }
   return step[i]
 }
 

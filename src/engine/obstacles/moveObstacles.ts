@@ -50,6 +50,7 @@ function moveObstacles(type: string): void {
   for (let i = 0; i < coordCopy.length; i++) {
     // рассчитываем новый шаг с учётом всех столкновений, работаем с копией stepCopy
     stepCopy[i] = setObstacleStep({ i, twist, coord: coordCopy, step: stepCopy })
+    let nextStoredStep = stepCopy[i]
     // сохраняем последний ненулевой шаг в массив, специфичный для типа
     const prev = type === 'x' ? prevStepsX : prevStepsY
     if (stepCopy[i] !== 0) prev[i] = stepCopy[i]
@@ -77,7 +78,11 @@ function moveObstacles(type: string): void {
           // Возвращаем предыдущий шаг только если он снова ведет в допустимую клетку.
           // Иначе препятствие должно остаться на месте, чтобы не проскочить сквозь объект.
           if (checkObstaclePosition(restoredProbePos)) {
-            newStep = prev[i]
+            // В этот тик только восстанавливаем шаг, а само движение переносим
+            // на следующий тик. Это дает движку шанс учесть встречные траектории
+            // через getCollidingPositions до фактического смещения.
+            nextStoredStep = prev[i]
+            newStep = 0
           }
         }
       }
@@ -85,7 +90,7 @@ function moveObstacles(type: string): void {
 
     // применяем шаг к копии координат
     coordCopy[i][twist[0]] += newStep
-    stepCopy[i] = newStep
+    stepCopy[i] = nextStoredStep
   }
 
   // Записываем обновлённые массивы в соответствующие модули одним присваиванием

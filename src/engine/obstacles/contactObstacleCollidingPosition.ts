@@ -19,10 +19,12 @@ import obstacleBounce from './obstacleBounce'
  */
 function contactObstacleCollidingPosition(props: obstacleContactProps): number {
   const { i, step } = props
+  const initialStep = step[i]
 
-  getCollidingPositions().forEach(
-    (pos) => (step[i] = obstacleBounce({ ...props, cell: pos }))
-  )
+  for (const pos of getCollidingPositions()) {
+    step[i] = obstacleBounce({ ...props, cell: pos })
+    if (step[i] !== initialStep) break
+  }
 
   return step[i]
 }
