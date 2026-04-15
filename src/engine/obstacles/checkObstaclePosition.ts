@@ -16,7 +16,7 @@ function checkObstaclePosition(pos: number[]): boolean {
   if (pos[0] > getField()) isCorrect = false
   if (pos[1] < 1) isCorrect = false
   if (pos[1] > getField()) isCorrect = false
-  if (!cellCheck(pos)) isCorrect = false
+  if (!cellCheck(pos, { ignoreSnakeReserveTail: true })) isCorrect = false
 
   return isCorrect
 }

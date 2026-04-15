@@ -26,7 +26,7 @@ const prevStepsY: number[] = []
  *      - изменяет координаты препятствий на величину шага
  * @param type - направление движения препятствия, x или y
  */
-function moveObstacles(type: string): void {
+function moveObstacles(type: string, forceMove = false): void {
   const gridSize = getField()
   // фиксированный радиус останова препятствий (не зависит от скорости змейки)
   const stopDistance = getStep() + 2
@@ -43,7 +43,7 @@ function moveObstacles(type: string): void {
   const stepCopy: number[] = [...selected.step]
   // if (type === 'y') console.log('move: ', coordCopy[0])
 
-  if (!checkTimerWorking()) return
+  if (!checkTimerWorking() && !forceMove) return
 
   const twist = type === 'y' ? [1, 0] : [0, 1]
 
@@ -60,6 +60,28 @@ function moveObstacles(type: string): void {
 
     // если позиция недопустима — останавливаем
     let newStep = !checkObstaclePosition(probePos) ? 0 : stepCopy[i]
+
+    // Блокируем "проезд сквозь" при одновременном обмене клетками двух ежей.
+    // Это особенно заметно, когда один еж разворачивается, а второй продолжает движение.
+    if (newStep !== 0) {
+      const currentPrimary = coordCopy[i][twist[0]]
+      const currentSecondary = coordCopy[i][twist[1]]
+      const nextPrimary = currentPrimary + newStep
+      const isSwapCrossing = coordCopy.some((otherCoord, j) => {
+        if (j === i) return false
+        if (otherCoord[twist[1]] !== currentSecondary) return false
+
+        const otherCurrentPrimary = otherCoord[twist[0]]
+        const otherStep = stepCopy[j]
+        const otherNextPrimary = otherCurrentPrimary + otherStep
+
+        return nextPrimary === otherCurrentPrimary && otherNextPrimary === currentPrimary
+      })
+
+      if (isSwapCrossing) {
+        newStep = 0
+      }
+    }
 
     // если змейка близко и движется — останавливаем препятствие
     if (

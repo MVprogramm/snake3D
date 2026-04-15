@@ -10,6 +10,7 @@ import { SystemConfig } from '../config/systemConfig'
 import { checkTimerWorking } from '../engine/time/isTimer'
 import moveObstacles from '../engine/obstacles/moveObstacles'
 import Rock from '../assets/rockModel/Rock'
+import { checkMistake } from '../engine/lives/isMistake'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
@@ -54,8 +55,10 @@ const Obstacles: React.FC = () => {
   }
 
   useFrame(() => {
+    const shouldAnimateObstacles = checkTimerWorking() || checkMistake()
+    const forceMoveByMistake = !checkTimerWorking() && checkMistake()
     // 1. Тик: запускаем движок на границе периода (до инициализации, чтобы в первом кадре не срабатывало)
-    if (counter === 0 && checkTimerWorking()) {
+    if (counter === 0 && shouldAnimateObstacles) {
       // Сохраняем текущие экранные позиции как начало интерполяции
       threeCoordX.forEach((v, i) => {
         prevVisualX[i] = v.x
@@ -64,8 +67,8 @@ const Obstacles: React.FC = () => {
         prevVisualY[i] = v.y
       })
       // Шаг движка
-      moveObstacles('x')
-      moveObstacles('y')
+      moveObstacles('x', forceMoveByMistake)
+      moveObstacles('y', forceMoveByMistake)
       // Читаем новые целевые позиции движка
       const updated = getAllObstacles()
       nextEngineX = updated.xCoord.map((c) => Math.round(c[0] - gridSize / 2) - 1)
@@ -117,7 +120,7 @@ const Obstacles: React.FC = () => {
     // 3. Продвигаем счётчик
     counter += 1 / SystemConfig.FPS
     const tickProgress = counter // захватываем до сброса
-    if (checkTimerWorking() && counter >= 1) counter = 0
+    if (shouldAnimateObstacles && counter >= 1) counter = 0
 
     // 4. Плавная интерполяция prevVisual → nextEngine
     if (threeCoordX.length > 0) {

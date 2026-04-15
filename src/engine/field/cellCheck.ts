@@ -7,13 +7,17 @@ import { getObstaclesXCoord } from '../obstacles/obstaclesX'
 import { getObstaclesYCoord } from '../obstacles/obstaclesY'
 import { getFoodCoord } from '../food/food'
 import { getSnakeBodyCoord } from '../snake/snake'
+
+type CellCheckOptions = {
+  ignoreSnakeReserveTail?: boolean
+}
 /**
  * Проверяет ячейку на наличие в ней объектов игрового поля
  * @param cell координаты проверяемой ячейки
  * @description ищет среди всех занятых ячеек проверяемую координату
  * @returns true, если ячейка свободна, false, если занята
  */
-const cellCheck = (cell: number[]): boolean => {
+const cellCheck = (cell: number[], options: CellCheckOptions = {}): boolean => {
   const [cellX, cellY] = cell
 
   const bookedCells: number[][] = []
@@ -34,7 +38,11 @@ const cellCheck = (cell: number[]): boolean => {
   addBookedCells(getObstaclesFixCoord())
   addBookedCells(getObstaclesYCoord())
   addBookedCells(getObstaclesXCoord())
-  addBookedCells(getSnakeBodyCoord())
+  const snakeBody = getSnakeBodyCoord()
+  const snakeBodyForCollision = options.ignoreSnakeReserveTail
+    ? snakeBody.slice(0, -1)
+    : snakeBody
+  addBookedCells(snakeBodyForCollision)
 
   return bookedCells.every((coord) => coord[0] !== cellX || coord[1] !== cellY)
 }
