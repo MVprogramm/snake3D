@@ -3,6 +3,7 @@
  *     @function snakeCoordCompare Сравнивает координаты препятствий и головы змейки
  */
 import { SnakeHeadCoord, HeadCompare } from '../../types/snakeTypes'
+import { didSnakeReachCellOnStep } from './snakeStepCollision'
 /**
  * Сравнивает координаты головы змейки с заданной позицией
  * @param snakeHead Параметры головы змейки
@@ -16,8 +17,7 @@ function snakeCoordCompare(
   pos: number[],
   contact: boolean,
 ): HeadCompare {
-  const isCollision =
-    snakeHead.snakeHeadCoordY === pos[1] && snakeHead.snakeHeadCoordX === pos[0]
+  const isCollision = didSnakeReachCellOnStep(snakeHead, pos)
   contact = contact || isCollision
   if (isCollision) {
     snakeHead.snakeHeadCoordY = snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY

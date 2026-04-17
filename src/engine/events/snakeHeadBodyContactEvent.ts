@@ -5,6 +5,7 @@
 import { SnakeHeadCoord } from '../../types/snakeTypes'
 import { isContact } from './isContact'
 import * as SNAKE from '../snake/snake'
+import { didSnakeReachCellOnStep } from './snakeStepCollision'
 /**
  * При контакте змейки с самой собой останавливает движение и создает событие
  * @param snakeHead
@@ -20,8 +21,7 @@ function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
       index !== 0 &&
       index !== visibleTailIndex &&
       index !== reserveTailIndex &&
-      snakeHead.snakeHeadCoordX === pos[0] &&
-      snakeHead.snakeHeadCoordY === pos[1]
+      didSnakeReachCellOnStep(snakeHead, pos)
     ) {
       snakeHead.snakeHeadCoordY = snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY
       snakeHead.snakeHeadCoordX = snakeHead.snakeHeadCoordX - snakeHead.snakeHeadStepX

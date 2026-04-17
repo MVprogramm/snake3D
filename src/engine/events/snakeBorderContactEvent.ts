@@ -20,7 +20,7 @@ import { getFoodEaten } from './snakeCatchesFoodEvent'
  */
 function snakeBorderContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
   let borderContact = false
-  if (snakeHead.snakeHeadCoordX === 0) {
+  if (snakeHead.snakeHeadCoordX < 1) {
     snakeHead.snakeHeadCoordX = getCrossesBorders() ? getField() : 1
     borderContact = true
   }
@@ -28,7 +28,7 @@ function snakeBorderContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
     snakeHead.snakeHeadCoordX = getCrossesBorders() ? 1 : getField()
     borderContact = true
   }
-  if (snakeHead.snakeHeadCoordY === 0) {
+  if (snakeHead.snakeHeadCoordY < 1) {
     snakeHead.snakeHeadCoordY = getCrossesBorders() ? getField() : 1
     borderContact = true
   }
