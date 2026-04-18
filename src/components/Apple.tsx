@@ -89,6 +89,7 @@ const Apple: React.FC = () => {
   // ⏳ Показываем спиннер
   if (!gltf?.scene || (DEBUG_MODE && FORCE_SPINNER)) return <Spinner />
   if (!gltf?.scene) return <Spinner />
+  if (!debouncedPosition) return null
 
   return <primitive object={gltf.scene} position={debouncedPosition} scale={scaleArray} />
 }

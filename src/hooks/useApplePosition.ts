@@ -4,7 +4,11 @@ import { getFoodCoord } from '../engine/food/food'
 import { Position2D, Position3D } from '../types/threeTypes'
 
 const ROUNDING_OFFSET = 0.5
-const INITIAL_POSITION: Position3D = [0, 0, 0]
+
+const isValidCoord = (coord: unknown): coord is Position2D =>
+  Array.isArray(coord) &&
+  coord.length === 2 &&
+  coord.every((value) => typeof value === 'number' && Number.isFinite(value))
 
 /**
  * Хук для управления позицией яблока
@@ -12,20 +16,13 @@ const INITIAL_POSITION: Position3D = [0, 0, 0]
 export const useApplePosition = (zLocation: number) => {
   const fieldSize = getField()
   const halfField = React.useMemo(() => fieldSize / 2 + 1, [fieldSize])
+  const [position, setPosition] = React.useState<Position3D | null>(null)
 
-  // Состояние позиции яблока
-  const [position, setPosition] = React.useState<Position3D>([
-    ...(INITIAL_POSITION.slice(0, 2) as Position2D),
-    zLocation,
-  ])
-
-  // Мемоизированная функция битового округления
   const fastRound = React.useCallback(
     (value: number) => (value + ROUNDING_OFFSET) | 0,
     []
   )
 
-  // Мемоизированная функция преобразования координат
   const transformCoordinates = React.useCallback(
     (coord: Position2D): Position3D => [
       fastRound(coord[0] - halfField),
@@ -35,21 +32,19 @@ export const useApplePosition = (zLocation: number) => {
     [halfField, zLocation, fastRound]
   )
 
-  // Мемоизированная функция проверки изменения позиции
   const positionChanged = React.useCallback(
     (prev: Position3D, next: Position3D): boolean =>
       prev[0] !== next[0] || prev[1] !== next[1],
     []
   )
 
-  // Функция обновления позиции
   const updatePosition = React.useCallback(() => {
-    const updatedPosition: Position2D = getFoodCoord()
-    const adjustedPosition = transformCoordinates(updatedPosition)
+    const foodCoord = getFoodCoord()
+    if (!isValidCoord(foodCoord)) return
 
-    // Обновляем состояние только при изменении позиции
+    const adjustedPosition = transformCoordinates(foodCoord)
     setPosition((prev) =>
-      positionChanged(prev, adjustedPosition) ? adjustedPosition : prev
+      !prev || positionChanged(prev, adjustedPosition) ? adjustedPosition : prev
     )
   }, [transformCoordinates, positionChanged])
 

@@ -1,20 +1,13 @@
 import { SnakeHeadCoord } from '../../types/snakeTypes'
 import { getField } from '../field/fieldPerLevel'
 import { getObstaclesFixCoord } from '../obstacles/obstaclesFix'
-import { getObstaclesXCoord } from '../obstacles/obstaclesX'
-import { getObstaclesYCoord } from '../obstacles/obstaclesY'
 import { getSnakeBodyCoord } from '../snake/snake'
 import snakeCoordCompare from './snakeCoordCompare'
 
 function noMoves(snakeHeadPos: SnakeHeadCoord): boolean {
-  const obstacles = [
-    ...getObstaclesFixCoord(),
-    ...getObstaclesXCoord(),
-    ...getObstaclesYCoord(),
-  ]
   let prohibitedCells: number[][] = []
 
-  prohibitedCells = obstacles.concat(getSnakeBodyCoord().slice(1))
+  prohibitedCells = getObstaclesFixCoord().concat(getSnakeBodyCoord().slice(1))
   let checkSnakePos: SnakeHeadCoord = { ...snakeHeadPos }
   let contact: boolean
   const directions = [
