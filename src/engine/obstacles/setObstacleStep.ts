@@ -8,7 +8,6 @@ import contactBorderObstacle from './contactBorderObstacle'
 import contactFoodObstacle from './contactFoodObstacle'
 import contactObstacleCollidingPosition from './contactObstacleCollidingPosition'
 import contactObstacleObstacle from './contactObstacleObstacle'
-import contactSnakeHeadObstacle from './contactSnakeHeadObstacle'
 import contactSnakeBodyObstacle from './contactSnakeBodyObstacle'
 import { getCollidingPositions } from './getCollidingPositions'
 
@@ -46,9 +45,6 @@ function setObstacleStep(props: obstacleContactProps): number {
   if (step[i] !== initialStep) return step[i]
 
   step[i] = contactBonusObstacle(props)
-  if (step[i] !== initialStep) return step[i]
-
-  step[i] = contactSnakeHeadObstacle(props)
   if (step[i] !== initialStep) return step[i]
 
   step[i] = contactSnakeBodyObstacle(props)

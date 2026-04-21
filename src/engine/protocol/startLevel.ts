@@ -10,6 +10,7 @@ import setObstacleEvent from "../events/setObstacleEvent";
 import { obstacleSpeedReset } from "../obstacles/obstacleSpeed";
 import { removeBonus } from "../bonuses/bonusAvailableState";
 import { catchBonus } from "../bonuses/bonusCatchingState";
+import { clearStoppedSnakeDirection } from "../snake/snake";
 /**
  * Запускает текущий уровень игры
  * @description
@@ -19,6 +20,7 @@ import { catchBonus } from "../bonuses/bonusCatchingState";
  */
 function startLevel(): void {
   levelNotCompleted();
+  clearStoppedSnakeDirection();
   setSnakeStartEvent([
     Math.floor(getField() / 2) + 1,
     Math.floor(getField() / 2) + 1,

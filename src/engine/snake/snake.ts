@@ -23,6 +23,7 @@ let snakeBody: SNAKE.SnakeBodyCoord = []
  * @var массив с координатами головы и тела змейки на предыдущем шаге
  */
 let previousSnakeBody: SNAKE.SnakeBodyCoord = []
+let stoppedSnakeDirection: [number, number] | null = null
 /**
  * Задает параметры головы змейки
  * @param snake Объект с параметрами головы змейки
@@ -50,6 +51,15 @@ export function setSnakeBodyCoord(body: SNAKE.SnakeBodyCoord): void {
  */
 export function getSnakeHeadParams(): SNAKE.SnakeHeadCoord {
   return snakeHead
+}
+export function setStoppedSnakeDirection(direction: [number, number]): void {
+  stoppedSnakeDirection = direction
+}
+export function clearStoppedSnakeDirection(): void {
+  stoppedSnakeDirection = null
+}
+export function getStoppedSnakeDirection(): [number, number] | null {
+  return stoppedSnakeDirection
 }
 /**
  * Возвращает координаты тела змейки

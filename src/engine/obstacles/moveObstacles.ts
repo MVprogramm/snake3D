@@ -9,13 +9,24 @@ import * as X from './obstaclesX'
 import * as Y from './obstaclesY'
 import checkObstaclePosition from './checkObstaclePosition'
 import setObstacleStep, { resetCollidingPositionsCache } from './setObstacleStep'
-import { getSnakeHeadParams } from '../snake/snake'
+import { getSnakeHeadParams, getStoppedSnakeDirection } from '../snake/snake'
 import { getStep } from '../time/timerStepPerLevel'
 import { getField } from '../field/fieldPerLevel'
 
 // хранит ненулевые шаги препятствий отдельно для X и Y, чтобы избежать коллизий индексов
 const prevStepsX: number[] = []
 const prevStepsY: number[] = []
+
+function isStoppedSnakeFrontCell(pos: number[]): boolean {
+  const stoppedDirection = getStoppedSnakeDirection()
+  if (!stoppedDirection) return false
+
+  const { snakeHeadCoordX, snakeHeadCoordY } = getSnakeHeadParams()
+  return (
+    pos[0] === snakeHeadCoordX + stoppedDirection[0] &&
+    pos[1] === snakeHeadCoordY + stoppedDirection[1]
+  )
+}
 /**
  * Изменяет координаты препятствий и их шаг
  * @description
@@ -59,7 +70,28 @@ function moveObstacles(type: string, forceMove = false): void {
     probePos[twist[0]] += stepCopy[i]
 
     // если позиция недопустима — останавливаем
+    const hitsStoppedSnakeFrontCell = isStoppedSnakeFrontCell(probePos)
     let newStep = !checkObstaclePosition(probePos) ? 0 : stepCopy[i]
+
+    if (hitsStoppedSnakeFrontCell) {
+      const reversedStep = stepCopy[i] * -1
+      const reversedProbePos = [...coordCopy[i]]
+      reversedProbePos[twist[0]] += reversedStep
+
+      nextStoredStep = reversedStep
+      stepCopy[i] = reversedStep
+
+      if (
+        reversedStep !== 0 &&
+        checkObstaclePosition(reversedProbePos) &&
+        !isStoppedSnakeFrontCell(reversedProbePos)
+      ) {
+        newStep = reversedStep
+        prev[i] = reversedStep
+      } else {
+        newStep = 0
+      }
+    }
 
     // Блокируем "проезд сквозь" при одновременном обмене клетками двух ежей.
     // Это особенно заметно, когда один еж разворачивается, а второй продолжает движение.
@@ -92,7 +124,7 @@ function moveObstacles(type: string, forceMove = false): void {
       newStep = 0
     } else {
       // если змейка не близко и препятствие было остановлено — возвращаем предыдущий шаг
-      if (newStep === 0) {
+      if (newStep === 0 && !hitsStoppedSnakeFrontCell) {
         const prev = type === 'x' ? prevStepsX : prevStepsY
         if (prev[i] !== undefined) {
           const restoredProbePos = [...coordCopy[i]]

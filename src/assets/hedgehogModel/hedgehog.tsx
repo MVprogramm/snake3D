@@ -2,6 +2,8 @@ import { Vector2 } from 'three'
 import { hedgehogProps } from '../../types/obstacleTypes'
 import mulberry32 from '../../commands/mulberry32'
 
+const FORWARD_OFFSET = 0.75
+
 function Hedgehog(props: hedgehogProps) {
   const { direction, index, line, seed = index } = props
 
@@ -40,8 +42,8 @@ function Hedgehog(props: hedgehogProps) {
   return (
     <group
       position={[
-        line === 'x' ? direction[index] * 0.75 : 0,
-        line === 'y' ? direction[index] * 0.75 : 0,
+        line === 'x' ? direction[index] * FORWARD_OFFSET : 0,
+        line === 'y' ? direction[index] * FORWARD_OFFSET : 0,
         0,
       ]}
     >

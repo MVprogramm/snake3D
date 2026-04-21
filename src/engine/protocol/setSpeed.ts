@@ -6,7 +6,12 @@
 import { changeSnakeSpeed } from '../../animations/snakeAnimation/snakeSpeedSetting'
 import { checkPause } from '../events/pauseEvent'
 import { obstacleSpeedReset } from '../obstacles/obstacleSpeed'
-import { getSnakeHeadParams, setSnakeHeadParams } from '../snake/snake'
+import {
+  clearStoppedSnakeDirection,
+  getSnakeHeadParams,
+  setSnakeHeadParams,
+  setStoppedSnakeDirection,
+} from '../snake/snake'
 import checkTimerStep from '../time/checkTimerStep'
 import * as TIMER from '../time/timerStepPerLevel'
 /**
@@ -43,6 +48,7 @@ function setSpeed(speed: number) {
         getSnakeHeadParams().snakeHeadStepX,
         getSnakeHeadParams().snakeHeadStepY,
       ]
+    setStoppedSnakeDirection([snakeHeadSteps[0], snakeHeadSteps[1]])
     setSnakeHeadParams({
       ...getSnakeHeadParams(),
       snakeHeadStepX: 0,
@@ -58,6 +64,7 @@ function setSpeed(speed: number) {
         snakeHeadStepX: snakeHeadSteps?.[0] ?? 0,
         snakeHeadStepY: snakeHeadSteps?.[1] ?? 0,
       })
+    clearStoppedSnakeDirection()
   }
   changeSnakeSpeed(TIMER.getStep())
 }

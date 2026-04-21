@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { createRef, RefObject, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import SnakeHead from '../assets/snakeModel/snakeHead/SnakeHead'
@@ -13,7 +13,6 @@ import SnakeJaw from '../assets/snakeModel/snakeHead/snakeJaw/SnakeJaw'
 import { snakeHeadTurnaround } from '../animations/snakeAnimation/headAnimations/snakeHeadTurnaround'
 import { getNewMoveDirection } from '../engine/events/changeDirectionEvent'
 import checkTimerStep from '../engine/time/checkTimerStep'
-import { getIsDistraintContact } from '../engine/events/allContactEvents'
 import { checkTimerWorking } from '../engine/time/isTimer'
 import { checkMistake } from '../engine/lives/isMistake'
 
@@ -23,16 +22,18 @@ import { checkMistake } from '../engine/lives/isMistake'
 const Snake = () => {
   const snakeMaxLength = getAmountOfFood() + 1
   const [snakeCurrentLength, setSnakeCurrentLength] = useState(3)
-  let snake = Array(getAmountOfFood() + 1).fill(1)
-  const [snakeSeparate, setSnakeSeparate] = useState(Array(getAmountOfFood() + 1).fill(1))
-  const snakeRefs: { [key: string]: RefObject<THREE.Group> } = {}
-  let tempKey: string
-  for (let i = 0; i <= snakeMaxLength - 1; i++) {
-    tempKey = `bodyUnitRef_${i}`
-    if (i === 0) tempKey = 'headRef'
-    if (i === snakeMaxLength - 1) tempKey = 'tailRef'
-    snakeRefs[tempKey] = useRef<THREE.Group>(null)
+  const snake = Array(snakeMaxLength).fill(1)
+  const [snakeSeparate, setSnakeSeparate] = useState(Array(snakeMaxLength).fill(1))
+  const snakeRefs = useRef<{ [key: string]: RefObject<THREE.Group> }>({})
+
+  const getSnakeRef = (key: string): RefObject<THREE.Group> => {
+    if (!snakeRefs.current[key]) snakeRefs.current[key] = createRef<THREE.Group>()
+    return snakeRefs.current[key]
   }
+
+  const headRef = getSnakeRef('headRef')
+  const tailRef = getSnakeRef('tailRef')
+
   useFrame((_, delta) => {
     snakeAnimation(delta)
     const updatedSnake = snake.map((_, index) => {
@@ -44,10 +45,10 @@ const Snake = () => {
     if (snakeCurrentLength < getSnakeBodyCoord().length) {
       setSnakeCurrentLength(getSnakeBodyCoord().length)
     }
-    for (const key in snakeRefs) {
-      if (snakeRefs.hasOwnProperty(key)) {
+    for (const key in snakeRefs.current) {
+      if (Object.prototype.hasOwnProperty.call(snakeRefs.current, key)) {
         if (key === 'headRef') {
-          snakeRefs['headRef'].current?.position.set(
+          snakeRefs.current['headRef'].current?.position.set(
             U.getSnakeUnitPosition()[0][0],
             U.getSnakeUnitPosition()[0][1],
             U.getSnakeUnitPosition()[0][2],
@@ -64,7 +65,7 @@ const Snake = () => {
           //     ? snakeHeadTurnaround(getNewMoveDirection())
           //     : U.getSnakeUnitRotation()[0]?.[2]
 
-          snakeRefs['headRef'].current?.rotation.set(0, 0, rotationZ)
+          snakeRefs.current['headRef'].current?.rotation.set(0, 0, rotationZ)
 
           if (isStop && rotationZ !== U.getSnakeUnitRotation()[0]?.[2]) {
             rotationZ = U.getSnakeUnitRotation()[0]?.[2]
@@ -72,19 +73,19 @@ const Snake = () => {
           }
           // console.log(rotationZ, U.getSnakeUnitRotation()[0]?.[2])
         }
-        const index = +key[key.length - 1]
+        const index = Number(key.replace('bodyUnitRef_', ''))
         if (key === 'tailRef') {
-          snakeRefs['tailRef'].current?.position.set(
+          snakeRefs.current['tailRef'].current?.position.set(
             U.getSnakeUnitPosition()[snakeCurrentLength - 2][0],
             U.getSnakeUnitPosition()[snakeCurrentLength - 2][1],
             U.getSnakeUnitPosition()[snakeCurrentLength - 2][2],
           )
-          snakeRefs['tailRef'].current?.rotation.set(
+          snakeRefs.current['tailRef'].current?.rotation.set(
             0,
             0,
             U.getSnakeUnitRotation()[snakeCurrentLength - 2][2],
           )
-          snakeRefs['tailRef'].current?.scale.set(
+          snakeRefs.current['tailRef'].current?.scale.set(
             0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
             0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
             0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
@@ -93,17 +94,17 @@ const Snake = () => {
 
         if (key.includes('bodyUnitRef_')) {
           if (index < snakeCurrentLength - 2) {
-            snakeRefs[`bodyUnitRef_${index}`].current?.position.set(
+            snakeRefs.current[`bodyUnitRef_${index}`].current?.position.set(
               U.getSnakeUnitPosition()[index][0],
               U.getSnakeUnitPosition()[index][1],
               U.getSnakeUnitPosition()[index][2],
             )
-            snakeRefs[`bodyUnitRef_${index}`].current?.rotation.set(
+            snakeRefs.current[`bodyUnitRef_${index}`].current?.rotation.set(
               0,
               0,
               U.getSnakeUnitRotation()[index][2],
             )
-            snakeRefs[`bodyUnitRef_${index}`].current?.scale.set(
+            snakeRefs.current[`bodyUnitRef_${index}`].current?.scale.set(
               0.65 +
                 (0.35 * (getSnakeBodyCoord().length - index)) /
                   getSnakeBodyCoord().length,
@@ -125,7 +126,7 @@ const Snake = () => {
       {snakeSeparate.map((ref, index) => {
         if (index === 0) {
           return (
-            <group key={index} ref={snakeRefs['headRef']}>
+            <group key={index} ref={headRef}>
               <SnakeHead />
               <SnakeJaw />
             </group>
@@ -133,7 +134,7 @@ const Snake = () => {
         } else if (index < snakeMaxLength - 1) {
           return (
             ref === 1 && (
-              <group key={index} ref={snakeRefs[`bodyUnitRef_${index}`]}>
+              <group key={index} ref={getSnakeRef(`bodyUnitRef_${index}`)}>
                 <SnakeBodyUnit
                   right={-(index % 2) * 1.57}
                   left={3.14 - (index % 2) * 1.57}
@@ -143,7 +144,7 @@ const Snake = () => {
           )
         } else if (index === snakeMaxLength - 1) {
           return (
-            <group key={index} ref={snakeRefs['tailRef']}>
+            <group key={index} ref={tailRef}>
               <SnakeTail />
             </group>
           )
