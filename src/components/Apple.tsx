@@ -11,7 +11,6 @@ import { useShadowSetup } from '../hooks/useShadowSetup'
 import ErrorScreen from './ErrorScreen'
 import Spinner from './Spinner'
 import { SystemConfig } from '../config/systemConfig'
-import { getDistanceFromSnakeToFood } from '../engine/events/snakeMovesTowardsFood'
 import { getFoodEaten } from '../engine/events/snakeCatchesFoodEvent'
 import { closeSnakeMouthOnly } from '../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 
@@ -70,7 +69,7 @@ const Apple: React.FC = () => {
       // counterRef.current = (counterRef.current + 1) % COUNTER_RESET_VALUE
       // if (counterRef.current % FRAME_SKIP !== 0) return
       updatePosition()
-      if (!eaten && (getDistanceFromSnakeToFood() === 1 || getFoodEaten())) {
+      if (!eaten && getFoodEaten()) {
         setEaten(true)
       }
 
