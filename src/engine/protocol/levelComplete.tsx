@@ -30,8 +30,8 @@ function levelComplete(): void {
     })
     localStorage.setItem('protocol', JSON.stringify(getProtocol()))
     location.reload()
-  } else if (checkTimerWorking()) {
-    stopTimer()
+  } else {
+    if (checkTimerWorking()) stopTimer()
     toggleModal()
     selectTitleMenu(
       `Level ${

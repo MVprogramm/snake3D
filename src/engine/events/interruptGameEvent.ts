@@ -16,7 +16,7 @@ let isInterrupt = false;
  *  @return true, если игра прерывается, false, если нет
  */
 export function interruptGameEvent(): void {
-  isInterrupt = gameOverEvent() ? true : levelCompleteEvent() ? true : false;
+  isInterrupt = levelCompleteEvent() ? true : gameOverEvent() ? true : false;
 }
 /**
  *  Новая игра не может быть прервана

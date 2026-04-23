@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Scene } from './Scene'
 import renderInfo from '../engine/render/renderInfo'
 import { useFrame } from '@react-three/fiber'
@@ -8,9 +8,13 @@ import keyboardEvents from '../engine/events/keyboardEvents'
 import { keyboardPauseEvent } from '../engine/events/pauseEvent'
 import { getInterruptGame } from '../engine/events/interruptGameEvent'
 
+const SCENE_FINISH_DELAY_MS = 500
+
 export const Game = () => {
   const isVisible = useMenuStore((state) => state.isVisible)
   const titleMenu = useMenuStore((state) => state.titleMenu)
+  const [showScene, setShowScene] = useState(true)
+  const finishTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     document.removeEventListener('keydown', keyboardEvents)
@@ -27,10 +31,29 @@ export const Game = () => {
       document.removeEventListener('keydown', keyboardPauseEvent)
     }
   }, [isVisible, titleMenu])
+
+  useEffect(() => {
+    return () => {
+      if (finishTimeoutRef.current !== null) {
+        window.clearTimeout(finishTimeoutRef.current)
+      }
+    }
+  }, [])
+
   useFrame((_, delta) => {
     setLoop(delta)
     renderInfo()
+
+    if (getInterruptGame() && finishTimeoutRef.current === null) {
+      finishTimeoutRef.current = window.setTimeout(() => {
+        setShowScene(false)
+      }, SCENE_FINISH_DELAY_MS)
+    }
+
+    if (!getInterruptGame() && !showScene) {
+      setShowScene(true)
+    }
   })
 
-  return !getInterruptGame() && <Scene />
+  return showScene && <Scene />
 }

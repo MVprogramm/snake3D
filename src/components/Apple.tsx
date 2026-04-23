@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Object3D } from 'three'
+import { Material, Object3D } from 'three'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { appleCONFIG } from '../config/appleConfig'
@@ -12,12 +12,17 @@ import ErrorScreen from './ErrorScreen'
 import Spinner from './Spinner'
 import { SystemConfig } from '../config/systemConfig'
 import { getDistanceFromSnakeToFood } from '../engine/events/snakeMovesTowardsFood'
+import { getFoodEaten } from '../engine/events/snakeCatchesFoodEvent'
+import { closeSnakeMouthOnly } from '../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 
 const COUNTER_RESET_VALUE = 1000000 // Предотвращает переполнение счетчика
 const DEBUG_MODE = false
 const FORCE_SPINNER = false
 const FORCE_LOAD_ERROR = false
 const FORCE_ERROR = false
+const SHRINK_OUT_SPEED = 1
+const MOUTH_FIT_SCALE_FACTOR = 1
+const MOUTH_CLOSE_SCALE_THRESHOLD = 0.5
 
 /**
  * Компонент Apple отображает 3D-модель яблока,
@@ -39,10 +44,25 @@ const Apple: React.FC = () => {
   const { zLocation, scale, FRAME_SKIP } = appleCONFIG as AppleConfig
   const { position, updatePosition } = useApplePosition(zLocation)
   const debouncedPosition = useDebounce(position, SystemConfig.DEBOUNCE_DELAY)
-  useShadowSetup(gltf?.scene)
+  const appleScene = React.useMemo(() => {
+    const scene = gltf.scene.clone(true)
+    scene.traverse((child: any) => {
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map((material: Material) => material.clone())
+        } else {
+          child.material = child.material.clone()
+        }
+      }
+    })
+
+    return scene
+  }, [gltf.scene])
+  useShadowSetup(appleScene)
   const counterRef = React.useRef<Object3D | null>(null)
   const [eaten, setEaten] = React.useState(false)
-  const opacityRef = React.useRef(1)
+  const scaleRef = React.useRef(1)
+  const mouthClosedRef = React.useRef(false)
   let scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
 
   useFrame((_, delta) => {
@@ -50,17 +70,28 @@ const Apple: React.FC = () => {
       // counterRef.current = (counterRef.current + 1) % COUNTER_RESET_VALUE
       // if (counterRef.current % FRAME_SKIP !== 0) return
       updatePosition()
-      if (!eaten && getDistanceFromSnakeToFood() === 1) {
+      if (!eaten && (getDistanceFromSnakeToFood() === 1 || getFoodEaten())) {
         setEaten(true)
       }
 
       if (eaten && counterRef.current) {
-        opacityRef.current = Math.max(0, opacityRef.current - delta) // плавно уменьшаем
-        counterRef.current.traverse((child: any) => {
-          if (child.isMesh && child.material) {
-            child.material.opacity = opacityRef.current
-          }
-        })
+        scaleRef.current = Math.max(
+          0,
+          scaleRef.current - delta * SHRINK_OUT_SPEED,
+        )
+        const fittedScale = scale * scaleRef.current * MOUTH_FIT_SCALE_FACTOR
+        counterRef.current.scale.set(
+          fittedScale,
+          fittedScale,
+          fittedScale,
+        )
+        if (
+          scaleRef.current <= MOUTH_CLOSE_SCALE_THRESHOLD &&
+          !mouthClosedRef.current
+        ) {
+          closeSnakeMouthOnly()
+          mouthClosedRef.current = true
+        }
       }
     } catch (error) {
       console.error('Ошибка обновления позиции яблока:', error)
@@ -69,13 +100,11 @@ const Apple: React.FC = () => {
   })
 
   React.useEffect(() => {
-    gltf.scene.traverse((child: any) => {
-      if (child.isMesh && child.material) {
-        child.material.transparent = true
-        child.material.opacity = 1
-      }
-    })
-  }, [gltf])
+    setEaten(false)
+    scaleRef.current = 1
+    mouthClosedRef.current = false
+    counterRef.current?.scale.set(scale, scale, scale)
+  }, [debouncedPosition, scale])
 
   React.useEffect(() => {
     return () => useGLTF.clear('/apple.glb')
@@ -87,11 +116,18 @@ const Apple: React.FC = () => {
   }
 
   // ⏳ Показываем спиннер
-  if (!gltf?.scene || (DEBUG_MODE && FORCE_SPINNER)) return <Spinner />
-  if (!gltf?.scene) return <Spinner />
+  if (!appleScene || (DEBUG_MODE && FORCE_SPINNER)) return <Spinner />
+  if (!appleScene) return <Spinner />
   if (!debouncedPosition) return null
 
-  return <primitive object={gltf.scene} position={debouncedPosition} scale={scaleArray} />
+  return (
+    <primitive
+      ref={counterRef}
+      object={appleScene}
+      position={debouncedPosition}
+      scale={scaleArray}
+    />
+  )
 }
 
 useGLTF.preload('/apple.glb')

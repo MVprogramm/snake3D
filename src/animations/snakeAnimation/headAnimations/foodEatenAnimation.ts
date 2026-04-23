@@ -1,5 +1,4 @@
 import { snakeCONFIG } from '../../../config/snakeConfig/snakeCONFIG'
-import { getFoodEaten } from '../../../engine/events/snakeCatchesFoodEvent'
 import { setDistanceFromSnakeToFood } from '../../../engine/events/snakeMovesTowardsFood'
 import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import {
@@ -89,8 +88,27 @@ export const foodEatenAnimation = (delta: number) => {
     snakeTongueProps.position.y,
     snakeTongueProps.position.z
   )
-  if (getFoodEaten()) closeSnakeMouth()
   // }
+}
+
+export const closeSnakeMouthOnly = () => {
+  snakeHeadProps['rotation-x'] = 0
+  setDistanceFromSnakeToFood(2)
+  snakeJawProps['rotation-x'] = JAW_CLOSED_ROTATION
+  snakeJawProps.position.z = JAW_CLOSED_Z
+  snakeJawProps.position = new Vector3(
+    snakeJawProps.position.x,
+    snakeJawProps.position.y,
+    snakeJawProps.position.z
+  )
+  snakeTongueProps['rotation-x'] = TONGUE_CLOSED_ROTATION
+  snakeTongueProps.position.z = TONGUE_CLOSED_Z
+  snakeTongueProps.position.y = TONGUE_CLOSED_Y
+  snakeTongueProps.position = new Vector3(
+    snakeTongueProps.position.x,
+    snakeTongueProps.position.y,
+    snakeTongueProps.position.z
+  )
 }
 
 export const closeSnakeMouth = () => {

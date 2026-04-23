@@ -5,11 +5,11 @@
  *     @function snakeCatchesFoodEvent Проверяет касание головы змейки с едой
  *     @function getFoodEaten Показывает, была ли съедена еда на текущем шаге
  */
-import { closeSnakeMouth } from '../../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 import { getCounterHead } from '../../animations/snakeAnimation/headAnimations/snakeHeadLocation'
 import { getDoubleScoresFood } from '../bonuses/bonusDoubleScoresFood'
-import { getCurrentFoodNumber } from '../food/currentFoodNumber'
+import { getCurrentFoodNumber, howMuchIsLeftToEat } from '../food/currentFoodNumber'
 import { getFoodCoord, getFoodScores } from '../food/food'
+import { getCurrentLevel } from '../levels/currentLevel'
 import { addEvent } from '../protocol/protocol'
 import protocolExecutor from '../protocol/protocolExecutor'
 import { getSnakeHeadParams } from '../snake/snake'
@@ -39,6 +39,12 @@ export function snakeCatchesFoodEvent(): void {
       name: 'food eaten',
       value: getCurrentFoodNumber() + 1,
     })
+    if (howMuchIsLeftToEat() === 0) {
+      protocolExecutor({
+        name: 'level is complete',
+        value: getCurrentLevel(),
+      })
+    }
   }
 }
 
