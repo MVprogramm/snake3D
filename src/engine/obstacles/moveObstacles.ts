@@ -16,6 +16,16 @@ import { getField } from '../field/fieldPerLevel'
 // хранит ненулевые шаги препятствий отдельно для X и Y, чтобы избежать коллизий индексов
 const prevStepsX: number[] = []
 const prevStepsY: number[] = []
+const oscillatingStationaryX: number[][] = []
+const oscillatingStationaryY: number[][] = []
+
+export function getOscillatingStationaryX(): number[][] {
+  return oscillatingStationaryX.map((coord) => [...coord])
+}
+
+export function getOscillatingStationaryY(): number[][] {
+  return oscillatingStationaryY.map((coord) => [...coord])
+}
 
 function isStoppedSnakeFrontCell(pos: number[]): boolean {
   const stoppedDirection = getStoppedSnakeDirection()
@@ -59,6 +69,8 @@ function moveObstacles(type: string, forceMove = false): void {
   const twist = type === 'y' ? [1, 0] : [0, 1]
 
   for (let i = 0; i < coordCopy.length; i++) {
+    const initialCoord = [...coordCopy[i]]
+    const initialStep = stepCopy[i]
     // рассчитываем новый шаг с учётом всех столкновений, работаем с копией stepCopy
     stepCopy[i] = setObstacleStep({ i, twist, coord: coordCopy, step: stepCopy })
     let nextStoredStep = stepCopy[i]
@@ -145,6 +157,15 @@ function moveObstacles(type: string, forceMove = false): void {
     // применяем шаг к копии координат
     coordCopy[i][twist[0]] += newStep
     stepCopy[i] = nextStoredStep
+
+    const obstacleOscillatesInPlace =
+      initialStep !== 0 &&
+      coordCopy[i][0] === initialCoord[0] &&
+      coordCopy[i][1] === initialCoord[1] &&
+      nextStoredStep === initialStep * -1
+
+    const stationaryOscillating = type === 'x' ? oscillatingStationaryX : oscillatingStationaryY
+    stationaryOscillating[i] = obstacleOscillatesInPlace ? [...coordCopy[i]] : []
   }
 
   // Записываем обновлённые массивы в соответствующие модули одним присваиванием
