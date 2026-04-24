@@ -119,7 +119,7 @@ const Snake = () => {
         }
       }
     }
-  })
+  }, -20)
 
   return (
     <group>

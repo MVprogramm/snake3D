@@ -5,23 +5,24 @@ import { useFrame } from '@react-three/fiber'
 import { appleCONFIG } from '../config/appleConfig'
 import { GLTFResult } from '../types/threeTypes'
 import { AppleConfig } from '../types/appleTypes'
-import { useDebounce } from '../hooks/useDebounce'
 import { useApplePosition } from '../hooks/useApplePosition'
 import { useShadowSetup } from '../hooks/useShadowSetup'
 import ErrorScreen from './ErrorScreen'
 import Spinner from './Spinner'
-import { SystemConfig } from '../config/systemConfig'
 import { getFoodEaten } from '../engine/events/snakeCatchesFoodEvent'
-import { closeSnakeMouthOnly } from '../animations/snakeAnimation/headAnimations/foodEatenAnimation'
+import { getStep } from '../engine/time/timerStepPerLevel'
+import {
+  closeSnakeMouthOnly,
+  shouldHideAppleBeforeMaxOpen,
+} from '../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 
 const COUNTER_RESET_VALUE = 1000000 // Предотвращает переполнение счетчика
 const DEBUG_MODE = false
 const FORCE_SPINNER = false
 const FORCE_LOAD_ERROR = false
 const FORCE_ERROR = false
-const SHRINK_OUT_SPEED = 1
-const MOUTH_FIT_SCALE_FACTOR = 1
-const MOUTH_CLOSE_SCALE_THRESHOLD = 0.5
+const HIDE_APPLE_IMMEDIATELY_SPEED = 5
+const HIDE_APPLE_FRAMES_AFTER_EAT = 2
 
 /**
  * Компонент Apple отображает 3D-модель яблока,
@@ -42,7 +43,6 @@ const Apple: React.FC = () => {
   }) as GLTFResult
   const { zLocation, scale, FRAME_SKIP } = appleCONFIG as AppleConfig
   const { position, updatePosition } = useApplePosition(zLocation)
-  const debouncedPosition = useDebounce(position, SystemConfig.DEBOUNCE_DELAY)
   const appleScene = React.useMemo(() => {
     const scene = gltf.scene.clone(true)
     scene.traverse((child: any) => {
@@ -59,51 +59,64 @@ const Apple: React.FC = () => {
   }, [gltf.scene])
   useShadowSetup(appleScene)
   const counterRef = React.useRef<Object3D | null>(null)
-  const [eaten, setEaten] = React.useState(false)
-  const scaleRef = React.useRef(1)
+  const eatenRef = React.useRef(false)
+  const hideFramesRef = React.useRef(0)
   const mouthClosedRef = React.useRef(false)
   let scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
 
-  useFrame((_, delta) => {
+  useFrame(() => {
     try {
+      const foodWasEatenThisFrame = getFoodEaten()
+
+      if (foodWasEatenThisFrame && counterRef.current) {
+        eatenRef.current = true
+        hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
+        counterRef.current.visible = false
+        if (!mouthClosedRef.current && getStep() >= HIDE_APPLE_IMMEDIATELY_SPEED) {
+          closeSnakeMouthOnly()
+          mouthClosedRef.current = true
+        }
+        return
+      }
+
       // counterRef.current = (counterRef.current + 1) % COUNTER_RESET_VALUE
       // if (counterRef.current % FRAME_SKIP !== 0) return
       updatePosition()
-      if (!eaten && getFoodEaten()) {
-        setEaten(true)
+
+      if (hideFramesRef.current > 0) {
+        hideFramesRef.current -= 1
+        if (counterRef.current) counterRef.current.visible = false
+        return
       }
 
-      if (eaten && counterRef.current) {
-        scaleRef.current = Math.max(
-          0,
-          scaleRef.current - delta * SHRINK_OUT_SPEED,
-        )
-        const fittedScale = scale * scaleRef.current * MOUTH_FIT_SCALE_FACTOR
-        counterRef.current.scale.set(
-          fittedScale,
-          fittedScale,
-          fittedScale,
-        )
-        if (
-          scaleRef.current <= MOUTH_CLOSE_SCALE_THRESHOLD &&
-          !mouthClosedRef.current
-        ) {
-          closeSnakeMouthOnly()
-          mouthClosedRef.current = true
+      if (eatenRef.current && counterRef.current) {
+        const shouldHideNow =
+          getStep() >= HIDE_APPLE_IMMEDIATELY_SPEED ||
+          shouldHideAppleBeforeMaxOpen()
+
+        if (shouldHideNow) {
+          counterRef.current.visible = false
+          if (!mouthClosedRef.current) {
+            closeSnakeMouthOnly()
+            mouthClosedRef.current = true
+          }
+        } else {
+          counterRef.current.visible = true
         }
       }
     } catch (error) {
       console.error('Ошибка обновления позиции яблока:', error)
       setLoadError(error as Error)
     }
-  })
+  }, -10)
 
   React.useEffect(() => {
-    setEaten(false)
-    scaleRef.current = 1
+    eatenRef.current = false
     mouthClosedRef.current = false
+    hideFramesRef.current = 0
+    if (counterRef.current) counterRef.current.visible = true
     counterRef.current?.scale.set(scale, scale, scale)
-  }, [debouncedPosition, scale])
+  }, [position, scale])
 
   React.useEffect(() => {
     return () => useGLTF.clear('/apple.glb')
@@ -117,13 +130,13 @@ const Apple: React.FC = () => {
   // ⏳ Показываем спиннер
   if (!appleScene || (DEBUG_MODE && FORCE_SPINNER)) return <Spinner />
   if (!appleScene) return <Spinner />
-  if (!debouncedPosition) return null
+  if (!position) return null
 
   return (
     <primitive
       ref={counterRef}
       object={appleScene}
-      position={debouncedPosition}
+      position={position}
       scale={scaleArray}
     />
   )

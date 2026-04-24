@@ -53,7 +53,7 @@ export const Game = () => {
     if (!getInterruptGame() && !showScene) {
       setShowScene(true)
     }
-  })
+  }, -100)
 
   return showScene && <Scene />
 }

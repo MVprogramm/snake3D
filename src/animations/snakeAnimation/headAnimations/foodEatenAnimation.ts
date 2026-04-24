@@ -1,6 +1,6 @@
 import { snakeCONFIG } from '../../../config/snakeConfig/snakeCONFIG'
 import { setDistanceFromSnakeToFood } from '../../../engine/events/snakeMovesTowardsFood'
-import { getTimerStep } from '../../../engine/time/timerStepPerLevel'
+import { getStep, getTimerStep } from '../../../engine/time/timerStepPerLevel'
 import {
   getSnakeUnitPosition,
   setSnakeUnitPosition,
@@ -24,6 +24,10 @@ const TONGUE_OPEN_Z = -0.1
 const TONGUE_CLOSED_Z = 0.23
 const TONGUE_OPEN_Y = 0.1
 const TONGUE_CLOSED_Y = 0.35
+const MOUTH_OPEN_EPSILON = 0.72
+const APPLE_HIDE_OPEN_PROGRESS = 0.35
+const APPLE_HIDE_OPEN_PROGRESS_AT_MAX_SPEED = 0.08
+const MAX_SNAKE_SPEED = 5
 
 export const foodEatenAnimation = (delta: number) => {
   // const [counterHeadX, counterHeadY] = getCounterHead()
@@ -133,6 +137,30 @@ export const closeSnakeMouth = () => {
     snakeTongueProps.position.x,
     snakeTongueProps.position.y,
     snakeTongueProps.position.z
+  )
+}
+
+export const isSnakeMouthAtMaxOpen = () => {
+  const jawRotationDiff = Math.abs(snakeJawProps['rotation-x'] - JAW_OPEN_ROTATION)
+  const jawPositionDiff = Math.abs(snakeJawProps.position.z - JAW_OPEN_Z)
+
+  return jawRotationDiff <= MOUTH_OPEN_EPSILON && jawPositionDiff <= MOUTH_OPEN_EPSILON
+}
+
+export const shouldHideAppleBeforeMaxOpen = () => {
+  const requiredOpenProgress =
+    getStep() >= MAX_SNAKE_SPEED
+      ? APPLE_HIDE_OPEN_PROGRESS_AT_MAX_SPEED
+      : APPLE_HIDE_OPEN_PROGRESS
+  const jawRotationOpenProgress =
+    (snakeJawProps['rotation-x'] - JAW_CLOSED_ROTATION) /
+    (JAW_OPEN_ROTATION - JAW_CLOSED_ROTATION)
+  const jawPositionOpenProgress =
+    (snakeJawProps.position.z - JAW_CLOSED_Z) / (JAW_OPEN_Z - JAW_CLOSED_Z)
+
+  return (
+    jawRotationOpenProgress >= requiredOpenProgress &&
+    jawPositionOpenProgress >= requiredOpenProgress
   )
 }
 
