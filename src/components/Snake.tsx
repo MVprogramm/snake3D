@@ -1,4 +1,4 @@
-import { createRef, RefObject, useRef, useState } from 'react'
+import { createRef, RefObject, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import SnakeHead from '../assets/snakeModel/snakeHead/SnakeHead'
@@ -26,6 +26,9 @@ const Snake = () => {
   const [snakeSeparate, setSnakeSeparate] = useState(Array(snakeMaxLength).fill(1))
   const snakeRefs = useRef<{ [key: string]: RefObject<THREE.Group> }>({})
 
+  const getVisibleSnakeUnits = (bodyLength: number, maxLength: number): number[] =>
+    Array.from({ length: maxLength }, (_, index) => (index > bodyLength - 3 ? 0 : 1))
+
   const getSnakeRef = (key: string): RefObject<THREE.Group> => {
     if (!snakeRefs.current[key]) snakeRefs.current[key] = createRef<THREE.Group>()
     return snakeRefs.current[key]
@@ -34,16 +37,20 @@ const Snake = () => {
   const headRef = getSnakeRef('headRef')
   const tailRef = getSnakeRef('tailRef')
 
+  useEffect(() => {
+    const currentBodyLength = getSnakeBodyCoord().length
+    setSnakeCurrentLength(currentBodyLength)
+    setSnakeSeparate(getVisibleSnakeUnits(currentBodyLength, snakeMaxLength))
+  }, [snakeMaxLength])
+
   useFrame((_, delta) => {
     snakeAnimation(delta)
-    const updatedSnake = snake.map((_, index) => {
-      if (index > getSnakeBodyCoord().length - 3) return 0
-      return 1
-    })
+    const currentBodyLength = getSnakeBodyCoord().length
+    const updatedSnake = getVisibleSnakeUnits(currentBodyLength, snakeMaxLength)
 
     setSnakeSeparate(updatedSnake)
-    if (snakeCurrentLength < getSnakeBodyCoord().length) {
-      setSnakeCurrentLength(getSnakeBodyCoord().length)
+    if (snakeCurrentLength !== currentBodyLength) {
+      setSnakeCurrentLength(currentBodyLength)
     }
     for (const key in snakeRefs.current) {
       if (Object.prototype.hasOwnProperty.call(snakeRefs.current, key)) {

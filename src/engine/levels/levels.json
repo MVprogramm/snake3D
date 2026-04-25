@@ -1,28 +1,11 @@
 [
   {
-    "field": "11",
+    "field": "21",
     "time": "500000",
     "timerStep": "1",
-    "food": "10",
-    "lives": "30",
-    "obstacles": [
-      "x",
-      "x",
-      "x",
-      "x",
-      "x",
-      "y",
-      "x",
-      "y",
-      "fix-M",
-      "fix-M",
-      "fix-M",
-      "fix-M",
-      "fix-R",
-      "fix-R",
-      "fix-R",
-      "fix-R"
-    ],
+    "food": "90",
+    "lives": "10",
+    "obstacles": [],
     "bonuses": [],
     "fog": "light",
     "maxScores": "30"
