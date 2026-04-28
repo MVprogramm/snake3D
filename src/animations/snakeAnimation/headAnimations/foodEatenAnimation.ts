@@ -24,9 +24,9 @@ const TONGUE_OPEN_Z = -0.1
 const TONGUE_CLOSED_Z = 0.23
 const TONGUE_OPEN_Y = 0.1
 const TONGUE_CLOSED_Y = 0.35
-const MOUTH_OPEN_EPSILON = 0.72
 const APPLE_HIDE_OPEN_PROGRESS = 0.35
-const APPLE_HIDE_OPEN_PROGRESS_AT_MAX_SPEED = 0.08
+const APPLE_HIDE_OPEN_PROGRESS_AT_MAX_SPEED = 0.18
+const APPLE_HIDE_MOVE_PROGRESS_AT_MAX_SPEED = 0.65
 const MAX_SNAKE_SPEED = 5
 
 export const foodEatenAnimation = (delta: number) => {
@@ -144,7 +144,7 @@ export const isSnakeMouthAtMaxOpen = () => {
   const jawRotationDiff = Math.abs(snakeJawProps['rotation-x'] - JAW_OPEN_ROTATION)
   const jawPositionDiff = Math.abs(snakeJawProps.position.z - JAW_OPEN_Z)
 
-  return jawRotationDiff <= MOUTH_OPEN_EPSILON && jawPositionDiff <= MOUTH_OPEN_EPSILON
+  return jawRotationDiff <= 0.08 && jawPositionDiff <= 0.05
 }
 
 export const shouldHideAppleBeforeMaxOpen = () => {
@@ -161,6 +161,22 @@ export const shouldHideAppleBeforeMaxOpen = () => {
   return (
     jawRotationOpenProgress >= requiredOpenProgress &&
     jawPositionOpenProgress >= requiredOpenProgress
+  )
+}
+
+export const isSnakeOpeningMouthForFoodAtMaxSpeed = () =>
+  getStep() >= MAX_SNAKE_SPEED &&
+  getHeadVerticalStep() > 0 &&
+  shouldHideAppleBeforeMaxOpen()
+
+export const shouldHideAppleBeforeContactAtMaxSpeed = () => {
+  const [counterHeadX, counterHeadY] = getCounterHead()
+  const moveProgress = Math.max(Math.abs(counterHeadX), Math.abs(counterHeadY))
+
+  return (
+    getStep() >= MAX_SNAKE_SPEED &&
+    getHeadVerticalStep() > 0 &&
+    moveProgress >= APPLE_HIDE_MOVE_PROGRESS_AT_MAX_SPEED
   )
 }
 

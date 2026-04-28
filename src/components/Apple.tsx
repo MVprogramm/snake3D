@@ -13,6 +13,7 @@ import { getFoodEaten } from '../engine/events/snakeCatchesFoodEvent'
 import { getStep } from '../engine/time/timerStepPerLevel'
 import {
   closeSnakeMouthOnly,
+  shouldHideAppleBeforeContactAtMaxSpeed,
   shouldHideAppleBeforeMaxOpen,
 } from '../animations/snakeAnimation/headAnimations/foodEatenAnimation'
 
@@ -43,6 +44,7 @@ const Apple: React.FC = () => {
   }) as GLTFResult
   const { zLocation, scale, FRAME_SKIP } = appleCONFIG as AppleConfig
   const { position, updatePosition } = useApplePosition(zLocation)
+  const [renderPosition, setRenderPosition] = React.useState<typeof position>(null)
   const appleScene = React.useMemo(() => {
     const scene = gltf.scene.clone(true)
     scene.traverse((child: any) => {
@@ -62,21 +64,51 @@ const Apple: React.FC = () => {
   const eatenRef = React.useRef(false)
   const hideFramesRef = React.useRef(0)
   const mouthClosedRef = React.useRef(false)
+  const preHideRef = React.useRef(false)
+  const pendingPositionRef = React.useRef<typeof position>(null)
   let scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
+
+  const commitApplePosition = React.useCallback(
+    (nextPosition: typeof position) => {
+      if (!nextPosition) return
+
+      setRenderPosition(nextPosition)
+      pendingPositionRef.current = null
+      eatenRef.current = false
+      mouthClosedRef.current = false
+      preHideRef.current = false
+      hideFramesRef.current = 0
+
+      if (counterRef.current) {
+        counterRef.current.visible = true
+        counterRef.current.scale.set(scale, scale, scale)
+      }
+    },
+    [scale]
+  )
 
   useFrame(() => {
     try {
+      const shouldPreHideAtMaxSpeed = shouldHideAppleBeforeContactAtMaxSpeed()
       const foodWasEatenThisFrame = getFoodEaten()
 
       if (foodWasEatenThisFrame && counterRef.current) {
         eatenRef.current = true
-        hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
-        counterRef.current.visible = false
-        if (!mouthClosedRef.current && getStep() >= HIDE_APPLE_IMMEDIATELY_SPEED) {
-          closeSnakeMouthOnly()
-          mouthClosedRef.current = true
+        if (getStep() < HIDE_APPLE_IMMEDIATELY_SPEED) {
+          hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
+          counterRef.current.visible = false
+          return
         }
-        return
+
+        if (getStep() >= HIDE_APPLE_IMMEDIATELY_SPEED) {
+          hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
+          counterRef.current.visible = false
+          if (!mouthClosedRef.current) {
+            closeSnakeMouthOnly()
+            mouthClosedRef.current = true
+          }
+          return
+        }
       }
 
       // counterRef.current = (counterRef.current + 1) % COUNTER_RESET_VALUE
@@ -86,15 +118,28 @@ const Apple: React.FC = () => {
       if (hideFramesRef.current > 0) {
         hideFramesRef.current -= 1
         if (counterRef.current) counterRef.current.visible = false
+        if (hideFramesRef.current === 0 && pendingPositionRef.current) {
+          commitApplePosition(pendingPositionRef.current)
+        }
+        return
+      }
+
+      if (!eatenRef.current && shouldPreHideAtMaxSpeed && counterRef.current) {
+        preHideRef.current = true
+        counterRef.current.visible = false
         return
       }
 
       if (eatenRef.current && counterRef.current) {
         const shouldHideNow =
-          getStep() >= HIDE_APPLE_IMMEDIATELY_SPEED ||
-          shouldHideAppleBeforeMaxOpen()
+          getStep() >= HIDE_APPLE_IMMEDIATELY_SPEED
+            ? true
+            : shouldHideAppleBeforeMaxOpen()
 
         if (shouldHideNow) {
+          if (hideFramesRef.current === 0) {
+            hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
+          }
           counterRef.current.visible = false
           if (!mouthClosedRef.current) {
             closeSnakeMouthOnly()
@@ -111,12 +156,19 @@ const Apple: React.FC = () => {
   }, -10)
 
   React.useEffect(() => {
-    eatenRef.current = false
-    mouthClosedRef.current = false
-    hideFramesRef.current = 0
-    if (counterRef.current) counterRef.current.visible = true
-    counterRef.current?.scale.set(scale, scale, scale)
-  }, [position, scale])
+    if (!position) return
+
+    if (eatenRef.current || hideFramesRef.current > 0 || preHideRef.current) {
+      pendingPositionRef.current = position
+
+      if (preHideRef.current && hideFramesRef.current === 0 && renderPosition) {
+        hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
+      }
+      return
+    }
+
+    commitApplePosition(position)
+  }, [position, renderPosition, commitApplePosition])
 
   React.useEffect(() => {
     return () => useGLTF.clear('/apple.glb')
@@ -130,13 +182,13 @@ const Apple: React.FC = () => {
   // ⏳ Показываем спиннер
   if (!appleScene || (DEBUG_MODE && FORCE_SPINNER)) return <Spinner />
   if (!appleScene) return <Spinner />
-  if (!position) return null
+  if (!renderPosition) return null
 
   return (
     <primitive
       ref={counterRef}
       object={appleScene}
-      position={position}
+      position={renderPosition}
       scale={scaleArray}
     />
   )
