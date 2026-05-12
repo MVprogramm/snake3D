@@ -36,9 +36,9 @@ function getTreeColor(rnd: () => number, baseColor?: number): number {
 function createTrunk(seed: number) {
   const rnd = mulberry32(seed + 100)
 
-  const height = 0.5 + rnd() * 0.28
-  const radiusBottom = 0.06 + rnd() * 0.025
-  const radiusTop = radiusBottom * (0.62 + rnd() * 0.12)
+  const height = 0.18 + rnd() * 0.08
+  const radiusBottom = 0.045 + rnd() * 0.01
+  const radiusTop = radiusBottom * 0.7
 
   // Cylinder is Y-up by default, rotate once to Z-up and stop there.
   const geo = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 6, 1)
@@ -48,9 +48,9 @@ function createTrunk(seed: number) {
   geo.translate(0, 0, height / 2)
 
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color().setHSL(0.07, 0.42 + rnd() * 0.08, 0.2 + rnd() * 0.06),
+    color: new THREE.Color(0x5c3d1e),
     flatShading: true,
-    roughness: 0.92,
+    roughness: 0.95,
   })
 
   return { geo, mat, height, radiusTop, radiusBottom }
@@ -58,13 +58,13 @@ function createTrunk(seed: number) {
 
 function createPineLayers(seed: number, trunkHeight: number, color?: number) {
   const rnd = mulberry32(seed + 200)
-  const treeColor = getTreeColor(mulberry32(seed + 300), color)
+  const baseColor = getTreeColor(mulberry32(seed + 300), color)
 
-  const base = new THREE.Color(treeColor)
+  const base = new THREE.Color(baseColor)
   const hsl = { h: 0, s: 0, l: 0 }
   base.getHSL(hsl)
 
-  const count = 3
+  const count = 6
   const layers: {
     geo: THREE.BufferGeometry
     mat: THREE.MeshStandardMaterial
@@ -74,38 +74,30 @@ function createPineLayers(seed: number, trunkHeight: number, color?: number) {
   for (let i = 0; i < count; i++) {
     const t = i / (count - 1)
 
-    const radius = 0.28 - t * 0.08 + rnd() * 0.015
-    const height = 0.26 + rnd() * 0.06
+    const radius = 0.32 - t * 0.22 + rnd() * 0.008
+    const height = 0.1 + (1 - t) * 0.04
 
-    const geo = new THREE.ConeGeometry(radius, height, 7, 1)
+    const geo = new THREE.ConeGeometry(radius, height, 8, 1)
     geo.rotateX(Math.PI / 2)
 
     // Put cone base at local origin so position.z is easy to reason about.
     geo.translate(0, 0, height / 2)
 
     // Minimal randomness only around vertical axis.
-    geo.rotateZ(rnd() * Math.PI * 2)
+    geo.rotateZ((i % 2) * (Math.PI / 8) + rnd() * 0.15)
 
-    const lightness = Math.min(
-      0.78,
-      Math.max(0.12, hsl.l + (rnd() - 0.5) * 0.03 + t * 0.02),
-    )
-    const layerColor = new THREE.Color().setHSL(
-      hsl.h + (rnd() - 0.5) * 0.015,
-      hsl.s,
-      lightness,
-    )
-
+    const lightness = hsl.l + t * 0.06
     const mat = new THREE.MeshStandardMaterial({
-      color: layerColor,
+      color: new THREE.Color().setHSL(hsl.h, hsl.s, lightness),
       flatShading: true,
-      roughness: 0.88,
-      emissive: new THREE.Color().setHSL(hsl.h, hsl.s * 0.35, 0.02),
-      emissiveIntensity: 0.14,
+      roughness: 0.85,
+      emissive: new THREE.Color().setHSL(hsl.h, hsl.s * 0.3, 0.015),
+      emissiveIntensity: 0.1,
     })
 
     // Start just below trunk top so the crown visually connects.
-    const z = trunkHeight - 0.06 + i * 0.13
+    const step = 0.13 - t * 0.03
+    const z = trunkHeight - 0.04 + i * step
 
     layers.push({ geo, mat, z })
   }
