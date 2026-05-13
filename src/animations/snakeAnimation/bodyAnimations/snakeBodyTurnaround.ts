@@ -9,6 +9,24 @@ import { getCounterHead } from '../headAnimations/snakeHeadLocation'
 import * as PROPS from './snakeBodyProps'
 import * as DIFF from './snakeDiff'
 
+const getTailTargetRotation = (diffX: number, diffY: number): number | null =>
+  diffX === 0 && diffY === 1
+    ? 0
+    : diffX === 0 && diffY === -1
+      ? 3.14
+      : diffX === 1 && diffY === 0
+        ? -1.57
+        : diffX === -1 && diffY === 0
+          ? 1.57
+          : null
+
+const getShortestRotationDiff = (target: number, current: number): number => {
+  let diff = target - current
+  while (diff > 3.14) diff -= 6.28
+  while (diff < -3.14) diff += 6.28
+  return diff
+}
+
 export const snakeBodyTurnaround = () => {
   const [counterHeadX, counterHeadY] = getCounterHead()
   const rotations = PROPS.getSnakeUnitRotation().map((unit, index) => {
@@ -111,16 +129,16 @@ export const snakeBodyTurnaround = () => {
       const tailDiff = DIFF.getDiff()[index]
       if (tailDiff) {
         const { diffX, diffY } = tailDiff
-        unit[2] =
-          diffX === 0 && diffY === 1
-            ? 0
-            : diffX === 0 && diffY === -1
-              ? 3.14
-              : diffX === 1 && diffY === 0
-                ? -1.57
-                : diffX === -1 && diffY === 0
-                  ? 1.57
-                  : unit[2]
+        const targetRotation = getTailTargetRotation(diffX, diffY)
+        if (targetRotation !== null) {
+          const rotationDiff = getShortestRotationDiff(targetRotation, unit[2])
+          const rotationStep = (1.57 * getTimerStep()) / 61
+
+          unit[2] =
+            Math.abs(rotationDiff) <= rotationStep
+              ? targetRotation
+              : unit[2] + Math.sign(rotationDiff) * rotationStep
+        }
       }
     }
     if (index > getSnakeBodyCoord().length - 2) {
