@@ -9,6 +9,7 @@ import { getFoodScores } from '../food/food'
 import setFood from '../food/setFood'
 import { setScores } from '../scores/scores'
 import * as SNAKE from '../snake/snake'
+import { syncSnakeGrowthTail } from '../../animations/snakeAnimation/bodyAnimations/syncSnakeGrowthTail'
 /**
  * Выводит новую еду, задает вознаграждение, добавляет длину змейке, если можно
  */
@@ -26,6 +27,7 @@ function foodEaten() {
     const xNewCoord = SNAKE.getSnakeBodyCoord()[snakeLength - 1][0] - xDef
     const yNewCoord = SNAKE.getSnakeBodyCoord()[snakeLength - 1][1] - yDef
     SNAKE.addSnakeBodyCoord([xNewCoord, yNewCoord])
+    syncSnakeGrowthTail(SNAKE.getSnakeBodyCoord(), snakeLength)
   }
   // moveSnake();
 }

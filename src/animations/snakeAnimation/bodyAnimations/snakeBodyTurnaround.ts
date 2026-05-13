@@ -39,10 +39,10 @@ export const snakeBodyTurnaround = () => {
                 : 0
     }
     if (index > 0 && index < getSnakeBodyCoord().length - 2) {
-      const diffPreviousX = DIFF.getPreviousDiff()[index - 1].diffX
-      const diffPreviousY = DIFF.getPreviousDiff()[index - 1].diffY
-      const diffCurrentX = DIFF.getDiff()[index - 1].diffX
-      const diffCurrentY = DIFF.getDiff()[index - 1].diffY
+      const diffPreviousX = DIFF.getPreviousDiff()[index].diffX
+      const diffPreviousY = DIFF.getPreviousDiff()[index].diffY
+      const diffCurrentX = DIFF.getDiff()[index].diffX
+      const diffCurrentY = DIFF.getDiff()[index].diffY
       let previousDirection =
         diffPreviousX === 1 && diffPreviousY === 0
           ? 'right'
@@ -108,54 +108,26 @@ export const snakeBodyTurnaround = () => {
       // }
     }
     if (index === getSnakeBodyCoord().length - 2) {
-      const diffPreviousX = DIFF.getPreviousDiff()[index - 1].diffX
-      const diffPreviousY = DIFF.getPreviousDiff()[index - 1].diffY
-      const diffCurrentX = DIFF.getDiff()[index - 1].diffX
-      const diffCurrentY = DIFF.getDiff()[index - 1].diffY
-      let previousDirection =
-        diffPreviousX === 1 && diffPreviousY === 0
-          ? 'right'
-          : diffPreviousX === 0 && diffPreviousY === -1
-            ? 'down'
-            : diffPreviousX === -1 && diffPreviousY === 0
-              ? 'left'
-              : diffPreviousX === 0 && diffPreviousY === 1
-                ? 'up'
-                : ''
-      let currentDirection =
-        diffCurrentX === 1 && diffCurrentY === 0
-          ? 'right'
-          : diffCurrentX === 0 && diffCurrentY === -1
-            ? 'down'
-            : diffCurrentX === -1 && diffCurrentY === 0
-              ? 'left'
-              : diffCurrentX === 0 && diffCurrentY === 1
-                ? 'up'
-                : ''
-      if (
-        (previousDirection === 'right' && currentDirection === 'up') ||
-        (previousDirection === 'left' && currentDirection === 'down') ||
-        (previousDirection === 'up' && currentDirection === 'left') ||
-        (previousDirection === 'down' && currentDirection === 'right')
-      )
-        unit[2] = unit[2] + (1.57 * moveSpeed) / 61
-      if (counterHeadX === 0 && counterHeadY === 0)
-        unit[2] = Math.ceil(unit[2] / 1.57) * 1.57
-      if (
-        (previousDirection === 'right' && currentDirection === 'down') ||
-        (previousDirection === 'left' && currentDirection === 'up') ||
-        (previousDirection === 'up' && currentDirection === 'right') ||
-        (previousDirection === 'down' && currentDirection === 'left')
-      )
-        unit[2] = unit[2] - (1.57 * moveSpeed) / 61
-      if (counterHeadX === 0 && counterHeadY === 0)
-        unit[2] = Math.floor(unit[2] / 1.57) * 1.57
+      const tailDiff = DIFF.getDiff()[index]
+      if (tailDiff) {
+        const { diffX, diffY } = tailDiff
+        unit[2] =
+          diffX === 0 && diffY === 1
+            ? 0
+            : diffX === 0 && diffY === -1
+              ? 3.14
+              : diffX === 1 && diffY === 0
+                ? -1.57
+                : diffX === -1 && diffY === 0
+                  ? 1.57
+                  : unit[2]
+      }
     }
     if (index > getSnakeBodyCoord().length - 2) {
-      const diffPreviousX = DIFF.getPreviousDiff()[index - 1].diffX
-      const diffPreviousY = DIFF.getPreviousDiff()[index - 1].diffY
-      const diffCurrentX = DIFF.getDiff()[index - 1].diffX
-      const diffCurrentY = DIFF.getDiff()[index - 1].diffY
+      const diffPreviousX = DIFF.getPreviousDiff()[index].diffX
+      const diffPreviousY = DIFF.getPreviousDiff()[index].diffY
+      const diffCurrentX = DIFF.getDiff()[index].diffX
+      const diffCurrentY = DIFF.getDiff()[index].diffY
       let previousDirection =
         diffPreviousX === 1 && diffPreviousY === 0
           ? 'right'
