@@ -65,27 +65,7 @@ const Apple: React.FC = () => {
   const hideFramesRef = React.useRef(0)
   const mouthClosedRef = React.useRef(false)
   const preHideRef = React.useRef(false)
-  const pendingPositionRef = React.useRef<typeof position>(null)
   let scaleArray = React.useMemo(() => [scale, scale, scale] as const, [scale])
-
-  const commitApplePosition = React.useCallback(
-    (nextPosition: typeof position) => {
-      if (!nextPosition) return
-
-      setRenderPosition(nextPosition)
-      pendingPositionRef.current = null
-      eatenRef.current = false
-      mouthClosedRef.current = false
-      preHideRef.current = false
-      hideFramesRef.current = 0
-
-      if (counterRef.current) {
-        counterRef.current.visible = true
-        counterRef.current.scale.set(scale, scale, scale)
-      }
-    },
-    [scale]
-  )
 
   useFrame(() => {
     try {
@@ -118,8 +98,14 @@ const Apple: React.FC = () => {
       if (hideFramesRef.current > 0) {
         hideFramesRef.current -= 1
         if (counterRef.current) counterRef.current.visible = false
-        if (hideFramesRef.current === 0 && pendingPositionRef.current) {
-          commitApplePosition(pendingPositionRef.current)
+        if (hideFramesRef.current === 0) {
+          eatenRef.current = false
+          mouthClosedRef.current = false
+          preHideRef.current = false
+          if (counterRef.current) {
+            counterRef.current.visible = true
+            counterRef.current.scale.set(scale, scale, scale)
+          }
         }
         return
       }
@@ -158,17 +144,15 @@ const Apple: React.FC = () => {
   React.useEffect(() => {
     if (!position) return
 
-    if (eatenRef.current || hideFramesRef.current > 0 || preHideRef.current) {
-      pendingPositionRef.current = position
-
-      if (preHideRef.current && hideFramesRef.current === 0 && renderPosition) {
-        hideFramesRef.current = HIDE_APPLE_FRAMES_AFTER_EAT
+    setRenderPosition(position)
+    if (counterRef.current) {
+      counterRef.current.position.set(position[0], position[1], position[2])
+      if (!eatenRef.current && hideFramesRef.current === 0 && !preHideRef.current) {
+        counterRef.current.visible = true
+        counterRef.current.scale.set(scale, scale, scale)
       }
-      return
     }
-
-    commitApplePosition(position)
-  }, [position, renderPosition, commitApplePosition])
+  }, [position, scale])
 
   React.useEffect(() => {
     return () => useGLTF.clear('/apple.glb')
