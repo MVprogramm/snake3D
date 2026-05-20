@@ -13,7 +13,7 @@ import obstacleBounce from './obstacleBounce'
  */
 function contactSnakeBodyObstacle(props: obstacleContactProps): number {
   const { i, step }: { i: number; step: number[] } = props
-  const snakeBody = SNAKE.getSnakeBodyCoord()
+  const snakeBody = SNAKE.getSnakeBodyCoord().slice(0, -1)
   snakeBody.forEach((pos) => {
     step[i] = obstacleBounce({ ...props, cell: pos })
   })

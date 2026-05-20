@@ -83,24 +83,24 @@ const Snake = () => {
         const index = Number(key.replace('bodyUnitRef_', ''))
         if (key === 'tailRef') {
           snakeRefs.current['tailRef'].current?.position.set(
-            U.getSnakeUnitPosition()[snakeCurrentLength - 2][0],
-            U.getSnakeUnitPosition()[snakeCurrentLength - 2][1],
-            U.getSnakeUnitPosition()[snakeCurrentLength - 2][2],
+            U.getSnakeUnitPosition()[currentBodyLength - 2][0],
+            U.getSnakeUnitPosition()[currentBodyLength - 2][1],
+            U.getSnakeUnitPosition()[currentBodyLength - 2][2],
           )
           snakeRefs.current['tailRef'].current?.rotation.set(
             0,
             0,
-            U.getSnakeUnitRotation()[snakeCurrentLength - 2][2],
+            U.getSnakeUnitRotation()[currentBodyLength - 2][2],
           )
           snakeRefs.current['tailRef'].current?.scale.set(
-            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
-            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
-            0.65 + 0.35 * (1 - (snakeCurrentLength - 2) / getSnakeBodyCoord().length),
+            0.65 + 0.35 * (1 - (currentBodyLength - 2) / currentBodyLength),
+            0.65 + 0.35 * (1 - (currentBodyLength - 2) / currentBodyLength),
+            0.65 + 0.35 * (1 - (currentBodyLength - 2) / currentBodyLength),
           )
         }
 
         if (key.includes('bodyUnitRef_')) {
-          if (index < snakeCurrentLength - 2) {
+          if (index < currentBodyLength - 2) {
             snakeRefs.current[`bodyUnitRef_${index}`].current?.position.set(
               U.getSnakeUnitPosition()[index][0],
               U.getSnakeUnitPosition()[index][1],
@@ -112,15 +112,9 @@ const Snake = () => {
               U.getSnakeUnitRotation()[index][2],
             )
             snakeRefs.current[`bodyUnitRef_${index}`].current?.scale.set(
-              0.65 +
-                (0.35 * (getSnakeBodyCoord().length - index)) /
-                  getSnakeBodyCoord().length,
-              0.65 +
-                (0.35 * (getSnakeBodyCoord().length - index)) /
-                  getSnakeBodyCoord().length,
-              0.65 +
-                (0.35 * (getSnakeBodyCoord().length - index)) /
-                  getSnakeBodyCoord().length,
+              0.65 + (0.35 * (currentBodyLength - index)) / currentBodyLength,
+              0.65 + (0.35 * (currentBodyLength - index)) / currentBodyLength,
+              0.65 + (0.35 * (currentBodyLength - index)) / currentBodyLength,
             )
           }
         }

@@ -17,8 +17,10 @@ function getOscillatingStationaryObstacles(): number[][] {
 function noMoves(snakeHeadPos: SnakeHeadCoord): boolean {
   let prohibitedCells: number[][] = []
 
-  prohibitedCells = getObstaclesFixCoord()
-    .concat(getOscillatingStationaryObstacles(), getSnakeBodyCoord().slice(1))
+  prohibitedCells = getObstaclesFixCoord().concat(
+    getOscillatingStationaryObstacles(),
+    getSnakeBodyCoord().slice(1, -2),
+  )
   let checkSnakePos: SnakeHeadCoord = { ...snakeHeadPos }
   let contact: boolean
   const directions = [

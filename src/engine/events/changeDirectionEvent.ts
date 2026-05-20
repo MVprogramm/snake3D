@@ -29,7 +29,8 @@ function isDirectionAvailable(dirName: 'X' | 'Y', dirValue: 1 | -1): boolean {
     ...getObstaclesXCoord(),
     ...getObstaclesYCoord(),
   ]
-  const prohibitedCells = obstacles.concat(getSnakeBodyCoord().slice(1))
+  const blockingSnakeBody = getSnakeBodyCoord().slice(1, -2)
+  const prohibitedCells = obstacles.concat(blockingSnakeBody)
 
   let coord = [0, 0]
   if (dirName === 'X') {

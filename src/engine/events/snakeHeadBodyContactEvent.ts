@@ -14,13 +14,11 @@ import { didSnakeReachCellOnStep } from './snakeStepCollision'
 function snakeHeadBodyContactEvent(snakeHead: SnakeHeadCoord): SnakeHeadCoord {
   const snakeBody = SNAKE.getSnakeBodyCoord()
   const visibleTailIndex = snakeBody.length - 2
-  const reserveTailIndex = snakeBody.length - 1
   for (let index = 0; index < snakeBody.length; index++) {
     const pos = snakeBody[index]
     if (
       index !== 0 &&
-      index !== visibleTailIndex &&
-      index !== reserveTailIndex &&
+      index < visibleTailIndex &&
       didSnakeReachCellOnStep(snakeHead, pos)
     ) {
       snakeHead.snakeHeadCoordY = snakeHead.snakeHeadCoordY - snakeHead.snakeHeadStepY
