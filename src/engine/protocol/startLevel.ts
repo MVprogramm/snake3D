@@ -11,6 +11,7 @@ import { obstacleSpeedReset } from "../obstacles/obstacleSpeed";
 import { removeBonus } from "../bonuses/bonusAvailableState";
 import { catchBonus } from "../bonuses/bonusCatchingState";
 import { clearStoppedSnakeDirection } from "../snake/snake";
+import { clearPendingSnakeHead } from "../snake/snakeStepPhase";
 /**
  * Запускает текущий уровень игры
  * @description
@@ -21,6 +22,7 @@ import { clearStoppedSnakeDirection } from "../snake/snake";
 function startLevel(): void {
   levelNotCompleted();
   clearStoppedSnakeDirection();
+  clearPendingSnakeHead();
   setSnakeStartEvent([
     Math.floor(getField() / 2) + 1,
     Math.floor(getField() / 2) + 1,

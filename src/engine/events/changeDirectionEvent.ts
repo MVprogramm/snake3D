@@ -16,7 +16,11 @@ import { getField } from '../field/fieldPerLevel'
 import { getObstaclesFixCoord } from '../obstacles/obstaclesFix'
 import { getObstaclesXCoord } from '../obstacles/obstaclesX'
 import { getObstaclesYCoord } from '../obstacles/obstaclesY'
-import { getSnakeBodyCoord } from '../snake/snake'
+import { getSnakeBlockingBodyForHead } from '../snake/getSnakeCollisionBody'
+import {
+  hasPendingSnakeHead,
+  hasSnakeDirectionQueueCapacity,
+} from '../snake/snakeStepPhase'
 import snakeCoordCompare from './snakeCoordCompare'
 
 /**
@@ -29,8 +33,7 @@ function isDirectionAvailable(dirName: 'X' | 'Y', dirValue: 1 | -1): boolean {
     ...getObstaclesXCoord(),
     ...getObstaclesYCoord(),
   ]
-  const blockingSnakeBody = getSnakeBodyCoord().slice(1, -2)
-  const prohibitedCells = obstacles.concat(blockingSnakeBody)
+  const prohibitedCells = obstacles.concat(getSnakeBlockingBodyForHead())
 
   let coord = [0, 0]
   if (dirName === 'X') {
@@ -87,6 +90,10 @@ export const changeDirectionEvent = (e: KeyboardEvent): Event => {
 
   let newName = ''
   let newValue = 0
+
+  if (hasPendingSnakeHead() && !hasSnakeDirectionQueueCapacity()) {
+    return { name: '', value: 0 }
+  }
 
   if (!checkTimerWorking() || checkContact()) moveDirection.name = ''
 

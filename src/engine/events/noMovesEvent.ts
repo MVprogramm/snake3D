@@ -5,7 +5,7 @@ import {
   getOscillatingStationaryX,
   getOscillatingStationaryY,
 } from '../obstacles/moveObstacles'
-import { getSnakeBodyCoord } from '../snake/snake'
+import { getSnakeBlockingBodyForHead } from '../snake/getSnakeCollisionBody'
 import snakeCoordCompare from './snakeCoordCompare'
 
 function getOscillatingStationaryObstacles(): number[][] {
@@ -19,7 +19,7 @@ function noMoves(snakeHeadPos: SnakeHeadCoord): boolean {
 
   prohibitedCells = getObstaclesFixCoord().concat(
     getOscillatingStationaryObstacles(),
-    getSnakeBodyCoord().slice(1, -2),
+    getSnakeBlockingBodyForHead(),
   )
   let checkSnakePos: SnakeHeadCoord = { ...snakeHeadPos }
   let contact: boolean

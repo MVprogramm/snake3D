@@ -6,10 +6,14 @@ import allContactEvents, { setIsDistraintContact } from '../events/allContactEve
 import { breakContact } from '../events/isContact'
 import { checkMistake } from '../lives/isMistake'
 import { checkTimerWorking, startTimer } from '../time/isTimer'
-import { getCurrentHeadState } from './getCurrentHeadState'
 import { getPotentialHeadState } from './getPotentialHeadState'
 import * as SNAKE from './snake'
 import { shiftSnakeBody } from './shiftSnakeBody'
+import {
+  consumePendingSnakeHead,
+  consumeQueuedSnakeDirection,
+  setPendingSnakeHead,
+} from './snakeStepPhase'
 import { stopSnakeHead } from './stopSnakeHead'
 /**
  * Двигает змейку по игровому полю
@@ -22,7 +26,18 @@ import { stopSnakeHead } from './stopSnakeHead'
  *    - Управляет таймером движения
  */
 export function advanceSnake(): void {
-  let currentHead = getCurrentHeadState()
+  const completedHead = consumePendingSnakeHead()
+  if (completedHead) {
+    const queuedDirection = consumeQueuedSnakeDirection()
+    const { snakeHeadStepX, snakeHeadStepY } = SNAKE.getSnakeHeadParams()
+    SNAKE.setSnakeHeadParams({
+      ...completedHead,
+      snakeHeadStepX: queuedDirection?.[0] ?? snakeHeadStepX,
+      snakeHeadStepY: queuedDirection?.[1] ?? snakeHeadStepY,
+    })
+  }
+
+  let currentHead = SNAKE.getSnakeHeadParams()
   const newBodyCoord = [...SNAKE.getSnakeBodyCoord()]
   let { snakeHeadCoordX, snakeHeadCoordY, snakeHeadStepX, snakeHeadStepY } = currentHead
   if (snakeHeadStepX !== 0 || snakeHeadStepY !== 0) {
@@ -35,6 +50,8 @@ export function advanceSnake(): void {
       setIsDistraintContact(true)
       currentHead = stopSnakeHead(nextSnakeHeadCoord)
       shiftSnakeBody(newBodyCoord, snakeHeadCoordX, snakeHeadCoordY)
+    } else {
+      setPendingSnakeHead(potentialHead)
     }
     SNAKE.setSnakeHeadParams(currentHead)
     breakContact()
