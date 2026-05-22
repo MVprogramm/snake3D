@@ -10,6 +10,7 @@ import { getPotentialHeadState } from './getPotentialHeadState'
 import * as SNAKE from './snake'
 import { shiftSnakeBody } from './shiftSnakeBody'
 import {
+  clearPendingSnakeHead,
   consumePendingSnakeHead,
   consumeQueuedSnakeDirection,
   setPendingSnakeHead,
@@ -43,20 +44,25 @@ export function advanceSnake(): void {
   if (snakeHeadStepX !== 0 || snakeHeadStepY !== 0) {
     const potentialHead = getPotentialHeadState(currentHead)
     const nextSnakeHeadCoord = allContactEvents(potentialHead)
+    let nextBodyHeadX = snakeHeadCoordX
+    let nextBodyHeadY = snakeHeadCoordY
+
     if (
       nextSnakeHeadCoord.snakeHeadCoordX !== potentialHead.snakeHeadCoordX ||
       nextSnakeHeadCoord.snakeHeadCoordY !== potentialHead.snakeHeadCoordY
     ) {
       setIsDistraintContact(true)
       currentHead = stopSnakeHead(nextSnakeHeadCoord)
-      shiftSnakeBody(newBodyCoord, snakeHeadCoordX, snakeHeadCoordY)
+      clearPendingSnakeHead()
     } else {
       setPendingSnakeHead(potentialHead)
+      nextBodyHeadX = potentialHead.snakeHeadCoordX
+      nextBodyHeadY = potentialHead.snakeHeadCoordY
     }
     SNAKE.setSnakeHeadParams(currentHead)
     breakContact()
     if (checkTimerWorking() && !checkMistake()) {
-      shiftSnakeBody(newBodyCoord, snakeHeadCoordX, snakeHeadCoordY)
+      shiftSnakeBody(newBodyCoord, nextBodyHeadX, nextBodyHeadY)
     } else if (!checkMistake()) {
       startTimer()
     }
