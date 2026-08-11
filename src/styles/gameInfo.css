@@ -5,5 +5,38 @@
   padding: 2vmin 1vmin;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 1.5vmin;
   /* z-index: 100; */
+}
+
+.bonus-probability {
+  color: #d32f2f;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45vmin;
+  min-width: 7ch;
+  font-size: 2.4vmin;
+  white-space: nowrap;
+}
+
+.bonus-probability-icon {
+  color: #d32f2f;
+}
+
+.available-bonus-icon {
+  animation: available-bonus-blink 800ms ease-in-out infinite;
+  color: currentColor;
+  margin-left: 0.35vmin;
+}
+
+@keyframes available-bonus-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
 }

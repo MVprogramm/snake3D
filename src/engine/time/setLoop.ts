@@ -4,6 +4,7 @@
  */
 import * as INTERRUPT from '../events/interruptGameEvent'
 import playLevel from '../levels/playLevel'
+import { updateAppleTimeIdealRoute } from '../protocol/appleTimeEfficiency'
 // import render from "../render/render";
 import { checkTimerWorking } from './isTimer'
 import { setTimer } from './timer'
@@ -20,7 +21,10 @@ function setLoop(delta: number) {
   if (!INTERRUPT.getInterruptGame()) {
     playLevel()
   }
-  if (checkTimerWorking()) setTimer(delta * 1000)
+  if (checkTimerWorking()) {
+    setTimer(delta * 1000)
+    updateAppleTimeIdealRoute()
+  }
 }
 
 export default setLoop

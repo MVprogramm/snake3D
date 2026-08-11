@@ -1,0 +1,43 @@
+.training-panel {
+  position: fixed;
+  top: 1.2vmin;
+  right: 1.2vmin;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1vmin;
+  color: #f3f6fb;
+  font-size: 2vmin;
+  font-weight: 600;
+  pointer-events: auto;
+}
+
+.training-panel-title {
+  color: #f3f6fb;
+}
+
+.training-speed-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4vmin;
+}
+
+.training-speed-button {
+  width: 3.4vmin;
+  height: 3.4vmin;
+  min-width: 28px;
+  min-height: 28px;
+  border: 1px solid rgba(243, 246, 251, 0.45);
+  border-radius: 6px;
+  background: rgba(41, 52, 71, 0.72);
+  color: #f3f6fb;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+}
+
+.training-speed-button-active {
+  border-color: #00fff2;
+  background: rgba(0, 255, 242, 0.24);
+  color: #ffffff;
+}

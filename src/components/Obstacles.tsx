@@ -1,5 +1,5 @@
 import { getObstacles } from '../engine/obstacles/obstaclesPerLevel'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { getAllObstacles } from '../engine/obstacles/getAllObstacles'
 import { useFrame } from '@react-three/fiber'
@@ -11,6 +11,8 @@ import { checkTimerWorking } from '../engine/time/isTimer'
 import moveObstacles from '../engine/obstacles/moveObstacles'
 import Rock from '../assets/rockModel/Rock'
 import { checkMistake } from '../engine/lives/isMistake'
+import { getCurrentLevel } from '../engine/levels/currentLevel'
+import { updateAppleTimeIdealRoute } from '../engine/protocol/appleTimeEfficiency'
 
 let threeCoordX: THREE.Vector3[] = []
 let threeCoordY: THREE.Vector3[] = []
@@ -20,7 +22,19 @@ let prevVisualY: number[] = []
 let nextEngineX: number[] = []
 let nextEngineY: number[] = []
 
+function resetObstacleRenderState(): void {
+  threeCoordX = []
+  threeCoordY = []
+  counter = -1
+  prevVisualX = []
+  prevVisualY = []
+  nextEngineX = []
+  nextEngineY = []
+}
+
 const Obstacles: React.FC = () => {
+  const [renderLevel, setRenderLevel] = useState(getCurrentLevel())
+  const renderLevelRef = useRef(renderLevel)
   const gridSize = getField()
   const { xCoord, xStep, yCoord, yStep, fixCoord } = getAllObstacles()
 
@@ -31,6 +45,14 @@ const Obstacles: React.FC = () => {
   const obstaclesRefs = useRef<Record<string, React.RefObject<THREE.Group>>>({})
   const lastXStep = useRef<number[]>([...xStep])
   const lastYStep = useRef<number[]>([...yStep])
+
+  useEffect(() => {
+    renderLevelRef.current = renderLevel
+    lastXStep.current = [...xStep]
+    lastYStep.current = [...yStep]
+    setXStepState([...xStep])
+    setYStepState([...yStep])
+  }, [renderLevel])
   // Создаём стабильные рефы по индексам координат для каждого типа препятствий.
   // Ключи x_0..x_n, y_0..y_n, fix_0..fix_n совпадают с индексами данных.
   const xCount = xCoord.length
@@ -55,6 +77,15 @@ const Obstacles: React.FC = () => {
   }
 
   useFrame(() => {
+    const currentLevel = getCurrentLevel()
+    if (renderLevelRef.current !== currentLevel) {
+      resetObstacleRenderState()
+      obstaclesRefs.current = {}
+      renderLevelRef.current = currentLevel
+      setRenderLevel(currentLevel)
+      return
+    }
+
     const shouldAnimateObstacles = checkTimerWorking() || checkMistake()
     const forceMoveByMistake = !checkTimerWorking() && checkMistake()
     // 1. Тик: запускаем движок на границе периода (до инициализации, чтобы в первом кадре не срабатывало)
@@ -69,6 +100,7 @@ const Obstacles: React.FC = () => {
       // Шаг движка
       moveObstacles('x', forceMoveByMistake)
       moveObstacles('y', forceMoveByMistake)
+      updateAppleTimeIdealRoute(false)
       // Читаем новые целевые позиции движка
       const updated = getAllObstacles()
       nextEngineX = updated.xCoord.map((c) => Math.round(c[0] - gridSize / 2) - 1)

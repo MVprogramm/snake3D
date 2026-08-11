@@ -12,6 +12,11 @@ import { removeBonus } from "../bonuses/bonusAvailableState";
 import { catchBonus } from "../bonuses/bonusCatchingState";
 import { clearStoppedSnakeDirection } from "../snake/snake";
 import { clearPendingSnakeHead } from "../snake/snakeStepPhase";
+import { resetExtraTimeBonusProbabilityLaunch } from "../bonuses/extraTimeBonusProbability";
+import { resetExtraLifeBonusProbabilityLaunch } from "../bonuses/extraLifeBonusProbability";
+import { closeSnakeMouthOnly } from "../../animations/snakeAnimation/headAnimations/foodEatenAnimation";
+import { stopTimer } from "../time/isTimer";
+import { resetNewMoveDirection } from "../events/changeDirectionEvent";
 /**
  * Запускает текущий уровень игры
  * @description
@@ -21,8 +26,11 @@ import { clearPendingSnakeHead } from "../snake/snakeStepPhase";
  */
 function startLevel(): void {
   levelNotCompleted();
+  stopTimer();
+  resetNewMoveDirection();
   clearStoppedSnakeDirection();
   clearPendingSnakeHead();
+  closeSnakeMouthOnly();
   setSnakeStartEvent([
     Math.floor(getField() / 2) + 1,
     Math.floor(getField() / 2) + 1,
@@ -32,6 +40,8 @@ function startLevel(): void {
   obstacleSpeedReset();
   catchBonus(false);
   removeBonus();
+  resetExtraTimeBonusProbabilityLaunch();
+  resetExtraLifeBonusProbabilityLaunch();
 }
 
 export default startLevel;

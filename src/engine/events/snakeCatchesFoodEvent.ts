@@ -13,6 +13,9 @@ import { getCurrentLevel } from '../levels/currentLevel'
 import { addEvent } from '../protocol/protocol'
 import protocolExecutor from '../protocol/protocolExecutor'
 import { getSnakeHeadParams } from '../snake/snake'
+import { tryLaunchExtraTimeBonusByProbability } from '../bonuses/extraTimeBonusProbability'
+import { tryLaunchExtraLifeBonusByProbability } from '../bonuses/extraLifeBonusProbability'
+import { recordAppleTimeEfficiency } from '../protocol/appleTimeEfficiency'
 import { checkContact } from './isContact'
 /**
  * Контроль контакта головы змейки с едой, true, если есть, и false, если нет
@@ -35,10 +38,13 @@ export function snakeCatchesFoodEvent(): void {
 
     if (getDoubleScoresFood())
       addEvent({ name: 'bonus doubleScoresFood', value: getFoodScores() * 2 })
+    recordAppleTimeEfficiency()
     protocolExecutor({
       name: 'food eaten',
       value: getCurrentFoodNumber() + 1,
     })
+    tryLaunchExtraTimeBonusByProbability()
+    tryLaunchExtraLifeBonusByProbability()
     if (howMuchIsLeftToEat() === 0) {
       protocolExecutor({
         name: 'level is complete',

@@ -5,6 +5,7 @@ import setInitialLevelOfGame from './engine/events/setInitialLevelOfGame'
 import ErrorScreen from './components/ErrorScreen'
 import { disableScrolling } from './commands/disableScrolling'
 import { enableScrolling } from './commands/enableScrolling'
+import { setTrainingMode, setTrainingSpeed } from './engine/training/trainingMode'
 
 // Глобальный флаг, чтобы не создать root повторно при HMR
 const W: any = typeof window !== 'undefined' ? window : {}
@@ -17,6 +18,17 @@ function parseLevel(search: string): number {
   return Number.isFinite(n) && n >= 1 ? n : 1
 }
 
+function parseTrainingMode(search: string): boolean {
+  return new URLSearchParams(search).get('mode') === 'training'
+}
+
+function parseTrainingSpeed(search: string): number {
+  const raw = new URLSearchParams(search).get('speed')
+  const n = raw ? parseInt(raw, 10) : 5
+
+  return Number.isFinite(n) ? n : 5
+}
+
 export default function main() {
   const rootElement = document.getElementById('root')
   if (!rootElement) throw new Error('Root element not found')
@@ -24,10 +36,16 @@ export default function main() {
   const root = (W.__appRoot ||= ReactDOM.createRoot(rootElement))
 
   try {
+    const trainingMode = parseTrainingMode(window.location.search)
+    const trainingSpeed = parseTrainingSpeed(window.location.search)
+    setTrainingMode(trainingMode)
+    setTrainingSpeed(trainingSpeed)
+
     const level = parseLevel(window.location.search)
     const ok = setInitialLevelOfGame(level)
 
     if (ok) {
+      setTrainingSpeed(trainingSpeed)
       disableScrolling() // важно, чтобы была идемпотентной
       root.render(
         <React.StrictMode>

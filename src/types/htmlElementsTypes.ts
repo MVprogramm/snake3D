@@ -6,6 +6,8 @@ export type GameElements = {
   levelElement: HTMLElement | null
   lifeElement: HTMLElement | null
   speedElement: HTMLElement | null
+  appleEatingSpeedElement: HTMLElement | null
+  lifeLossStatusElement: HTMLElement | null
   controls: NodeList | null
   bonusElement: HTMLElement | null
 }

@@ -15,6 +15,11 @@ import { getStep } from '../time/timerStepPerLevel'
 import checkTimerStep from '../time/checkTimerStep'
 import { checkPause } from '../events/pauseEvent'
 import { checkContact } from '../events/isContact'
+import { getExtraTimeBonusProbability } from '../protocol/appleEatingSpeed'
+import { getFoodEaten } from '../events/snakeCatchesFoodEvent'
+import { getBonusAvailability } from '../bonuses/bonusAvailableState'
+import { getBonusParams } from '../bonuses/bonusParams'
+import { getExtraLifeBonusProbability } from '../protocol/lifeLossSpeed'
 
 // let attention = 0;
 /**
@@ -31,6 +36,8 @@ function renderInfo(): void {
     lifeElement,
     bonusElement,
     speedElement,
+    appleEatingSpeedElement,
+    lifeLossStatusElement,
   } = getSelectors()
   if (howMuchIsLeftToEat() === 0) setScores(getLives())
   if (scoreElement) scoreElement.innerHTML = ` ${getScores()} / ${getMaxScores()}`
@@ -47,11 +54,36 @@ function renderInfo(): void {
   }
 
   if (bonusElement) {
-    bonusElement.style.opacity = '0.5'
-    bonusElement.innerHTML = ' 0'
+    const bonusType = getBonusAvailability() ? getBonusParams().type : ''
+    const bonusIconClass =
+      bonusType === 'addExtraTime'
+        ? 'fa-clock'
+        : bonusType === 'addExtraLives'
+        ? 'fa-heart'
+        : ''
+    const isKnownBonusAvailable = bonusIconClass !== ''
+
+    bonusElement.style.opacity = isKnownBonusAvailable ? '1' : '0.5'
+    bonusElement.style.color = ''
+    const currentBonusIcon = bonusElement.querySelector('.available-bonus-icon')
+    if (
+      isKnownBonusAvailable &&
+      !currentBonusIcon?.classList.contains(bonusIconClass)
+    ) {
+      bonusElement.innerHTML = ` <span class="fa-solid ${bonusIconClass} available-bonus-icon"></span>`
+    }
+    if (!isKnownBonusAvailable && bonusElement.innerHTML !== ' 0') {
+      bonusElement.innerHTML = ' 0'
+    }
   }
   if (speedElement && !checkContact()) {
     speedElement.innerHTML = ` ${checkTimerStep() || checkPause() ? 0 : getStep()}`
+  }
+  if (appleEatingSpeedElement && getFoodEaten()) {
+    appleEatingSpeedElement.innerHTML = ` ${getExtraTimeBonusProbability()}`
+  }
+  if (lifeLossStatusElement && getFoodEaten()) {
+    lifeLossStatusElement.innerHTML = ` ${getExtraLifeBonusProbability()}`
   }
 }
 

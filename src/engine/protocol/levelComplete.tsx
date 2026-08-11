@@ -11,6 +11,7 @@ import { getScores } from '../scores/scores'
 import { getMaxScores } from '../scores/maxScoresPerLevel'
 import { setBonuses } from '../bonuses/bonusesPerLevel'
 import { useMenuStore } from '../../store/menuStore'
+import { saveGameSession } from '../../services/gameSessionRepository'
 /**
  * Отрабатывает успешное завершение текущего уровня игры
  * @description
@@ -19,7 +20,8 @@ import { useMenuStore } from '../../store/menuStore'
  */
 function levelComplete(): void {
   const { toggleModal, selectTitleMenu } = useMenuStore.getState()
-  LEVEL.setCurrentLevel(LEVEL.getCurrentLevel() + 1)
+  const completedLevel = LEVEL.getCurrentLevel()
+  LEVEL.setCurrentLevel(completedLevel + 1)
   if (LEVEL.getCurrentLevel() - getMaxLevel() === 1) {
     stopTimer()
     toggleModal()
@@ -27,6 +29,14 @@ function levelComplete(): void {
     addEvent({
       name: 'you win',
       value: `your scores: ${getScores()}/${getMaxScores()}`,
+    })
+    void saveGameSession({
+      levelNumber: completedLevel,
+      status: 'won',
+      finishReason: 'all levels completed',
+      score: getScores(),
+      maxScore: getMaxScores(),
+      protocol: getProtocol(),
     })
     localStorage.setItem('protocol', JSON.stringify(getProtocol()))
     location.reload()
@@ -38,6 +48,14 @@ function levelComplete(): void {
         LEVEL.getCurrentLevel() - 1
       } is complete! Congratulation! Well done! It's time to Level ${LEVEL.getCurrentLevel()}`
     )
+    void saveGameSession({
+      levelNumber: completedLevel,
+      status: 'completed',
+      finishReason: 'level complete',
+      score: getScores(),
+      maxScore: getMaxScores(),
+      protocol: getProtocol(),
+    })
     setBonuses([])
     setLevelEvent(LEVEL.getCurrentLevel())
   }

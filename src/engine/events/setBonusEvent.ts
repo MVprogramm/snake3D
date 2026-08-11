@@ -16,7 +16,7 @@ import { catchBonus } from '../bonuses/bonusCatchingState'
 /**
  * Генерирует координаты X и Y текущего бонуса, заносит событие в протокол
  */
-function setBonusEvent(): void {
+function setBonusEvent(): boolean {
   const booking: number[][] = []
   if (!getBonusAvailability()) {
     const bonusCell = getFreeCell(
@@ -30,7 +30,7 @@ function setBonusEvent(): void {
     )
     if (!bonusCell) {
       console.log('WARNING! Unable to set bonus: no free cells available')
-      return
+      return false
     }
     BONUS.setBonusCoord(bonusCell)
     if (getBonusParams()) {
@@ -41,6 +41,7 @@ function setBonusEvent(): void {
       catchBonus(false)
     }
   }
+  return true
 }
 
 export default setBonusEvent

@@ -67,15 +67,10 @@ const LevaMonitor = lazy(() =>
 const Game = lazy(() => import('./Game').then((m) => ({ default: m.Game })))
 const Menu = lazy(() => import('./Menu'))
 const Wrapper = lazy(() => import('./Wrapper').then((m) => ({ default: m.Wrapper })))
+const TrainingPanel = lazy(() => import('./TrainingPanel'))
 
 // ✅ в Vite используем import.meta.env.DEV
 const isDev = import.meta.env.DEV
-
-// Держим сам компонент всегда lazy-определённым,
-// а рендерим его только в dev — так проще для TS и JSX.
-const OrbitControls = lazy(() =>
-  import('@react-three/drei').then((m) => ({ default: m.OrbitControls })),
-)
 
 const GL_SETTINGS = {
   antialias: true,
@@ -123,12 +118,6 @@ const WebGLError = () => (
 
 const Scene = () => (
   <>
-    {isDev && (
-      <Suspense fallback={null}>
-        {/* при необходимости раскомментируйте */}
-        {/* <OrbitControls makeDefault /> */}
-      </Suspense>
-    )}
     <Suspense fallback={null}>
       <Game />
     </Suspense>
@@ -162,6 +151,10 @@ function Main() {
           >
             <Scene />
           </Canvas>
+
+          <Suspense fallback={null}>
+            <TrainingPanel />
+          </Suspense>
 
           {isVisible && (
             <Suspense fallback={<LoadingFallback text='Loading menu...' />}>

@@ -71,6 +71,9 @@ let newMoveDirection = ''
 export const setNewMoveDirection = (move: string) => {
   newMoveDirection = move
 }
+export const resetNewMoveDirection = () => {
+  newMoveDirection = 'up'
+}
 export const getNewMoveDirection = (): string => newMoveDirection
 
 /**

@@ -12,6 +12,7 @@ import { getObstaclesXCoord } from '../obstacles/obstaclesX'
 import { getObstaclesYCoord } from '../obstacles/obstaclesY'
 import * as FOOD from '../food/food'
 import { addEvent } from '../protocol/protocol'
+import { startAppleTimeEfficiencyMeasurement } from '../protocol/appleTimeEfficiency'
 
 function isAppleSpawnCellValid(cell: [number, number]): boolean {
   const [x, y] = cell
@@ -71,6 +72,7 @@ function setFoodEvent(): void {
       name: 'set food',
       value: FOOD.getFoodCoord()[0] + ':' + FOOD.getFoodCoord()[1],
     })
+    startAppleTimeEfficiencyMeasurement()
   }
 }
 
