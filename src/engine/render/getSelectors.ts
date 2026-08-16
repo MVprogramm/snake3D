@@ -18,6 +18,7 @@ function getSelectors(): GameElements {
     speedElement: document.querySelector('.game-info-speed'),
     appleEatingSpeedElement: document.querySelector('.apple-eating-speed'),
     lifeLossStatusElement: document.querySelector('.life-loss-status'),
+    snakeGrowthStatusElement: document.querySelector('.snake-growth-status'),
     controls: document.querySelectorAll('.controls i'),
     bonusElement: document.querySelector('.game-info-bonus'),
   }

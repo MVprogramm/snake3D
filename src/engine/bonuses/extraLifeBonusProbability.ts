@@ -11,13 +11,12 @@ import { getBonusAvailability, giveBonus, removeBonus } from './bonusAvailableSt
 import { catchBonus, getBonusCatchingStatus } from './bonusCatchingState'
 import { setBonusParams } from './bonusParams'
 import { getBonuses } from './bonusesPerLevel'
+import { resetBonusPickupWindow, startBonusPickupWindow } from './bonusPickupWindow'
 
 const EXTRA_LIFE_BONUS_TYPE = 'addExtraLives'
 const EXTRA_LIFE_BONUS_VALUE = 1
-const EXTRA_LIFE_BONUS_LIFETIME_FOOD = 2
 const DYNAMIC_EXTRA_LIFE_BONUS_INDEX = -1
 
-let dynamicExtraLifeBonusEndFood = 0
 let hasExtraLifeBonusLaunchedThisLevel = false
 
 function getExtraLifeBonusParams(): BonusProps {
@@ -30,25 +29,14 @@ function getExtraLifeBonusParams(): BonusProps {
     type: EXTRA_LIFE_BONUS_TYPE,
     value: configuredBonus?.value ?? EXTRA_LIFE_BONUS_VALUE,
     startFood: currentFoodNumber,
-    endFood: currentFoodNumber + EXTRA_LIFE_BONUS_LIFETIME_FOOD,
+    endFood: currentFoodNumber,
   }
 }
 
 function expireDynamicExtraLifeBonus(): void {
-  if (
-    dynamicExtraLifeBonusEndFood !== 0 &&
-    getCurrentFoodNumber() >= dynamicExtraLifeBonusEndFood
-  ) {
-    bonusAddTimeDeactivate()
-    bonusAddLivesDeactivate()
-    bonusAddScoresDeactivate()
-    if (getBonusAvailability()) {
-      addEvent({ name: 'bonus', value: ` ${EXTRA_LIFE_BONUS_TYPE} was not used` })
-    }
-    removeBonus()
-    if (!getBonusCatchingStatus().isBonusCaught) catchBonus(false)
-    dynamicExtraLifeBonusEndFood = 0
-  }
+  bonusAddTimeDeactivate()
+  bonusAddLivesDeactivate()
+  bonusAddScoresDeactivate()
 }
 
 export function tryLaunchExtraLifeBonusByProbability(): void {
@@ -78,12 +66,12 @@ export function tryLaunchExtraLifeBonusByProbability(): void {
   setBonusParams(bonus)
   if (!setBonusEvent()) return
   giveBonus()
+  startBonusPickupWindow()
   setCurrentBonus(DYNAMIC_EXTRA_LIFE_BONUS_INDEX)
-  dynamicExtraLifeBonusEndFood = bonus.endFood
   hasExtraLifeBonusLaunchedThisLevel = true
 }
 
 export function resetExtraLifeBonusProbabilityLaunch(): void {
-  dynamicExtraLifeBonusEndFood = 0
+  resetBonusPickupWindow()
   hasExtraLifeBonusLaunchedThisLevel = false
 }

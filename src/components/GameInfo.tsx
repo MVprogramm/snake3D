@@ -18,6 +18,10 @@ function GameInfo() {
         <i className='fa-solid fa-heart bonus-probability-icon'></i>
         <span className='life-loss-status'> 5%</span>
       </span>
+      <span className='bonus-probability'>
+        <i className='fa-solid fa-snowflake bonus-probability-icon'></i>
+        <span className='snake-growth-status'> 5%</span>
+      </span>
     </div>
   )
 }

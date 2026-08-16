@@ -16,6 +16,7 @@ import { bonusAddTimeDeactivate, checkAddTime } from './bonusAddTime'
 import * as BONUS from './bonusAvailableState'
 import { catchBonus, getBonusCatchingStatus } from './bonusCatchingState'
 import { getBonusParams, setBonusParams } from './bonusParams'
+import { resetBonusPickupWindow, startBonusPickupWindow } from './bonusPickupWindow'
 /**
  * Выбирает текущий бонус по номеру еды, доступности и типу для вывода на экран
  * @param bonus параметры текущего бонуса
@@ -29,8 +30,9 @@ export function selectBonusToDisplay(bonus: BonusProps, index: number): void {
     !isAdd
   ) {
     setBonusParams(bonus)
-    setBonusEvent()
+    if (!setBonusEvent()) return
     BONUS.giveBonus()
+    startBonusPickupWindow()
     setCurrentBonus(index)
   }
 }
@@ -45,6 +47,7 @@ function bonusCatchingHandler(bonus: BonusProps): void {
   if (BONUS.getBonusAvailability())
     addEvent({ name: 'bonus', value: ` ${bonus.type} was not used` })
   BONUS.removeBonus()
+  resetBonusPickupWindow()
   if (!getBonusCatchingStatus().isBonusCaught) catchBonus(false)
 }
 /**
@@ -52,6 +55,8 @@ function bonusCatchingHandler(bonus: BonusProps): void {
  * @param bonus параметры текущего бонуса
  */
 export function selectBonusToHide(bonus: BonusProps): void {
+  if (bonus.type === 'snakeStopsGrowing') return
+
   if (
     getBonusParams() &&
     getBonusCatchingStatus().isBonusCaught &&
@@ -59,5 +64,6 @@ export function selectBonusToHide(bonus: BonusProps): void {
       getCurrentFoodNumber()
   )
     protocolExecutor({ name: 'bonus', value: ` ${bonus.type} disabled` })
-  if (getCurrentFoodNumber() === bonus.endFood) bonusCatchingHandler(bonus)
+  if (getBonusCatchingStatus().isBonusCaught && getCurrentFoodNumber() === bonus.endFood)
+    bonusCatchingHandler(bonus)
 }

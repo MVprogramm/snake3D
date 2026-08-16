@@ -20,6 +20,7 @@ import { getFoodEaten } from '../events/snakeCatchesFoodEvent'
 import { getBonusAvailability } from '../bonuses/bonusAvailableState'
 import { getBonusParams } from '../bonuses/bonusParams'
 import { getExtraLifeBonusProbability } from '../protocol/lifeLossSpeed'
+import { getStopsGrowingBonusProbability } from '../protocol/snakeGrowthPressure'
 
 // let attention = 0;
 /**
@@ -38,6 +39,7 @@ function renderInfo(): void {
     speedElement,
     appleEatingSpeedElement,
     lifeLossStatusElement,
+    snakeGrowthStatusElement,
   } = getSelectors()
   if (howMuchIsLeftToEat() === 0) setScores(getLives())
   if (scoreElement) scoreElement.innerHTML = ` ${getScores()} / ${getMaxScores()}`
@@ -60,6 +62,8 @@ function renderInfo(): void {
         ? 'fa-clock'
         : bonusType === 'addExtraLives'
         ? 'fa-heart'
+        : bonusType === 'snakeStopsGrowing'
+        ? 'fa-snowflake'
         : ''
     const isKnownBonusAvailable = bonusIconClass !== ''
 
@@ -84,6 +88,9 @@ function renderInfo(): void {
   }
   if (lifeLossStatusElement && getFoodEaten()) {
     lifeLossStatusElement.innerHTML = ` ${getExtraLifeBonusProbability()}`
+  }
+  if (snakeGrowthStatusElement && getFoodEaten()) {
+    snakeGrowthStatusElement.innerHTML = ` ${getStopsGrowingBonusProbability()}`
   }
 }
 

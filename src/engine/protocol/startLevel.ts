@@ -14,6 +14,7 @@ import { clearStoppedSnakeDirection } from "../snake/snake";
 import { clearPendingSnakeHead } from "../snake/snakeStepPhase";
 import { resetExtraTimeBonusProbabilityLaunch } from "../bonuses/extraTimeBonusProbability";
 import { resetExtraLifeBonusProbabilityLaunch } from "../bonuses/extraLifeBonusProbability";
+import { resetStopsGrowingBonusProbabilityLaunch } from "../bonuses/snakeStopsGrowingBonusProbability";
 import { closeSnakeMouthOnly } from "../../animations/snakeAnimation/headAnimations/foodEatenAnimation";
 import { stopTimer } from "../time/isTimer";
 import { resetNewMoveDirection } from "../events/changeDirectionEvent";
@@ -42,6 +43,7 @@ function startLevel(): void {
   removeBonus();
   resetExtraTimeBonusProbabilityLaunch();
   resetExtraLifeBonusProbabilityLaunch();
+  resetStopsGrowingBonusProbabilityLaunch();
 }
 
 export default startLevel;

@@ -15,6 +15,7 @@ import protocolExecutor from '../protocol/protocolExecutor'
 import { getSnakeHeadParams } from '../snake/snake'
 import { tryLaunchExtraTimeBonusByProbability } from '../bonuses/extraTimeBonusProbability'
 import { tryLaunchExtraLifeBonusByProbability } from '../bonuses/extraLifeBonusProbability'
+import { tryLaunchStopsGrowingBonusByProbability } from '../bonuses/snakeStopsGrowingBonusProbability'
 import { recordAppleTimeEfficiency } from '../protocol/appleTimeEfficiency'
 import { checkContact } from './isContact'
 /**
@@ -45,6 +46,7 @@ export function snakeCatchesFoodEvent(): void {
     })
     tryLaunchExtraTimeBonusByProbability()
     tryLaunchExtraLifeBonusByProbability()
+    tryLaunchStopsGrowingBonusByProbability()
     if (howMuchIsLeftToEat() === 0) {
       protocolExecutor({
         name: 'level is complete',

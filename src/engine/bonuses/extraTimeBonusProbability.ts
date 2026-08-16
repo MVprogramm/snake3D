@@ -11,13 +11,12 @@ import { getBonusAvailability, giveBonus, removeBonus } from './bonusAvailableSt
 import { catchBonus, getBonusCatchingStatus } from './bonusCatchingState'
 import { setBonusParams } from './bonusParams'
 import { getBonuses } from './bonusesPerLevel'
+import { resetBonusPickupWindow, startBonusPickupWindow } from './bonusPickupWindow'
 
 const EXTRA_TIME_BONUS_TYPE = 'addExtraTime'
 const EXTRA_TIME_BONUS_VALUE_MS = 20000
-const EXTRA_TIME_BONUS_LIFETIME_FOOD = 2
 const DYNAMIC_EXTRA_TIME_BONUS_INDEX = -1
 
-let dynamicExtraTimeBonusEndFood = 0
 let hasExtraTimeBonusLaunchedThisLevel = false
 
 function getExtraTimeBonusParams(): BonusProps {
@@ -30,25 +29,14 @@ function getExtraTimeBonusParams(): BonusProps {
     type: EXTRA_TIME_BONUS_TYPE,
     value: configuredBonus?.value ?? EXTRA_TIME_BONUS_VALUE_MS,
     startFood: currentFoodNumber,
-    endFood: currentFoodNumber + EXTRA_TIME_BONUS_LIFETIME_FOOD,
+    endFood: currentFoodNumber,
   }
 }
 
 function expireDynamicExtraTimeBonus(): void {
-  if (
-    dynamicExtraTimeBonusEndFood !== 0 &&
-    getCurrentFoodNumber() >= dynamicExtraTimeBonusEndFood
-  ) {
-    bonusAddTimeDeactivate()
-    bonusAddLivesDeactivate()
-    bonusAddScoresDeactivate()
-    if (getBonusAvailability()) {
-      addEvent({ name: 'bonus', value: ` ${EXTRA_TIME_BONUS_TYPE} was not used` })
-    }
-    removeBonus()
-    if (!getBonusCatchingStatus().isBonusCaught) catchBonus(false)
-    dynamicExtraTimeBonusEndFood = 0
-  }
+  bonusAddTimeDeactivate()
+  bonusAddLivesDeactivate()
+  bonusAddScoresDeactivate()
 }
 
 export function tryLaunchExtraTimeBonusByProbability(): void {
@@ -78,12 +66,12 @@ export function tryLaunchExtraTimeBonusByProbability(): void {
   setBonusParams(bonus)
   if (!setBonusEvent()) return
   giveBonus()
+  startBonusPickupWindow()
   setCurrentBonus(DYNAMIC_EXTRA_TIME_BONUS_INDEX)
-  dynamicExtraTimeBonusEndFood = bonus.endFood
   hasExtraTimeBonusLaunchedThisLevel = true
 }
 
 export function resetExtraTimeBonusProbabilityLaunch(): void {
-  dynamicExtraTimeBonusEndFood = 0
+  resetBonusPickupWindow()
   hasExtraTimeBonusLaunchedThisLevel = false
 }

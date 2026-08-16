@@ -3,6 +3,8 @@
  *     @function setLoop Рекурсивная функция, позволяющая менять скорость игры
  */
 import * as INTERRUPT from '../events/interruptGameEvent'
+import { expireBonusPickupWindow } from '../bonuses/bonusPickupWindow'
+import { expireStopsGrowing } from '../bonuses/bonusSnakeStopsGrowing'
 import playLevel from '../levels/playLevel'
 import { updateAppleTimeIdealRoute } from '../protocol/appleTimeEfficiency'
 // import render from "../render/render";
@@ -23,6 +25,8 @@ function setLoop(delta: number) {
   }
   if (checkTimerWorking()) {
     setTimer(delta * 1000)
+    expireBonusPickupWindow()
+    expireStopsGrowing()
     updateAppleTimeIdealRoute()
   }
 }
