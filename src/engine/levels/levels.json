@@ -1,10 +1,10 @@
 [
   {
-    "field": "7",
-    "time": "1000000",
+    "field": "11",
+    "time": "100000",
     "timerStep": "1",
-    "food": "50",
-    "lives": "30",
+    "food": "5",
+    "lives": "3",
     "obstacles": ["x", "y", "fix-R", "fix-M"],
     "bonuses": [],
     "fog": "light",
@@ -14,7 +14,7 @@
     "field": "21",
     "time": "60000",
     "timerStep": "1",
-    "food": "15",
+    "food": "5",
     "lives": "3",
     "obstacles": [
       "x",

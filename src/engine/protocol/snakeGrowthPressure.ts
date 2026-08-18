@@ -10,7 +10,7 @@ import { getProtocol } from './protocol'
 
 const TARGET_BONUS_SECONDS = 20
 const MILLISECONDS_PER_SECOND = 1000
-const MIN_STOPS_GROWING_BONUS_PROBABILITY = 5
+const MIN_STOPS_GROWING_BONUS_PROBABILITY = 0
 const MAX_STOPS_GROWING_BONUS_PROBABILITY = 50
 
 type SnakeGrowthProjection = {

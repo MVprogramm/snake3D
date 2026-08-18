@@ -6,7 +6,7 @@ import { getTimer } from '../time/timer'
 import { getTimePerLevel } from '../time/timePerLevel'
 import { getProtocol } from './protocol'
 
-const MIN_EXTRA_LIFE_BONUS_PROBABILITY = 5
+const MIN_EXTRA_LIFE_BONUS_PROBABILITY = 0
 const MAX_EXTRA_LIFE_BONUS_PROBABILITY = 50
 const EXTRA_LIFE_BONUS_LIVES = 1
 

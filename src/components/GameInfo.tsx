@@ -12,15 +12,15 @@ function GameInfo() {
       <i className='fa-solid fa-gauge-high game-info-speed'></i>
       <span className='bonus-probability'>
         <i className='fa-solid fa-clock bonus-probability-icon'></i>
-        <span className='apple-eating-speed'> 5%</span>
+        <span className='apple-eating-speed'> 0%</span>
       </span>
       <span className='bonus-probability'>
         <i className='fa-solid fa-heart bonus-probability-icon'></i>
-        <span className='life-loss-status'> 5%</span>
+        <span className='life-loss-status'> 0%</span>
       </span>
       <span className='bonus-probability'>
         <i className='fa-solid fa-snowflake bonus-probability-icon'></i>
-        <span className='snake-growth-status'> 5%</span>
+        <span className='snake-growth-status'> 0%</span>
       </span>
     </div>
   )
